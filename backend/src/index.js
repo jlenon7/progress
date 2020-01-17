@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const routes = require('./routes');
 
 const app = express();
@@ -8,6 +9,12 @@ mongoose.connect('mongodb+srv://omnistack:1@stack10@1@cluster0-uagp0.mongodb.net
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+
+// Liberando o acesso a API de outras portas com o Cors
+app.use(cors());
+
+// Para produção;
+// app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Setando para qual linguagem o express vai entender
 app.use(express.json());

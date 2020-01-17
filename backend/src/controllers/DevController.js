@@ -60,9 +60,9 @@ module.exports = {
         return response.json(dev);
     },
     async destroy(request, response) {
-        const {id} = request.body;
+        const {id} = request.params.id;
         
-        dev = await Dev.deleteOne({_id: id})
+        dev = await Dev.findOneAndRemove({ id });
     
         return response.json(dev);
     }
