@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="Example" title="#delicinhas" src="6149_discord.png" width="200px" />
+    <img alt="Example" title="#delicinhas" src="4601_github.png" width="200px" />
 </h1>
 
 <h4 align="center">

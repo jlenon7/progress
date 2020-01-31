@@ -1,0 +1,65 @@
+```fix
+#-------------------------------------> DISCORD TEXT FORMATTING <-------------------------------------#
+```
+__***outside a code block:***__
+ 
+```
+italics = *italics*
+bold  = **bold**
+bold italics = ***bold italics***
+strikeout = ~~strikeout~~
+underline = __underline__
+underline italics = __*underline italics*__
+underline bold = __**underline bold**__
+underline bold italics = __***underline bold italics***__
+code block =  ``text here`` (3 backticks --> alt + 7 for me)
+```
+ 
+___***code block formating:***___
+ 
+```md
+ 
+(3 backticks)markdown
+or just:
+(3 backticks)md
+ 
+#lines starting with # are blue(?),
+[murky blue][red?] --------------------> anywhere in the code block
+[murky blue](red?) --------------------> anywhere in the code block
+<first_word_blue and the rest orange> -> anywhere in the code block
+(3 backticks)
+```
+ 
+```diff
+(3 backticks)diff uses the first character on a line for color:
+ 
++ for green,
+- for red,
+--- for grey
+! for green(? should be orange)
+(3 backticks)
+```
+ 
+```css
+ 
+(3 backticks)css makes almost everything green,
+numbers are white (0123456789),
+has some weird cases around some specific characters like colons and quotes
+(3 backticks)
+```
+ 
+```fix
+ 
+(3 backticks)fix makes pretty much everything orange
+(3 backticks)
+```
+ 
+```xl
+ 
+(3 backticks)xl is weird and has some random shit i didnt figure out yet:
+numbers 012345678910  and  "quotes" are blue
+the words and,color are always red
+the word is is always green
+// = grey line
+(3 backticks)
+```
