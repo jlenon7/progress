@@ -76,6 +76,7 @@
     <img alt="Example" title="#delicinhas" src="Logo Pack/whatsapp.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/windows.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/word.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/yarn.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/youtube.png" width="50px" />
 </p>
     
