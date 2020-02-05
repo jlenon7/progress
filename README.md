@@ -29,6 +29,8 @@
 ## 😎 Logos
 <p align="center">
     <img alt="Example" title="#delicinhas" src="Logo Pack/airbnb.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/android.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/apple.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/CheckMark.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/dota2.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/excel.png" width="50px" />
