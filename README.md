@@ -35,6 +35,9 @@
     <img alt="Example" title="#delicinhas" src="Logo Pack/apple.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/aws.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/CheckMark.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/codeigniter.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/css.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/django.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/dota2.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/excel.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/expo.png" width="50px" />
