@@ -49,9 +49,12 @@
     <img alt="Example" title="#delicinhas" src="Logo Pack/gimp.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/github.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/gitlab.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/html.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/imessage.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/insomnia.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/instagram.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/ionic.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/jquery.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/js.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/lol.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/mvc.png" width="50px" />
