@@ -40,6 +40,7 @@
     <img alt="Example" title="#delicinhas" src="Logo Pack/finder.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/gimp.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/github.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/gitlab.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/imessage.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/insomnia.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/instagram.png" width="50px" />
