@@ -37,8 +37,10 @@
     <img alt="Example" title="#delicinhas" src="Logo Pack/apple.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/aws.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/CheckMark.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/chrome.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/codeigniter.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/css.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/digitalocean.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/django.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/docker.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/dota2.png" width="50px" />
@@ -51,6 +53,7 @@
     <img alt="Example" title="#delicinhas" src="Logo Pack/gimp.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/github.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/gitlab.png" width="50px" />
+    <img alt="Example" title="#delicinhas" src="Logo Pack/heroku.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/html.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/imessage.png" width="50px" />
     <img alt="Example" title="#delicinhas" src="Logo Pack/insomnia.png" width="50px" />
