@@ -45,7 +45,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-O DevRadar é um projeto que visa conectar desenvolvedores próximos a você que trabalham com as mesmas tecnologias.
+O Be The Hero é um projeto que visa ajudar instituições que estão passando por situações precárias e precisam de ajuda financeira.
 
 ## 🤔 Como contribuir
 
