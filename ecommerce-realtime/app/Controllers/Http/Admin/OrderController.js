@@ -4,9 +4,6 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-/**
- * Resourceful controller for interacting with orders
- */
 class OrderController {
   /**
    * Show a list of all orders.
