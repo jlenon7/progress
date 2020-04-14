@@ -26,3 +26,6 @@ require('./auth')
 
 // Rotas de admin
 require('./admin')
+
+// Rotas de cliente
+require('./client')
