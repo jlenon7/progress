@@ -80,7 +80,27 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params: { id }, request, response }) {
+    try {
+      const user = await User.findOrFail(id)
+
+      const userData = request.only([
+        'name',
+        'surname',
+        'email',
+        'password',
+        'image_id',
+      ])
+      user.merge(userData)
+      await user.save()
+
+      return response.json(user)
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Não foi possível atualizar este usuário',
+      })
+    }
+  }
 
   /**
    * Delete a user with id.
@@ -90,7 +110,7 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {}
+  async destroy({ params: { id }, request, response }) {}
 }
 
 module.exports = UserController
