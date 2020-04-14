@@ -36,7 +36,24 @@ class ProductController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    try {
+      const { name, description, price, image_id } = request.all()
+
+      const product = await Product.create({
+        name,
+        description,
+        price,
+        image_id,
+      })
+
+      return response.status(201).json(product)
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Não foi possivel criar o produto neste momento',
+      })
+    }
+  }
 
   /**
    * Display a single product.
