@@ -37,7 +37,25 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    try {
+      const userData = request.only([
+        'name',
+        'surnamee',
+        'email',
+        'password',
+        'image_id',
+      ])
+
+      const user = await User.create(userData)
+
+      return response.status(201).json(user)
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Não foi possivel criar este usuário no momento',
+      })
+    }
+  }
 
   /**
    * Display a single user.
@@ -48,7 +66,7 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params, request, response, view }) {}
+  async show({ params: { id }, request, response }) {}
 
   /**
    * Update user details.
