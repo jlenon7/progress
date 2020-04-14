@@ -16,7 +16,7 @@ class UserController {
    * @param {object} ctx.pagination
    */
   async index({ request, response, pagination }) {
-    const { name } = request.input('name')
+    const name = request.input('name')
     const query = User.query()
 
     if (name) {
@@ -41,7 +41,7 @@ class UserController {
     try {
       const userData = request.only([
         'name',
-        'surnamee',
+        'surname',
         'email',
         'password',
         'image_id',
