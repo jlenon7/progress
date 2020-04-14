@@ -29,11 +29,15 @@ class AuthController {
   }
 
   async login({ request, response, auth }) {
-    //
+    const { email, password } = request.all()
+
+    let data = await auth.withRefreshToken().attempt(email, password)
+
+    return response.send({ data })
   }
 
   async refresh({ request, response, auth }) {
-    //
+    
   }
 
   async logout({ request, response, auth}) {
