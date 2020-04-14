@@ -16,6 +16,7 @@ const globalMiddleware = [
   'Adonis/Middleware/BodyParser',
   'App/Middleware/ConvertEmptyStringsToNull',
   'Adonis/Acl/Init',
+  'App/Middleware/Pagination',
 ]
 
 /*
