@@ -110,7 +110,18 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params: { id }, request, response }) {}
+  async destroy({ params: { id }, request, response }) {
+    const user = await User.findOrFail(id)
+    try {
+      await user.delete()
+
+      return response.status(204).json()
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Não foi possível excluir um usuário',
+      })
+    }
+  }
 }
 
 module.exports = UserController
