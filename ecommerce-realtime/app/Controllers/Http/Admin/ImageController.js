@@ -32,7 +32,61 @@ class ImageController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    try {
+      const fileJar = request.file('images', {
+        types: ['image'],
+        size: '2mb',
+      })
+
+      let images = []
+      if (!fileJar.files) {
+        const file = await manage_single_upload(fileJar)
+
+        if (file.moved()) {
+          const image = await Image.create({
+            path: file.fileName,
+            size: file.size,
+            original_name: file.clientName,
+            extension: file.subtype,
+          })
+
+          images.push(image)
+
+          return response.status(201).json({
+            successes: images,
+            errors: {},
+          })
+        }
+
+        return response.status(400).json({
+          message: 'Não foi possível processar o upload da imagem',
+        })
+      }
+
+      let files = await manage_multiple_uploads(fileJar)
+
+      await Promise.all(
+        files.successes.map(async file => {
+          const image = await Image.create({
+            path: file.fileName,
+            size: file.size,
+            original_name: file.clientName,
+            extension: file.subtype,
+          })
+          images.push(image)
+        })
+      )
+
+      return response
+        .status(201)
+        .json({ successes: images, errors: files.errors })
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Não foi possível processar a sua solicitação',
+      })
+    }
+  }
 
   /**
    * Display a single image.
