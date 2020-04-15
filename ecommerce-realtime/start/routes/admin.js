@@ -32,7 +32,12 @@ Route.group(() => {
   Route.resource('products', 'ProductController').apiOnly()
 
   // User Resource
-  Route.resource('users', 'UserController').apiOnly()
+  Route.resource('users', 'UserController')
+    .apiOnly()
+    .validator([
+      [['users.store'], ['Admin/User/StoreUser']],
+      [['users.update'], ['Admin/User/StoreUser']],
+    ])
 })
   .prefix('/api/v1/admin')
   .namespace('Admin')
