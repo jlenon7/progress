@@ -34,10 +34,12 @@ Route.group(() => {
   // User Resource
   Route.resource('users', 'UserController')
     .apiOnly()
-    .validator([
-      [['users.store'], ['Admin/User/StoreUser']],
-      [['users.update'], ['Admin/User/StoreUser']],
-    ])
+    .validator(
+      new Map([
+        [['users.store'], ['Admin/User/StoreUser']],
+        [['users.update'], ['Admin/User/StoreUser']],
+      ])
+    )
 })
   .prefix('/api/v1/admin')
   .namespace('Admin')
