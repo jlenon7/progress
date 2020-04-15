@@ -17,9 +17,8 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { greeting: 'This is Ecommerce API' }
 })
-
 
 // Rotas de autenticação
 require('./auth')
