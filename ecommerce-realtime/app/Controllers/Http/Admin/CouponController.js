@@ -71,7 +71,26 @@ class CouponController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params: { id }, request, response }) {}
+  async destroy({ params: { id }, request, response }) {
+    const trx = await Database.beginTransaction()
+    const coupon = await Coupon.findOrFail(id)
+
+    try {
+      await coupon.products().detach([], trx)
+      await coupon.orders().detach([], trx)
+      await coupon.users().detach([], trx)
+      await coupon.delete(trx)
+      await trx.commit()
+
+      return response.status(204).json()
+    } catch (error) {
+      await trx.rollback()
+
+      return response.status(400).json({
+        message: 'Não foi possível deletar este cupom no momento',
+      })
+    }
+  }
 }
 
 module.exports = CouponController
