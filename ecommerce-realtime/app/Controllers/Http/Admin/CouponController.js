@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const Coupon = use('App/Models/Coupon')
 const Database = use('Database')
+const Service = use('App/Services/Coupon/CouponService')
 
 class CouponController {
   /**
@@ -37,7 +38,62 @@ class CouponController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    const trx = Database.beginTransaction()
+
+    var can_use_for = {
+      client: false,
+      product: false,
+    }
+
+    try {
+      const couponData = request.only([
+        'code',
+        'discount',
+        'valid_from',
+        'valid_until',
+        'quantity',
+        'type',
+        'recursive',
+      ])
+
+      const { users, products } = request.only(['users', 'products'])
+      const coupon = await Coupon.create(couponData, trx)
+
+      const service = new Service(coupon, trx)
+
+      if (users && users.lenght > 0) {
+        await service.syncUsers(users)
+        can_use_for.client = true
+      }
+
+      if (products && products.lenght > 0) {
+        await service.syncProducts(products)
+        can_use_for.products = true
+      }
+
+      if (can_use_for.product && can_use_for.client) {
+        coupon.can_use_for = 'product_client'
+      } else if (can_use_for.product && !can_use_for.client) {
+        coupon.can_use_for = 'product'
+      } else if (!can_use_for.product && can_use_for.client) {
+        coupon.can_use_for = 'client'
+      } else {
+        coupon.can_use_for = 'all'
+      }
+
+      await coupon.save(trx)
+      await trx.commit()
+
+      return response.status(201).json(coupon)
+    } catch (error) {
+      await trx.rollback()
+
+      return response.status(400).json({
+        message: 'Não foi possível criar o coupon',
+      })
+    }
+  }
 
   /**
    * Display a single coupon.
