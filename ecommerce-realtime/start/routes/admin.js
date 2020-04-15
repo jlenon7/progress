@@ -5,7 +5,14 @@ const Route = use('Route')
 
 Route.group(() => {
   // Category Resource
-  Route.resource('categories', 'CategoryController').apiOnly()
+  Route.resource('categories', 'CategoryController')
+    .apiOnly()
+    .validator(
+      new Map([
+        [['categories.store'], ['Admin/Category/StoreCategory']],
+        [['categories.update'], ['Admin/Category/StoreCategory']],
+      ])
+    )
 
   // Coupon Resource
   Route.resource('coupons', 'CouponController').apiOnly()
@@ -17,7 +24,9 @@ Route.group(() => {
   Route.delete('orders/:id/discount', 'OrderController.revemoDiscount')
 
   // Order Resource
-  Route.resource('orders', 'OrderController').apiOnly()
+  Route.resource('orders', 'OrderController')
+    .apiOnly()
+    .validator(new Map([[['orders.store'], ['Admin/Category/StoreOrder']]]))
 
   // Product Resource
   Route.resource('products', 'ProductController').apiOnly()
