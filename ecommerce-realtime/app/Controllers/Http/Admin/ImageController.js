@@ -97,7 +97,11 @@ class ImageController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params, request, response, view }) {}
+  async show({ params: { id }, request, response, view }) {
+    const image = await Image.findOrFail()
+
+    return response.json(image)
+  }
 
   /**
    * Update image details.
