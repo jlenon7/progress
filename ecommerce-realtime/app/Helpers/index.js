@@ -49,7 +49,41 @@ const manage_single_upload = async (file, path = null) => {
   return file
 }
 
+/**
+ * Gerenciar upload de um vários arquivos
+ *
+ * @param {FileJar} fileJar - Arquivos
+ * @param {string} path - o caminho para onde o arquivo deve ser movido
+ * @return {object}
+ */
+
+const manage_multiple_uploads = async (fileJar, path = null) => {
+  path = path ? path : Helpers.publicPath('uploads')
+  let successes = []
+  errors = []
+
+  await Promise.all(
+    fileJar.files.map(async file => {
+      let random_name = await str_random(10)
+      let filename = `${new Date().getTime()}-${random_name}.${file.subtype}`
+
+      await file.move(path, {
+        name: filename,
+      })
+
+      if (file.moved()) {
+        successes.push(file)
+      } else {
+        errors.push(file.error())
+      }
+    })
+  )
+
+  return { successes, errors }
+}
+
 module.exports = {
   str_random,
   manage_single_upload,
+  manage_multiple_uploads,
 }
