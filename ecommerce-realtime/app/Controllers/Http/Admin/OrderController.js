@@ -3,6 +3,7 @@
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
+const Order = use('App/Models/Order')
 
 class OrderController {
   /**
@@ -12,9 +13,23 @@ class OrderController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * @param {object} ctx.pagination
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, pagination }) {
+    const { status, id } = request.only(['status', 'id'])
+    const query = Order.query()
+
+    if (status && id) {
+      query.where('status', status)
+      query.orWhere('id', 'LIKE', `%${id}%`)
+    } else if (status) {
+      query.where('status', status)
+    } else if (id) {
+      query.where('id', 'LIKE', `%${id}%`)
+    }
+
+    const orders = query.paginate(pagination.page, pagination.limit)
+    return response.json(orders)
   }
 
   /**
@@ -25,8 +40,7 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-  }
+  async store({ request, response }) {}
 
   /**
    * Display a single order.
@@ -37,8 +51,7 @@ class OrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async show({ params: { id }, response }) {}
 
   /**
    * Update order details.
@@ -48,8 +61,7 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
+  async update({ params, request, response }) {}
 
   /**
    * Delete a order with id.
@@ -59,8 +71,7 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
+  async destroy({ params, request, response }) {}
 }
 
 module.exports = OrderController
