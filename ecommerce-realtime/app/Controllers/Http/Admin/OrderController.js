@@ -176,7 +176,14 @@ class OrderController {
     }
   }
 
-  async removeDiscount({ request, response }) {}
+  async removeDiscount({ request, response }) {
+    const { discount_id } = request.all()
+
+    const discount = await Discount.findOrFail(discount_id)
+    await discount.delete()
+
+    return response.status(204).json()
+  }
 }
 
 module.exports = OrderController
