@@ -4,6 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const Order = use('App/Models/Order')
+const Database = use('Database')
 
 class OrderController {
   /**
