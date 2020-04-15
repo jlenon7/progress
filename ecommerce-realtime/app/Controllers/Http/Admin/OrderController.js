@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const Order = use('App/Models/Order')
 const Database = use('Database')
+const Service = use('App/Services/Order/OrderService')
 
 class OrderController {
   /**
@@ -41,7 +42,28 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    const trx = await Database.beginTransaction()
+    try {
+      const { user_id, items, status } = request.all()
+      let order = await Order.create({ user_id, status }, trx)
+
+      const service = new Service(order, trx)
+
+      if (items && items.length > 0) {
+        await service.syncItems(items)
+      }
+
+      await trx.commit()
+
+      return response.status(201).json(order)
+    } catch (error) {
+      await trx.rollback()
+      return response.status(400).json({
+        message: 'Não foi possível criar o pedido no momento',
+      })
+    }
+  }
 
   /**
    * Display a single order.
