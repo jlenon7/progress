@@ -4,6 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const Coupon = use('App/Models/Coupon')
+const Database = use('Database')
 
 class CouponController {
   /**
@@ -45,9 +46,12 @@ class CouponController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show({ params, request, response, view }) {}
+  async show({ params: { id }, request, response }) {
+    const coupon = await Coupon.findOrFail(id)
+
+    return response.json(coupon)
+  }
 
   /**
    * Update coupon details.
@@ -67,7 +71,7 @@ class CouponController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {}
+  async destroy({ params: { id }, request, response }) {}
 }
 
 module.exports = CouponController
