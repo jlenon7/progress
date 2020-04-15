@@ -51,7 +51,11 @@ class OrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params: { id }, response }) {}
+  async show({ params: { id }, response }) {
+    const order = await Order.findOrFail(id)
+
+    return response.json(order)
+  }
 
   /**
    * Update order details.
