@@ -117,7 +117,64 @@ class CouponController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params: { id }, request, response }) {
+    const trx = await Database.beginTransaction()
+
+    var coupon = await Coupon.findOrFail(id)
+
+    var can_use_for = {
+      client: false,
+      product: false,
+    }
+
+    try {
+      const couponData = request.only([
+        'code',
+        'discount',
+        'valid_from',
+        'valid_until',
+        'quantity',
+        'type',
+        'recursive',
+      ])
+
+      coupon.merg(couponData)
+
+      const { users, products } = request.originalUrl(['users', 'products'])
+
+      const service = new Service(coupon, trx)
+
+      if (users && users.lenght > 0) {
+        await service.syncUsers(users)
+        can_use_for.client = true
+      }
+
+      if (products && products.lenght > 0) {
+        can_use_for.product = true
+      }
+
+      if (can_use_for.product && can_use_for.client) {
+        coupon.can_use_for = 'product_client'
+      } else if (can_use_for.product && !can_use_for.client) {
+        coupon.can_use_for = 'product'
+      } else if (!can_use_for.product && can_use_for.client) {
+        coupon.can_use_for = 'client'
+      } else {
+        coupon.can_use_for = 'all'
+      }
+
+      await coupon.save(trx)
+      await trx.commit()
+
+      return response.json(coupon)
+    } catch (error) {
+      await trx.rollback()
+
+      return response.status(400).json({
+        message: 'Não foi possível atualizar o coupon',
+      })
+    }
+  }
 
   /**
    * Delete a coupon with id.
