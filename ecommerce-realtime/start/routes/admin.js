@@ -13,6 +13,9 @@ Route.group(() => {
   // Image Resource
   Route.resource('images', 'ImageController').apiOnly()
 
+  Route.post('orders/:id/discount', 'OrderController.applyDiscount')
+  Route.delete('orders/:id/discount', 'OrderController.revemoDiscount')
+
   // Order Resource
   Route.resource('orders', 'OrderController').apiOnly()
 
@@ -21,4 +24,6 @@ Route.group(() => {
 
   // User Resource
   Route.resource('users', 'UserController').apiOnly()
-}).prefix('/api/v1/admin').namespace('Admin')
+})
+  .prefix('/api/v1/admin')
+  .namespace('Admin')
