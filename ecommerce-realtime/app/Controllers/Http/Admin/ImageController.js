@@ -111,7 +111,20 @@ class ImageController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params: { id }, request, response }) {
+    const image = await Image.findOrFail(id)
+
+    try {
+      image.merge(request.only(['original_name']))
+      await image.save()
+
+      response.status(200).json(image)
+    } catch (error) {
+      response.status(400).json({
+        message: 'Não foi possível atualizar esta imagem no momento',
+      })
+    }
+  }
 
   /**
    * Delete a image with id.
