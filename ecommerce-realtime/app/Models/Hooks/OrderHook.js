@@ -11,6 +11,6 @@ OrderHook.updateValues = async model => {
 
 OrderHook.updateCollectionValues = async models => {
   for (let model of models) {
-    model = await OrderHook.updateValues(models)
+    model = await OrderHook.updateValues(model)
   }
 }
