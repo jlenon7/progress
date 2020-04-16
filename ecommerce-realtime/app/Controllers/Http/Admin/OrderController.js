@@ -8,6 +8,7 @@ const Database = use('Database')
 const Service = use('App/Services/Order/OrderService')
 const Coupon = use('App/Models/Coupon')
 const Discount = use('App/Models/Discount')
+const Transformer = use('App/Transformers/Admin/OrderTransformer')
 
 class OrderController {
   /**
@@ -19,20 +20,20 @@ class OrderController {
    * @param {Response} ctx.response
    * @param {object} ctx.pagination
    */
-  async index({ request, response, pagination }) {
+  async index({ request, response, pagination, transform }) {
     const { status, id } = request.only(['status', 'id'])
     const query = Order.query()
 
     if (status && id) {
-      query.where('status', status)
-      query.orWhere('id', 'LIKE', `%${id}%`)
+      query.where('status', status).orWhere('id', 'LIKE', `%${id}%`)
     } else if (status) {
       query.where('status', status)
     } else if (id) {
       query.where('id', 'LIKE', `%${id}%`)
     }
 
-    const orders = query.paginate(pagination.page, pagination.limit)
+    var orders = await query.paginate(pagination.page, pagination.limit)
+    orders = await transform.paginate(orders, Transformer)
     return response.json(orders)
   }
 
@@ -44,11 +45,11 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+  async store({ request, response, transform }) {
     const trx = await Database.beginTransaction()
     try {
       const { user_id, items, status } = request.all()
-      let order = await Order.create({ user_id, status }, trx)
+      var order = await Order.create({ user_id, status }, trx)
 
       const service = new Service(order, trx)
 
@@ -57,6 +58,9 @@ class OrderController {
       }
 
       await trx.commit()
+
+      order = await Order.find(order.id)
+      order = await transform.include('user,items').item(order, Transformer)
 
       return response.status(201).json(order)
     } catch (error) {
@@ -76,8 +80,9 @@ class OrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params: { id }, response }) {
-    const order = await Order.findOrFail(id)
+  async show({ params: { id }, response, transform }) {
+    var order = await Order.findOrFail(id)
+    order = await transform.include('items,user,discounts').item(order, Transformer)
 
     return response.json(order)
   }
@@ -104,6 +109,7 @@ class OrderController {
       await order.save(trx)
 
       await trx.commit()
+      order = await transform.include('items,user,discounts,coupons').item(order, Transformer)
 
       return response.json(order)
     } catch (error) {
@@ -143,11 +149,11 @@ class OrderController {
     }
   }
 
-  async applyDiscount({ params: { id }, request, response }) {
+  async applyDiscount({ params: { id }, request, response, transform }) {
     const { code } = request.all()
 
     const coupon = await Coupon.findByOrFail('code', code.toUpperCase())
-    const order = await Order.findOrFail(id)
+    var order = await Order.findOrFail(id)
 
     var discount,
       info = {}
@@ -169,6 +175,8 @@ class OrderController {
         info.message = 'Não foi possivel aplicar este cupom'
         info.success = false
       }
+
+      order = await transform.include('items,user,discounts').item(order, Transformer)
 
       return response.json({ order, info })
     } catch (error) {
