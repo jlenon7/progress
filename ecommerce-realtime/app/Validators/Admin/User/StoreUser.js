@@ -6,7 +6,7 @@ class AdminUserStoreUser {
     let rule = ''
 
     if (userID) {
-      rule`unique:users,email,id,${userID}`
+      rule = `unique:users,email,id,${userID}`
     } else {
       rule = 'unique:users,email|required'
     }
