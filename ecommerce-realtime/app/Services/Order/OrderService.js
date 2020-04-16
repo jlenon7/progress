@@ -119,3 +119,5 @@ class OrderService {
     return false
   }
 }
+
+module.exports = OrderService
