@@ -4,6 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const User = use('App/Models/User')
+const Transformer = use('App/Transformers/Admin/UserTransformer')
 
 class UserController {
   /**
@@ -15,7 +16,7 @@ class UserController {
    * @param {Response} ctx.response
    * @param {object} ctx.pagination
    */
-  async index({ request, response, pagination }) {
+  async index({ request, response, pagination, transform }) {
     const name = request.input('name')
     const query = User.query()
 
@@ -25,7 +26,8 @@ class UserController {
       query.orWhere('email', 'LIKE', `%${name}%`)
     }
 
-    const users = await query.paginate(pagination.page, pagination.limit)
+    var users = await query.paginate(pagination.page, pagination.limit)
+    users = await transform.paginate(users, Transformer)
     return response.json(users)
   }
 
@@ -47,7 +49,8 @@ class UserController {
         'image_id',
       ])
 
-      const user = await User.create(userData)
+      var user = await User.create(userData)
+      user = await transform.item(user, Transformer)
 
       return response.status(201).json(user)
     } catch (error) {
@@ -66,8 +69,10 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params: { id }, request, response }) {
-    const user = await User.findOrFail(id)
+  async show({ params: { id }, request, response, trasnform }) {
+    var user = await User.findOrFail(id)
+
+    user = await transform.item(user, Transformer)
 
     return response.json(user)
   }
@@ -82,7 +87,7 @@ class UserController {
    */
   async update({ params: { id }, request, response }) {
     try {
-      const user = await User.findOrFail(id)
+      var user = await User.findOrFail(id)
 
       const userData = request.only([
         'name',
@@ -93,6 +98,8 @@ class UserController {
       ])
       user.merge(userData)
       await user.save()
+
+      user = await transform.item(user, Transformer)
 
       return response.json(user)
     } catch (error) {

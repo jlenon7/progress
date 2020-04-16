@@ -6,6 +6,7 @@
 const Coupon = use('App/Models/Coupon')
 const Database = use('Database')
 const Service = use('App/Services/Coupon/CouponService')
+const Transformer = use('App/Transformers/Admin/CouponTransformer')
 
 class CouponController {
   /**
@@ -17,7 +18,7 @@ class CouponController {
    * @param {Response} ctx.response
    * @param {object} ctx.pagination
    */
-  async index({ request, response, pagination }) {
+  async index({ request, response, pagination, transform }) {
     const code = request.input('code')
     const query = Coupon.query()
 
@@ -25,8 +26,8 @@ class CouponController {
       query.where('code', 'LIKE', `%${code}%`)
     }
 
-    const coupons = await query.paginate(pagination.page, pagination.limit)
-
+    var coupons = await query.paginate(pagination.page, pagination.limit)
+    coupons = await transform.paginate(coupons, Transformer)
     return response.json(coupons)
   }
 
@@ -38,7 +39,7 @@ class CouponController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+  async store({ request, response, transform }) {
     const trx = Database.beginTransaction()
 
     var can_use_for = {
@@ -58,7 +59,7 @@ class CouponController {
       ])
 
       const { users, products } = request.only(['users', 'products'])
-      const coupon = await Coupon.create(couponData, trx)
+      var coupon = await Coupon.create(couponData, trx)
 
       const service = new Service(coupon, trx)
 
@@ -84,6 +85,7 @@ class CouponController {
 
       await coupon.save(trx)
       await trx.commit()
+      order = await transform.include('users,products').item(coupon, Transformer)
 
       return response.status(201).json(coupon)
     } catch (error) {
@@ -103,8 +105,9 @@ class CouponController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async show({ params: { id }, request, response }) {
-    const coupon = await Coupon.findOrFail(id)
+  async show({ params: { id }, request, response, transform }) {
+    var coupon = await Coupon.findOrFail(id)
+    order = await transform.include('products,users,orders').item(coupon, Transformer)
 
     return response.json(coupon)
   }
@@ -165,6 +168,7 @@ class CouponController {
 
       await coupon.save(trx)
       await trx.commit()
+      order = await transform.item(coupon, Transformer)
 
       return response.json(coupon)
     } catch (error) {

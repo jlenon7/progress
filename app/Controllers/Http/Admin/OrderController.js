@@ -3,6 +3,12 @@
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
+const Order = use('App/Models/Order')
+const Database = use('Database')
+const Service = use('App/Services/Order/OrderService')
+const Coupon = use('App/Models/Coupon')
+const Discount = use('App/Models/Discount')
+const Transformer = use('App/Transformers/Admin/OrderTransformer')
 
 class OrderController {
   /**
@@ -12,9 +18,23 @@ class OrderController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * @param {object} ctx.pagination
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, pagination, transform }) {
+    const { status, id } = request.only(['status', 'id'])
+    const query = Order.query()
+
+    if (status && id) {
+      query.where('status', status).orWhere('id', 'LIKE', `%${id}%`)
+    } else if (status) {
+      query.where('status', status)
+    } else if (id) {
+      query.where('id', 'LIKE', `%${id}%`)
+    }
+
+    var orders = await query.paginate(pagination.page, pagination.limit)
+    orders = await transform.paginate(orders, Transformer)
+    return response.json(orders)
   }
 
   /**
@@ -25,7 +45,30 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response, transform }) {
+    const trx = await Database.beginTransaction()
+    try {
+      const { user_id, items, status } = request.all()
+      var order = await Order.create({ user_id, status }, trx)
+
+      const service = new Service(order, trx)
+
+      if (items && items.length > 0) {
+        await service.syncItems(items)
+      }
+
+      await trx.commit()
+
+      order = await Order.find(order.id)
+      order = await transform.include('user,items').item(order, Transformer)
+
+      return response.status(201).json(order)
+    } catch (error) {
+      await trx.rollback()
+      return response.status(400).json({
+        message: 'Não foi possível criar o pedido no momento',
+      })
+    }
   }
 
   /**
@@ -37,7 +80,11 @@ class OrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params: { id }, response, transform }) {
+    var order = await Order.findOrFail(id)
+    order = await transform.include('items,user,discounts').item(order, Transformer)
+
+    return response.json(order)
   }
 
   /**
@@ -48,7 +95,30 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params: { id }, request, response }) {
+    const order = await Order.findOrFail(id)
+
+    const trx = await Database.beginTransaction()
+    try {
+      const { user_id, items, status } = request.all()
+
+      order.merge({ user_id, status })
+      const service = new Service(order, trx)
+
+      await service.updateItems(items)
+      await order.save(trx)
+
+      await trx.commit()
+      order = await transform.include('items,user,discounts,coupons').item(order, Transformer)
+
+      return response.json(order)
+    } catch (error) {
+      await trx.rollback()
+
+      return response.status(400).json({
+        message: 'Não foi possível atualizar o pedido no momento',
+      })
+    }
   }
 
   /**
@@ -59,7 +129,68 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params: { id }, response }) {
+    const order = await Order.findOrFail(id)
+
+    const trx = await Database.beginTransaction()
+    try {
+      await order.items().delete(trx)
+      await order.coupons().delete(trx)
+      await order.delete(trx)
+      await trx.commit()
+
+      return response.status(204).json()
+    } catch (order) {
+      await trx.rollback()
+
+      return response.status(400).json({
+        message: 'Erro ao deletar este pedido',
+      })
+    }
+  }
+
+  async applyDiscount({ params: { id }, request, response, transform }) {
+    const { code } = request.all()
+
+    const coupon = await Coupon.findByOrFail('code', code.toUpperCase())
+    var order = await Order.findOrFail(id)
+
+    var discount,
+      info = {}
+    try {
+      const service = new Service(order)
+      const canAddDiscount = await service.canApplyDiscount(coupon)
+      const orderDiscounts = await order.coupons().getCount()
+
+      const canApplyToOrder =
+        orderDiscounts < 1 || (orderDiscounts >= 1 && coupon.recursive)
+      if (canAddDiscount && canApplyToOrder) {
+        discount = await Discount.findOrCreate({
+          order_id: order.id,
+          coupon_id: coupon.id,
+        })
+        info.message = 'Cupom apicado com sucesso!'
+        info.success = true
+      } else {
+        info.message = 'Não foi possivel aplicar este cupom'
+        info.success = false
+      }
+
+      order = await transform.include('items,user,discounts').item(order, Transformer)
+
+      return response.json({ order, info })
+    } catch (error) {
+      return response.status(400).json({ message: 'Erro ao aplica o cupom' })
+    }
+  }
+
+  async removeDiscount({ request, response }) {
+    const { discount_id } = request.all()
+
+    const discount = await Discount.findOrFail(discount_id)
+    await discount.delete()
+
+    return response.status(204).json()
   }
 }
 
