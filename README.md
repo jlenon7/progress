@@ -1,2 +1,3 @@
-# bootcamp
-⏯🚀  My journey at Rocketseat Bootcamp
+# Rocketseat GoStack
+
+⏯🚀 My journey at Rocketseat Bootcamp
