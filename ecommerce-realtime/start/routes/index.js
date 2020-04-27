@@ -20,6 +20,8 @@ Route.get('/', () => {
   return { greeting: 'This is Ecommerce API' }
 })
 
+Route.get('api/v1/me', 'UserController.me').as('me').middleware('auth')
+
 // Rotas de autenticação
 require('./auth')
 
