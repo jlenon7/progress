@@ -1,62 +1,55 @@
 'use strict'
 
-const BumblebeeTransformer = use('Bumblebee/Transformer')
-
+const TransformerAbstract = use('Adonis/Addons/Bumblebee/TransformerAbstract')
 const UserTransformer = use('App/Transformers/Admin/UserTransformer')
 const OrderItemTransformer = use('App/Transformers/Admin/OrderItemTransformer')
 const CouponTransformer = use('App/Transformers/Admin/CouponTransformer')
 const DiscountTransformer = use('App/Transformers/Admin/DiscountTransformer')
-
 /**
  * OrderTransformer class
  *
  * @class OrderTransformer
  * @constructor
  */
-class OrderTransformer extends BumblebeeTransformer {
-  static get availableInclude() {
+class OrderTransformer extends TransformerAbstract {
+  availableInclude() {
     return ['user', 'coupons', 'items', 'discounts']
   }
   /**
    * This method is used to transform the data.
    */
-  transform (model) {
-    model = model.toJSON()
+  transform(order) {
+    order = order.toJSON()
     return {
-     // add your transformation object here
-     id: model.id,
-     status: model.status,
-     total: model.total ? parseFloat(model.total.toFixed(2)) : 0,
-     qty_items: 
-        model.__meta__ && model.__meta__.qty_items 
-        ? model.__meta__.qty_items 
-        : 0,
-     discount: 
-        model.__meta__ && model.__meta__.discount 
-        ? model.__meta__.discount 
-        : 0,
-     subtotal: 
-        model.__meta__ && model.__meta__.subtotal 
-        ? model.__meta__.subtotal 
-        : 0,
-
+      id: order.id,
+      status: order.status,
+      total: order.total ? parseFloat(order.total.toFixed(2)) : 0,
+      date: order.created_at,
+      qty_items:
+        order.__meta__ && order.__meta__.qty_items
+          ? order.__meta__.qty_items
+          : 0,
+      discount:
+        order.__meta__ && order.__meta__.discount ? order.__meta__.discount : 0,
+      subtotal:
+        order.__meta__ && order.__meta__.subtotal ? order.__meta__.subtotal : 0
     }
   }
 
-  includeUser(model) {
-    return this.item(model.getRelated('user'), UserTransformer)
+  includeUser(order) {
+    return this.item(order.getRelated('user'), UserTransformer)
   }
 
-  includeCoupons(model) {
-    return this.collection(model.getRelated('coupons'), CouponTransformer)
+  includeItems(order) {
+    return this.collection(order.getRelated('items'), OrderItemTransformer)
   }
 
-  includeItems(model) {
-    return this.collection(model.getRelated('items'), OrderItemTransformer)
+  includeCoupons(order) {
+    return this.collection(order.getRelated('coupons'), CouponTransformer)
   }
 
-  includeDiscounts(model) {
-    return this.collection(model.getRelated('discounts'), DiscountTransformer)
+  includeDiscounts(order) {
+    return this.collection(order.getRelated('discounts'), DiscountTransformer)
   }
 }
 
