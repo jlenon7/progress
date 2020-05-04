@@ -2,7 +2,6 @@
 
 const BaseExceptionHandler = use('BaseExceptionHandler')
 const Logger = use('Logger')
-
 /**
  * This class handles all exceptions thrown during
  * the HTTP request lifecycle.
@@ -23,10 +22,12 @@ class ExceptionHandler extends BaseExceptionHandler {
    */
   async handle(error, { request, response }) {
     if (error.name === 'ValidationException') {
-      response.status(error.status).json({
-        message: error.messages,
+      response.status(error.status).send({
+        errors: error.messages
       })
+      return
     }
+    response.status(error.status).send({ error: error.message })
   }
 
   /**
@@ -45,7 +46,7 @@ class ExceptionHandler extends BaseExceptionHandler {
         stack: error.stack,
         message: error.message,
         status: error.status,
-        name: error.name,
+        name: error.name
       })
     }
   }
