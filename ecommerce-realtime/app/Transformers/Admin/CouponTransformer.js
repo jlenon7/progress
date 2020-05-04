@@ -1,43 +1,39 @@
 'use strict'
 
-const BumblebeeTransformer = use('Bumblebee/Transformer')
-
-const UserTransformer = use('App/Transformers/Admin/UserTransformer')
+const TransformerAbstract = use('Adonis/Addons/Bumblebee/TransformerAbstract')
 const ProductTransformer = use('App/Transformers/Admin/ProductTransformer')
+const UserTransformer = use('App/Transformers/Admin/UserTransformer')
 const OrderTransformer = use('App/Transformers/Admin/OrderTransformer')
-
 /**
  * CouponTransformer class
  *
  * @class CouponTransformer
  * @constructor
  */
-class CouponTransformer extends BumblebeeTransformer {
-  static get availableIncludes() {
+class CouponTransformer extends TransformerAbstract {
+  availableIncludes() {
     return ['users', 'products', 'orders']
   }
   /**
    * This method is used to transform the data.
    */
-  transform (model) {
+  transform(coupon) {
     coupon = coupon.toJSON()
     delete coupon.created_at
     delete coupon.updated_at
-    return {
-     // add your transformation object here
-    }
+    return coupon
   }
 
-  includeUsers(model) {
-    return this.collection(model.getRelated('users'), UserTransformer)
+  includeUsers(coupon) {
+    return this.collection(coupon.getRelated('users'), UserTransformer)
   }
 
-  includeProducts(model) {
-    return this.collection(model.getRelated('products'), ProductTransformer)
+  includeProducts(coupon) {
+    return this.collection(coupon.getRelated('products'), ProductTransformer)
   }
 
-  includeOrders(model) {
-    return this.collection(model.getRelated('orders'), OrderTransformer)
+  includeOrders(coupon) {
+    return this.collection(coupon.getRelated('orders'), OrderTransformer)
   }
 }
 
