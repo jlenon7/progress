@@ -10,14 +10,18 @@ class Pagination {
    * @param {Function} next
    */
   async handle(ctx, next) {
+    // call next to advance the request
     if (ctx.request.method() === 'GET') {
-      const page = parseInt(ctx.request.input('page'))
-      const limit = parseInt(ctx.request.input('limit'))
-
-      // Atribuindo valores para a propriedade pagination
+      const page = ctx.request.input('page')
+        ? parseInt(ctx.request.input('page'))
+        : 1
+      const limit = ctx.request.input('limit')
+        ? parseInt(ctx.request.input('limit'))
+        : 20
+      // atribuí os valores passados via get para a propriedade pagination do objeto ctx
       ctx.pagination = {
         page,
-        limit,
+        limit
       }
 
       const perpage = parseInt(ctx.request.input('perpage'))
