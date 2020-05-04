@@ -3,27 +3,26 @@
 const Database = use('Database')
 const User = use('App/Models/User')
 const Role = use('Role')
+const Ws = use('Ws')
 
 class AuthController {
   async register({ request, response }) {
     const trx = await Database.beginTransaction()
-
     try {
       const { name, surname, email, password } = request.all()
-
       const user = await User.create({ name, surname, email, password }, trx)
       const userRole = await Role.findBy('slug', 'client')
-
       await user.roles().attach([userRole.id], null, trx)
-
       await trx.commit()
-
-      return response.status(201).json({ data: user })
+      const topic = Ws.getChannel('notifications').topic('notifications')
+      if (topic) {
+        topic.broadcast('new:user')
+      }
+      return response.status(201).send({ data: user })
     } catch (error) {
       await trx.rollback()
-
-      return response.status(400).json({
-        message: 'Erro ao realizar cadastro',
+      return response.status(400).send({
+        message: 'Erro ao realizar cadastro!'
       })
     }
   }
@@ -33,7 +32,7 @@ class AuthController {
 
     let data = await auth.withRefreshToken().attempt(email, password)
 
-    return response.json({ data })
+    return response.send({ data })
   }
 
   async refresh({ request, response, auth }) {
@@ -47,7 +46,7 @@ class AuthController {
       .newRefreshToken()
       .generateForRefreshToken(refresh_token)
 
-    return response.json({ data: user })
+    return response.send({ data: user })
   }
 
   async logout({ request, response, auth }) {
@@ -58,8 +57,7 @@ class AuthController {
     }
 
     await auth.authenticator('jwt').revokeTokens([refresh_token], true)
-
-    return response.status(204).json({})
+    return response.status(204).send({})
   }
 
   async forgot({ request, response }) {
