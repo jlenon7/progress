@@ -14,7 +14,7 @@ class OrderSchema extends Schema {
         'cancelled',
         'shipped',
         'paid',
-        'finished',
+        'finished'
       ])
       table.timestamps()
 
@@ -22,7 +22,7 @@ class OrderSchema extends Schema {
         .foreign('user_id')
         .references('id')
         .inTable('users')
-        .onDelete('CASCADE')
+        .onDelete('cascade')
     })
   }
 

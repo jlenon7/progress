@@ -21,6 +21,9 @@ class User extends Model {
     })
   }
 
+  /**
+   * Oculta os campos definidos no retorno, das queries no DB
+   */
   static get hidden() {
     return ['password']
   }
@@ -28,7 +31,7 @@ class User extends Model {
   static get traits() {
     return [
       '@provider:Adonis/Acl/HasRole',
-      '@provider:Adonis/Acl/HasPermission',
+      '@provider:Adonis/Acl/HasPermission'
     ]
   }
 

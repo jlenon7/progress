@@ -5,7 +5,9 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const User = use('App/Models/User')
 const Transformer = use('App/Transformers/Admin/UserTransformer')
-
+/**
+ * Resourceful controller for interacting with users
+ */
 class UserController {
   /**
    * Show a list of all users.
@@ -19,7 +21,6 @@ class UserController {
   async index({ request, response, pagination, transform }) {
     const name = request.input('name')
     const query = User.query()
-
     if (name) {
       query.where('name', 'LIKE', `%${name}%`)
       query.orWhere('surname', 'LIKE', `%${name}%`)
@@ -28,7 +29,7 @@ class UserController {
 
     var users = await query.paginate(pagination.page, pagination.limit)
     users = await transform.paginate(users, Transformer)
-    return response.json(users)
+    return response.send(users)
   }
 
   /**
@@ -39,24 +40,23 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+  async store({ request, response, transform }) {
     try {
       const userData = request.only([
         'name',
         'surname',
         'email',
         'password',
-        'image_id',
+        'image_id'
       ])
 
       var user = await User.create(userData)
       user = await transform.item(user, Transformer)
-
-      return response.status(201).json(user)
+      return response.status(201).send(user)
     } catch (error) {
-      return response.status(400).json({
-        message: 'Não foi possivel criar este usuário no momento',
-      })
+      return response
+        .status(400)
+        .send({ message: 'Não foi possível criar este usuário no momento!' })
     }
   }
 
@@ -69,12 +69,10 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params: { id }, request, response, trasnform }) {
+  async show({ params: { id }, response, transform }) {
     var user = await User.findOrFail(id)
-
     user = await transform.item(user, Transformer)
-
-    return response.json(user)
+    return response.send(user)
   }
 
   /**
@@ -85,28 +83,19 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params: { id }, request, response }) {
-    try {
-      var user = await User.findOrFail(id)
-
-      const userData = request.only([
-        'name',
-        'surname',
-        'email',
-        'password',
-        'image_id',
-      ])
-      user.merge(userData)
-      await user.save()
-
-      user = await transform.item(user, Transformer)
-
-      return response.json(user)
-    } catch (error) {
-      return response.status(400).json({
-        message: 'Não foi possível atualizar este usuário',
-      })
-    }
+  async update({ params: { id }, request, response, transform }) {
+    var user = await User.findOrFail(id)
+    const userData = request.only([
+      'name',
+      'surname',
+      'email',
+      'password',
+      'image_id'
+    ])
+    user.merge(userData)
+    await user.save()
+    user = await transform.item(user, Transformer)
+    return response.send(user)
   }
 
   /**
@@ -121,12 +110,11 @@ class UserController {
     const user = await User.findOrFail(id)
     try {
       await user.delete()
-
-      return response.status(204).json()
+      return response.status(204).send()
     } catch (error) {
-      return response.status(400).json({
-        message: 'Não foi possível excluir um usuário',
-      })
+      response
+        .status(500)
+        .send({ message: 'Não foi possível deletar este usuário!' })
     }
   }
 }

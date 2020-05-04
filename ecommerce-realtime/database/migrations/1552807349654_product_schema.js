@@ -17,7 +17,7 @@ class ProductSchema extends Schema {
         .foreign('image_id')
         .references('id')
         .inTable('images')
-        .onDelete('CASCADE')
+        .onDelete('cascade')
     })
 
     this.create('image_product', table => {
@@ -28,13 +28,13 @@ class ProductSchema extends Schema {
         .foreign('image_id')
         .references('id')
         .inTable('images')
-        .onDelete('CASCADE')
+        .onDelete('cascade')
 
       table
         .foreign('product_id')
         .references('id')
         .inTable('products')
-        .onDelete('CASCADE')
+        .onDelete('cascade')
     })
 
     this.create('category_product', table => {
@@ -46,13 +46,13 @@ class ProductSchema extends Schema {
         .foreign('product_id')
         .references('id')
         .inTable('products')
-        .onDelete('CASCADE')
+        .onDelete('cascade')
 
       table
         .foreign('category_id')
         .references('id')
         .inTable('categories')
-        .onDelete('CASCADE')
+        .onDelete('cascade')
     })
   }
 
