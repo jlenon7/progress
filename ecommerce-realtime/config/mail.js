@@ -25,7 +25,7 @@ module.exports = {
   smtp: {
     driver: 'smtp',
     pool: true,
-    port: Env.get('SMTP_PORT', 2525),
+    port: 2525,
     host: Env.get('SMTP_HOST'),
     secure: false,
     auth: {
@@ -79,7 +79,6 @@ module.exports = {
   mailgun: {
     driver: 'mailgun',
     domain: Env.get('MAILGUN_DOMAIN'),
-    region: Env.get('MAILGUN_API_REGION'),
     apiKey: Env.get('MAILGUN_API_KEY'),
     extras: {}
   },
