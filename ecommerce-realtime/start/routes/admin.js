@@ -4,45 +4,58 @@
 const Route = use('Route')
 
 Route.group(() => {
-  // Category Resource
+  /**
+   *  Categories resource routes
+   */
   Route.resource('categories', 'CategoryController')
     .apiOnly()
     .validator(
       new Map([
-        [['categories.store'], ['Admin/Category/StoreCategory']],
-        [['categories.update'], ['Admin/Category/StoreCategory']],
+        [['categories.store'], ['Admin/StoreCategory']],
+        [['categories.update'], ['Admin/StoreCategory']]
       ])
     )
-
-  // Coupon Resource
-  Route.resource('coupons', 'CouponController').apiOnly()
-
-  // Image Resource
-  Route.resource('images', 'ImageController').apiOnly()
-
-  Route.post('orders/:id/discount', 'OrderController.applyDiscount')
-  Route.delete('orders/:id/discount', 'OrderController.revemoDiscount')
-
-  // Order Resource
-  Route.resource('orders', 'OrderController')
-    .apiOnly()
-    .validator(new Map([[['orders.store'], ['Admin/Category/StoreOrder']]]))
-
-  // Product Resource
+  /**
+   * Products resource routes
+   */
   Route.resource('products', 'ProductController').apiOnly()
 
-  // User Resource
+  /**
+   * Coupon Resource Routes
+   */
+  Route.resource('coupons', 'CouponController').apiOnly()
+
+  /**
+   * Order Resource Routes
+   */
+  Route.post('orders/:id/discount', 'OrderController.applyDiscount')
+  Route.delete('orders/:id/discount', 'OrderController.removeDiscount')
+  Route.resource('orders', 'OrderController')
+    .apiOnly()
+    .validator(new Map([[['orders.store'], ['Admin/StoreOrder']]]))
+
+  /**
+   * Image Resource Routes
+   */
+  Route.resource('images', 'ImageController').apiOnly()
+
+  /**
+   * User Resource Routes
+   */
   Route.resource('users', 'UserController')
     .apiOnly()
     .validator(
       new Map([
-        [['users.store'], ['Admin/User/StoreUser']],
-        [['users.update'], ['Admin/User/StoreUser']],
+        [['users.store'], ['Admin/StoreUser']],
+        [['users.update'], ['Admin/StoreUser']]
       ])
     )
 
-    Route.get('dashboard', 'DashboardController.index').as('dashboard')
+  /**
+   * Dashboard Route
+   */
+  Route.get('dashboard', 'DashboardController.index').as('dashboard')
 })
-  .prefix('/api/v1/admin')
+  .prefix('v1/admin')
   .namespace('Admin')
-  .middleware(['auth', 'is:(admin || manager)'])
+  .middleware(['auth', 'is:( admin || manager )'])
