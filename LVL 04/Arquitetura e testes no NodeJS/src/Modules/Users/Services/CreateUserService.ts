@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm'
-import User from '../Models/User'
+import User from '@Modules/Users/Infra/Typeorm/Entities/User'
 
-import AppError from '../Errors/AppError'
+import AppError from '@Shared/Errors/AppError'
 
 interface IRequest {
   name: string

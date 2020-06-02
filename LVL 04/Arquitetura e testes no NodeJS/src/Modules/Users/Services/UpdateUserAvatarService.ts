@@ -1,11 +1,11 @@
 import { getRepository } from 'typeorm'
-import User from '../Models/User'
+import User from '@Modules/Users/Infra/Typeorm/Entities/User'
 import path from 'path'
-import AppError from '../Errors/AppError'
+import AppError from '@Shared/Errors/AppError'
 
 import fs from 'fs'
 
-import uploadConfig from '../Config/upload'
+import uploadConfig from '@Config/upload'
 
 interface IRequest {
   user_id: string
