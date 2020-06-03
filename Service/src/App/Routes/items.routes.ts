@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import ItemsController from '../Controllers/ItemsController'
+import ItemsController from '@App/Controllers/ItemsController'
 
 class Items {
   public router: Router

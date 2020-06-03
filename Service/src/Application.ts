@@ -1,6 +1,6 @@
 import express, { Application as ExpressApp } from 'express'
-import IApplication from './Interfaces/IApplication'
-import StartDatabase from './Database/StartDatabase'
+import IApplication from '@Interfaces/IApplication'
+import StartDatabase from '@Database/StartDatabase'
 
 class Application implements IApplication {
   public app: ExpressApp

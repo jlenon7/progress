@@ -1,7 +1,7 @@
-import { Connection } from '../Database/StartDatabase'
+import { Connection } from '@Database/StartDatabase'
 
 export default class ItemsRepository {
-  public async all(): Promise<> {
+  public async all(): Promise<any[]> {
     const items = await Connection('items').select('*')
 
     return items

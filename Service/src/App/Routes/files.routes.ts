@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express'
-import FilesController from '../Controllers/FilesController'
+import FilesController from '@App/Controllers/FilesController'
 
 class Files {
   public router: Router

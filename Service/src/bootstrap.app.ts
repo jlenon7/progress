@@ -1,11 +1,11 @@
-import Application from './Application'
+import Application from 'Application'
 import cors from 'cors'
 
-import logMiddleware from './Middlewares/log.middleware'
+import logMiddleware from '@App/Middlewares/log.middleware'
 
-import Welcome from './Routes'
-import Files from './Routes/files.routes'
-import Items from './Routes/items.routes'
+import Welcome from '@App/Routes'
+import Files from '@App/Routes/files.routes'
+import Items from '@App/Routes/items.routes'
 
 const app = new Application({
   middlewares: [
