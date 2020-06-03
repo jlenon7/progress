@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "repository": "https://github.com/jlenon7/NLWeek1.git",
   "scripts": {
-    "dev": "ts-node-dev src/bootstrap.app.ts"
+    "knex": "knex --knexfile knexfile.ts",
+    "dev": "ts-node-dev src/bootstrap.app.ts",
+    "migrate:pg": "yarn knex migrate:latest --env=postgresdb && yarn seed",
+    "rollback:pg": "yarn knex migrate:rollback --env=postgresdb",
+    "migrate:lite": "yarn knex migrate:latest --env=sqlitedb && yarn seed",
+    "rollback:lite": "yarn knex migrate:rollback --env=sqlitedb",
+    "seed": "yarn knex seed:run"
   },
   "keywords": [],
   "author": "João Lenon <lenonsec7@gmail.com>",
@@ -11,7 +17,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "knex": "^0.21.1",
+    "pg": "^8.2.1",
+    "sqlite3": "^4.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",

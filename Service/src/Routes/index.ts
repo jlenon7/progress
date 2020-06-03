@@ -1,14 +1,14 @@
 import { Router, Request, Response } from 'express'
 
-class Routes {
-  public router = Router()
-  public path = process.env.APP_PREFIX
+class Welcome {
+  public router: Router
 
   constructor() {
-    this.setupRoutes()
+    this.router = Router()
+    this.SetupWelcomeRoute()
   }
 
-  public setupRoutes(): any {
+  public SetupWelcomeRoute(): any {
     this.router.get('/', (request: Request, response: Response) => {
       return response.json({
        zap: 'nu dale 😎👋'
@@ -17,4 +17,4 @@ class Routes {
   }
 }
 
-export default new Routes().router
+export default new Welcome().router
