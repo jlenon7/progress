@@ -1,11 +1,10 @@
 import knex from 'knex'
 import path from 'path'
 
+export let Connection: knex<any, unknown[]>
 export default class StartDatabase {
-  public Connection: knex | any
-
   public SQLite3(): knex {
-    return this.Connection = knex({
+    return Connection = knex({
       client: 'sqlite3',
       connection: {
         filename: path.resolve(__dirname, 'database.sqlite')
@@ -15,7 +14,7 @@ export default class StartDatabase {
   }
 
   public PostgreSQL(): knex {
-    return this.Connection = knex({
+    return Connection = knex({
       client: 'postgres',
       connection: {
         host: '127.0.0.1',

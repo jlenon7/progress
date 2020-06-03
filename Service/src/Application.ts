@@ -36,9 +36,9 @@ class Application implements IApplication {
   private RunDatabaseCluster(): void {
     if (this.database === 'postgres') {
       new StartDatabase().PostgreSQL()
+    } else {
+      new StartDatabase().SQLite3()
     }
-
-    new StartDatabase().SQLite3()
   }
 
   private async BootMiddlewares (middlewares: any[]): Promise<void> {

@@ -5,9 +5,9 @@
   "scripts": {
     "knex": "knex --knexfile knexfile.ts",
     "dev": "ts-node-dev src/bootstrap.app.ts",
-    "migrate:pg": "yarn knex migrate:latest --env=postgresdb && yarn seed",
+    "migrate:pg": "yarn knex migrate:latest --env=postgresdb && yarn seed --env=postgresdb",
     "rollback:pg": "yarn knex migrate:rollback --env=postgresdb",
-    "migrate:lite": "yarn knex migrate:latest --env=sqlitedb && yarn seed",
+    "migrate:lite": "yarn knex migrate:latest --env=sqlitedb && yarn seed --env=sqlitedb",
     "rollback:lite": "yarn knex migrate:rollback --env=sqlitedb",
     "seed": "yarn knex seed:run"
   },
@@ -15,6 +15,7 @@
   "author": "João Lenon <lenonsec7@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@jlenon7/dedsec": "^1.1.6",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
