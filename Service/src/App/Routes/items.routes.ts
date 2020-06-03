@@ -8,10 +8,10 @@ class Items {
   constructor() {
     this.Controller = new ItemsController
     this.router = Router()
-    this.SetupFilesRoutes()
+    this.SetupItemsRoutes()
   }
 
-  public SetupFilesRoutes(): any {
+  public SetupItemsRoutes(): any {
     this.router.get('/items', this.Controller.index)
   }
 }

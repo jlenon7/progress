@@ -7,7 +7,7 @@ let dedRes: SecResponse
 let service: ItemsService
 let repository: ItemsRepository
 
-class ItemsController {
+export default class ItemsController {
   constructor() {
     repository = new ItemsRepository()
     service = new ItemsService()
@@ -20,6 +20,3 @@ class ItemsController {
     return response.json(dedRes.withCollection(items, 'Index Items'))
   }
 }
-
-export default ItemsController
-

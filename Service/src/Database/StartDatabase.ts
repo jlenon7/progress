@@ -1,7 +1,7 @@
 import knex from 'knex'
 import path from 'path'
 
-export let Connection: knex<any, unknown[]>
+export let Connection: knex
 export default class StartDatabase {
   public SQLite3(): knex {
     return Connection = knex({
