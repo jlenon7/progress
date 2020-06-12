@@ -9,6 +9,7 @@ import uploadConfig from '@Config/upload'
 import AppError from '@Shared/Errors/AppError'
 
 import '@Shared/Infra/Typeorm'
+import '@Shared/Container'
 
 const app = express()
 
