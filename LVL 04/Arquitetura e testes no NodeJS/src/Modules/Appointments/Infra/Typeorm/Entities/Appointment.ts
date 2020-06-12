@@ -11,7 +11,7 @@ import {
 import User from '@Modules/Users/Infra/Typeorm/Entities/User'
 
 @Entity('appointments')
-class Appointmet {
+class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -32,4 +32,4 @@ class Appointmet {
   updated_at: Date
 }
 
-export default Appointmet
+export default Appointment
