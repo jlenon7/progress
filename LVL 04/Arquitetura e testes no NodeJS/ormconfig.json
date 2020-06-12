@@ -5,9 +5,9 @@
   "username": "postgres",
   "password": "docker",
   "database": "gostack_gobarber",
-  "entities": ["./src/Models/*.ts"],
-  "migrations": ["./src/Database/migrations/*.ts"],
+  "entities": ["./src/Modules/**/Infra/Typeorm/Entities/*.ts"],
+  "migrations": ["./src/Shared/Infra/Typeorm/Migrations/*.ts"],
   "cli": {
-    "migrationsDir": "./src/Database/migrations"
+    "migrationsDir": "./src/Shared/Infra/Typeorm/Migrations/*.ts"
   }
 }
