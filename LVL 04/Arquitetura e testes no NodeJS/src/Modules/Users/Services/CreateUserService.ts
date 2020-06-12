@@ -1,7 +1,8 @@
-import { getRepository } from 'typeorm'
 import User from '@Modules/Users/Infra/Typeorm/Entities/User'
+import { injectable, inject } from 'tsyringe'
 
 import AppError from '@Shared/Errors/AppError'
+import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
 
 interface IRequest {
   name: string
@@ -9,25 +10,25 @@ interface IRequest {
   password: string
 }
 
+@injectable()
 class CreateUserService {
-  public async execute({ name, email, password }: IRequest): Promise<User> {
-    const usersRepository = getRepository(User)
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository
+  ) {}
 
-    const checkUsersExists = await usersRepository.findOne({
-      where: { email },
-    })
+  public async execute({ name, email, password }: IRequest): Promise<User> {
+    const checkUsersExists = await this.usersRepository.findByEmail(email)
 
     if (checkUsersExists) {
       throw new AppError('Email address already used.')
     }
 
-    const user = usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       email,
       password,
     })
-
-    await usersRepository.save(user)
 
     return user
   }
