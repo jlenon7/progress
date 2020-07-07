@@ -3,10 +3,10 @@
     "target": "es5",
     "module": "commonjs",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "strict": true,
     "strictPropertyInitialization": false,
-    "baseUrl": "./src", 
+    "baseUrl": "./", 
     "paths": {
       "@Config/*": ["config/*"],
       "@Start/*": ["start/*"],

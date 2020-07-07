@@ -25,7 +25,6 @@ export default class Application {
     this.routes = configs.routes
     this.database = configs.database
     this.middlewares = configs.middlewares
-    
     this.StartApplication()
   }
 
