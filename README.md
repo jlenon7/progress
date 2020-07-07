@@ -12,7 +12,7 @@
 
 The intention behind this repository is to always maintain a viable bootstrap for the `Frameworks` I usually use, for a fast software development using good practices
 
-<img src="https://lh3.googleusercontent.com/proxy/2Bl9eKWPeRKJm20V3AzzdUv_83PZ21UpZoK3z9UvGFUHksiqkGo8o9c2-m9q3hodyh-nWBJyGrdcxmyATJf2yCYkqtWQgdsr" width="200px" align="right" hspace="30px" vspace="100px">
+<img src="http://pixelartmaker.com/art/0fd29664f234657.png" width="200px" align="right" hspace="30px" vspace="100px">
 
 ## Installation
 
