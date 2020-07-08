@@ -1,9 +1,9 @@
 import User from '@Modules/Users/Infra/Typeorm/Entities/User'
 import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import ICreateUserDTO from '@Modules/Users/Dtos/ICreateUserDTO'  
+import ICreateUserDTO from '@Modules/Users/Dtos/ICreateUserDTO'
 import { uuid } from 'uuidv4'
 
-class UsersRepository implements IUsersRepository {
+class FakeUsersRepository implements IUsersRepository {
   private users: User[] = []
 
   public async findById(id: string): Promise<User | undefined> {
@@ -14,7 +14,7 @@ class UsersRepository implements IUsersRepository {
 
   public async findByEmail(email: string): Promise<User | undefined> {
     const findUser = this.users.find(user => user.email === email)
-    
+
     return findUser
   }
 
@@ -37,4 +37,4 @@ class UsersRepository implements IUsersRepository {
   }
 }
 
-export default UsersRepository
+export default FakeUsersRepository
