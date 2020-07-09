@@ -9,10 +9,15 @@ import UserAvatarController from '@Modules/Users/Infra/Http/Controllers/UserAvat
 
 const usersRouter = Router()
 const usersController = new UsersController()
-const userAvatarController = new UserAvatarController
+const userAvatarController = new UserAvatarController()
 const upload = multer(uploadConfig)
 
 usersRouter.post('/', usersController.store)
-usersRouter.patch('/avatar', ensureAuthenticated, upload.single('avatar'), userAvatarController.update)
+usersRouter.patch(
+  '/avatar',
+  ensureAuthenticated,
+  upload.single('avatar'),
+  userAvatarController.update,
+)
 
 export default usersRouter
