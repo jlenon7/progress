@@ -1,8 +1,8 @@
 import { EnvClass } from '@Start/kernel'
 
-const Env = new EnvClass()
+import pjson from '../package.json'
 
-const pjson = require('../package.json')
+const Env = new EnvClass()
 
 export default {
   /*

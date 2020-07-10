@@ -1,4 +1,4 @@
-export default { 
+export default {
   /*
   |--------------------------------------------------------------------------
   | Origin
@@ -10,5 +10,5 @@ export default {
   | Boolean: false - Disallow all
   |
   */
- origin: true,
+  origin: true,
 }

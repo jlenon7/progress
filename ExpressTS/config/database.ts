@@ -28,7 +28,7 @@ export default {
   sqlite: {
     client: 'sqlite3',
     connection: {
-      filename: `${Env.get('DB_DATABASE', 'development')}.sqlite`
+      filename: `${Env.get('DB_DATABASE', 'development')}.sqlite`,
     },
     debug: Env.get('DB_DEBUG', false),
   },
