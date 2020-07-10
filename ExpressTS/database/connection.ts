@@ -1,4 +1,8 @@
-import { createConnection, getConnectionOptions, Connection as TypeORMConnection } from 'typeorm'
+import {
+  createConnection,
+  getConnectionOptions,
+  Connection as TypeORMConnection,
+} from 'typeorm'
 
 export default class Connection {
   public async start(name = 'default'): Promise<TypeORMConnection> {
