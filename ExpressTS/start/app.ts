@@ -10,10 +10,10 @@ export default class Application {
   private name: string | boolean | undefined
   private prefix: string | boolean | undefined
 
-  constructor(configs: { 
-    middlewares: any[]; 
-    routes: any[]; 
-    port: number; 
+  constructor(configs: {
+    middlewares: any[]
+    routes: any[]
+    port: number
     database: Connection
     name: string | boolean | undefined
     prefix: string | boolean | undefined
@@ -33,7 +33,9 @@ export default class Application {
     this.database ? await this.RunDatabaseCluster() : this.MockDatabaseCluster()
     await this.BootMiddlewares(this.middlewares)
     await this.BootRoutes(this.routes)
-    this.app.listen(this.port, () => console.log(`🚀 ${this.name} started on port ${this.port}! 🤯`))
+    this.app.listen(this.port, () =>
+      console.log(`🚀 ${this.name} started on port ${this.port}! 🤯`),
+    )
   }
 
   private async RunDatabaseCluster(): Promise<void> {
@@ -44,13 +46,13 @@ export default class Application {
     console.log('> Mocking database cluster')
   }
 
-  private async BootMiddlewares (middlewares: any[]): Promise<void> {
+  private async BootMiddlewares(middlewares: any[]): Promise<void> {
     middlewares.forEach((middleware: any) => {
       this.app.use(middleware)
     })
   }
 
-  private async BootRoutes (routes: any[]): Promise<void> {
+  private async BootRoutes(routes: any[]): Promise<void> {
     routes.forEach((route: any) => {
       this.app.use(`${this.prefix}`, route)
     })
