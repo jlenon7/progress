@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import 'express-async-errors'
-import '@Start/env'
+import '@Config/env'
 
 import cors from 'cors'
 
