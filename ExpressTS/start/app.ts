@@ -1,5 +1,6 @@
 import express, { Application as ExpressApp } from 'express'
 import Connection from '@Database/connection'
+import { HelpersProvider, UsersProvider } from '@Providers'
 
 export default class Application {
   public app: ExpressApp
@@ -33,6 +34,7 @@ export default class Application {
     this.database ? await this.RunDatabaseCluster() : this.MockDatabaseCluster()
     await this.BootMiddlewares(this.middlewares)
     await this.BootRoutes(this.routes)
+    this.RegisterProviders()
     this.app.listen(this.port, () =>
       console.log(`🚀 ${this.name} started on port ${this.port}! 🤯`),
     )
@@ -56,5 +58,10 @@ export default class Application {
     routes.forEach((route: any) => {
       this.app.use(`${this.prefix}`, route)
     })
+  }
+
+  private RegisterProviders(): void {
+    new UsersProvider().register()
+    new HelpersProvider().register()
   }
 }

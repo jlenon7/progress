@@ -3,8 +3,8 @@ import appConfig from '@Config/app'
 
 import sessionsRouter from '@Domain/Users/Infra/Routes/sessions.routes'
 import usersRouter from '@Domain/Users/Infra/Routes/users.routes'
-import sessionsRouter from '@Domain/Users/Infra/Routes/password.routes'
-import usersRouter from '@Domain/Users/Infra/Routes/profile.routes'
+import passwordRouter from '@Domain/Users/Infra/Routes/password.routes'
+import profileRouter from '@Domain/Users/Infra/Routes/profile.routes'
 
 class Routes {
   public router: Router
