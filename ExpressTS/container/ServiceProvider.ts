@@ -1,20 +1,9 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { container } from 'tsyringe'
 
-import '@Modules/Users/Providers'
-import './Providers'
+export default class ServiceProvider {
+  protected app: typeof container = container
 
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import UsersRepository from '@Modules/Users/Infra/Typeorm/Repositories/UsersRepository'
-
-import IUserTokensRepository from '@Modules/Users/Repositories/IUserTokensRepository'
-import UserTokensRepository from '@Modules/Users/Infra/Typeorm/Repositories/UserTokensRepository'
-
-container.registerSingleton<IUsersRepository>(
-  'UsersRepository',
-  UsersRepository,
-)
-
-container.registerSingleton<IUserTokensRepository>(
-  'UserTokensRepository',
-  UserTokensRepository,
-)
+  public register(): void {}
+  public boot(): void {}
+}
