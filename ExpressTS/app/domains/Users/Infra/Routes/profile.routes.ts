@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import ensureAuthenticated from '@Modules/Users/Infra/Http/Middlewares/ensureAuthenticated'
 
-import ProfileController from '@Modules/Users/Infra/Http/Controllers/ProfileController'
+import ensureAuthenticated from '@Domain/Users/Infra/Middlewares/ensureAuthenticated'
+import ProfileController from '@Domain/Users/Infra/Controllers/ProfileController'
 
 const profileRouter = Router()
 const profileController = new ProfileController()

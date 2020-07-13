@@ -1,5 +1,6 @@
 import { Router } from 'express'
-import SessionsController from '@Modules/Users/Infra/Http/Controllers/SessionsController'
+
+import SessionsController from '@Domain/Users/Infra/Controllers/SessionsController'
 
 const sessionsRouter = Router()
 const sessionsController = new SessionsController()
