@@ -1,6 +1,7 @@
 import express, { Application as ExpressApp } from 'express'
-import Connection from '@Database/connection'
 import { HelpersProvider, UsersProvider } from '@Providers'
+
+import Connection from '@Database/connection'
 
 export default class Application {
   public app: ExpressApp
