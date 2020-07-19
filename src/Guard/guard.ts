@@ -30,8 +30,8 @@ export class Guard implements IGuard {
   getRoles(): RoleEnum[] {
     if (!this.check() || !this.payload) return []
 
-    const roles = this.payload['secjs:groups']
-      ? this.payload['secjs:groups']
+    const roles = this.payload['cognito:groups']
+      ? this.payload['cognito:groups']
       : []
 
     roles.push(RoleEnum.USER)
