@@ -4,7 +4,7 @@ import multer from 'multer'
 import uploadConfig from '@Config/upload'
 
 import UsersController from '@Domain/Users/Infra/Controllers/UsersController'
-import ensureAuthenticated from '@Domain/Users/Infra/Middlewares/ensureAuthenticated'
+// import ensureAuthenticated from '@Domain/Users/Infra/Middlewares/ensureAuthenticated'
 import UserAvatarController from '@Domain/Users/Infra/Controllers/UserAvatarController'
 
 const usersRouter = Router()
@@ -16,7 +16,7 @@ const userAvatarController = new UserAvatarController()
 usersRouter.post('/', usersController.store)
 usersRouter.patch(
   '/avatar',
-  ensureAuthenticated,
+  // ensureAuthenticated,
   upload.single('avatar'),
   userAvatarController.update,
 )

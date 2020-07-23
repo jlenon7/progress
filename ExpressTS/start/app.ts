@@ -1,5 +1,5 @@
 import express, { Application as ExpressApp } from 'express'
-import { HelpersProvider, UsersProvider } from '@Providers'
+// import { HelpersProvider, UsersProvider } from '@Providers'
 
 import Connection from '@Database/connection'
 
@@ -31,10 +31,10 @@ export default class Application {
   }
 
   public async StartApplication(): Promise<void> {
-    this.app.use(express.json())
     this.database ? await this.RunDatabaseCluster() : this.MockDatabaseCluster()
-    await this.BootMiddlewares(this.middlewares)
+    this.app.use(express.json())
     await this.BootRoutes(this.routes)
+    await this.BootMiddlewares(this.middlewares)
     this.RegisterProviders()
     this.app.listen(this.port, () =>
       console.log(`🚀 ${this.name} started on port ${this.port}! 🤯`),
@@ -62,7 +62,7 @@ export default class Application {
   }
 
   private RegisterProviders(): void {
-    new UsersProvider().register()
-    new HelpersProvider().register()
+    // new UsersProvider().register()
+    // new HelpersProvider().register()
   }
 }

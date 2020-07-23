@@ -1,11 +1,10 @@
-import User from '@Modules/Users/Infra/Typeorm/Entities/User'
+import User from '@Domain/Users/Infra/Entities/User'
 import { sign } from 'jsonwebtoken'
 import authConfig from '@Config/auth'
-import AppError from '@Shared/Errors/AppError'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import FakeUsersRepository from '../Repositories/Fakes/FakeUsersRepository'
+import AppError from '@Exceptions/AppError'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
 import { injectable, inject } from 'tsyringe'
-import IHashProvider from '../Providers/HashProvider/Models/IHashProvider'
+import IHashHelper from '@Utils/Helpers/Hash/Models/IHashHelper'
 
 interface IRequest {
   email: string
@@ -23,8 +22,8 @@ class AuthenticateUserService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HashProvider')
-    private hashProvider: IHashProvider
+    @inject('HashHelper')
+    private hashHelper: IHashHelper,
   ) {}
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -34,7 +33,10 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination', 401)
     }
 
-    const passwordMatched = await this.hashProvider.compareHash(password, user.password)
+    const passwordMatched = await this.hashHelper.compareHash(
+      password,
+      user.password,
+    )
 
     if (!passwordMatched) {
       throw new AppError('Incorrect email/password combination', 401)

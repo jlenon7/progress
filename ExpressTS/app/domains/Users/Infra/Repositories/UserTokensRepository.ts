@@ -1,5 +1,5 @@
-import UserToken from '@Modules/Users/Infra/Typeorm/Entities/UserToken'
-import IUserTokensRepository from '@Modules/Users/Repositories/IUserTokensRepository'
+import UserToken from '@Domain/Users/Infra/Entities/UserToken'
+import IUserTokensRepository from '@Domain/Users/Infra/Repositories/IUserTokensRepository'
 
 import { getRepository, Repository } from 'typeorm'
 

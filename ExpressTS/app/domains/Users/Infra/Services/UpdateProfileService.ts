@@ -1,9 +1,8 @@
-import User from '@Modules/Users/Infra/Typeorm/Entities/User'
 import { injectable, inject } from 'tsyringe'
-// import AppError from '@Shared/Errors/AppError'
-import IHashProvider from '../Providers/HashProvider/Models/IHashProvider'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import AppError from '@Shared/Errors/AppError'
+import User from '@Domain/Users/Infra/Entities/User'
+import IHashHelper from '@Utils/Helpers/Hash/Models/IHashHelper'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
+import AppError from '@Exceptions/AppError'
 
 interface IRequest {
   user_id: string
@@ -19,8 +18,8 @@ class UpdateProfileService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    @inject('HashHelper')
+    private hashHelper: IHashHelper,
   ) {}
 
   public async execute({
@@ -52,7 +51,7 @@ class UpdateProfileService {
     }
 
     if (password && old_password) {
-      const checkOldPassword = await this.hashProvider.compareHash(
+      const checkOldPassword = await this.hashHelper.compareHash(
         old_password,
         user.password,
       )
@@ -61,7 +60,7 @@ class UpdateProfileService {
         throw new AppError('Old password does not match')
       }
 
-      user.password = await this.hashProvider.generateHash(password)
+      user.password = await this.hashHelper.generateHash(password)
     }
 
     return this.usersRepository.save(user)

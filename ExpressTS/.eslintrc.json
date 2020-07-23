@@ -21,6 +21,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "no-new": "off",
+    "no-useless-constructor": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "prettier/prettier": "error",

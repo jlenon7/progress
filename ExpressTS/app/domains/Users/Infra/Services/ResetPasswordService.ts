@@ -1,10 +1,10 @@
 import { injectable, inject } from 'tsyringe'
 import { isAfter, addHours } from 'date-fns'
 
-import AppError from '@Shared/Errors/AppError'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import IUserTokensRepository from '@Modules/Users/Repositories/IUserTokensRepository'
-import IHashProvider from '../Providers/HashProvider/Models/IHashProvider'
+import AppError from '@Exceptions/AppError'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
+import IUserTokensRepository from '@Domain/Users/Infra/Repositories/IUserTokensRepository'
+import IHashHelper from '@Utils/Helpers/Hash/Models/IHashHelper'
 
 interface IRequest {
   token: string
@@ -20,8 +20,8 @@ class SendForgotPasswordEmailService {
     @inject('UserTokensRepository')
     private userTokensRepository: IUserTokensRepository,
 
-    @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    @inject('HashHelper')
+    private hashHelper: IHashHelper,
   ) {}
 
   public async execute({ token, password }: IRequest): Promise<void> {
@@ -44,7 +44,7 @@ class SendForgotPasswordEmailService {
       throw new AppError('Token expired')
     }
 
-    user.password = await this.hashProvider.generateHash(password)
+    user.password = await this.hashHelper.generateHash(password)
 
     await this.usersRepository.save(user)
   }

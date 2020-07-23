@@ -7,6 +7,9 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "baseUrl": "./",
+    "moduleResolution": "node",
+    "pretty": true,
+    "sourceMap": true,
     "paths": {
       "@Config/*": ["config/*"],
       "@Start/*": ["start/*"],
@@ -19,6 +22,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
   }
 }

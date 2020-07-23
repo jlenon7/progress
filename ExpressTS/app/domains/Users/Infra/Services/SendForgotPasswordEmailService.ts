@@ -1,11 +1,10 @@
-// import User from '@Modules/Users/Infra/Typeorm/Entities/User'
 import { injectable, inject } from 'tsyringe'
 import path from 'path'
 
-import AppError from '@Shared/Errors/AppError'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import IMailProvider from '@Shared/Container/Providers/MailProvider/Models/IMailProvider'
-import IUserTokensRepository from '@Modules/Users/Repositories/IUserTokensRepository'
+import AppError from '@Exceptions/AppError'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
+import IMailHelper from '@Utils/Helpers/Mail/Models/IMailHelper'
+import IUserTokensRepository from '@Domain/Users/Infra/Repositories/IUserTokensRepository'
 
 interface IRequest {
   email: string
@@ -17,12 +16,13 @@ class SendForgotPasswordEmailService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('MailProvider')
-    private mailProvider: IMailProvider,
+    @inject('MailHelper')
+    private mailHelper: IMailHelper,
 
     @inject('UserTokensRepository')
     private userTokensRepository: IUserTokensRepository,
-  ) {}
+  ) {
+  }
 
   public async execute({ email }: IRequest): Promise<void> {
     const user = await this.usersRepository.findByEmail(email)
@@ -40,12 +40,12 @@ class SendForgotPasswordEmailService {
       'forgot_password.hbs',
     )
 
-    await this.mailProvider.sendMail({
+    await this.mailHelper.sendMail({
       to: {
         name: user.name,
         email: user.email,
       },
-      subject: '[GoBarber] Recuperação de senha',
+      subject: '[@bootstrap/expressts] Recuperação de senha',
       template: {
         file: forgotPasswordTemplate,
         variables: {

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import uploadConfig from '@Config/Upload'
+import uploadConfig from '@Config/upload'
 import IStorageHelper from '../Models/IStorageHelper'
 
 export default class DiskStorageHelper implements IStorageHelper {

@@ -1,8 +1,7 @@
-import User from '@Modules/Users/Infra/Typeorm/Entities/User'
+import User from '@Domain/Users/Infra/Entities/User'
 import { injectable, inject } from 'tsyringe'
-// import AppError from '@Shared/Errors/AppError'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import AppError from '@Shared/Errors/AppError'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
+import AppError from '@Exceptions/AppError'
 
 interface IRequest {
   user_id: string

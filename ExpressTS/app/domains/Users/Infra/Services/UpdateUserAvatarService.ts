@@ -1,8 +1,8 @@
-import User from '@Modules/Users/Infra/Typeorm/Entities/User'
+import User from '@Domain/Users/Infra/Entities/User'
 import { injectable, inject } from 'tsyringe'
-import AppError from '@Shared/Errors/AppError'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import IStorageProvider from '@Shared/Container/Providers/StorageProvider/Models/IStorageProvider'
+import AppError from '@Exceptions/AppError'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
+import IStorageHelper from '@Utils/Helpers/Storage/Models/IStorageHelper'
 
 interface IRequest {
   user_id: string
@@ -15,8 +15,8 @@ class UpdateUserAvatarService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('StorageProvider')
-    private storageProvider: IStorageProvider,
+    @inject('StorageHelper')
+    private storageHelper: IStorageHelper,
   ) {}
 
   public async execute({ user_id, avatarFilename }: IRequest): Promise<User> {
@@ -27,10 +27,10 @@ class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      await this.storageProvider.deleteFile(user.avatar)
+      await this.storageHelper.deleteFile(user.avatar)
     }
 
-    const filename = await this.storageProvider.saveFile(avatarFilename)
+    const filename = await this.storageHelper.saveFile(avatarFilename)
 
     user.avatar = filename
 

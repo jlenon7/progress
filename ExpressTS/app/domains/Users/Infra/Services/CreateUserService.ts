@@ -1,9 +1,9 @@
-import User from '@Modules/Users/Infra/Typeorm/Entities/User'
+import User from '@Domain/Users/Infra/Entities/User'
 import { injectable, inject } from 'tsyringe'
 
-import AppError from '@Shared/Errors/AppError'
-import IUsersRepository from '@Modules/Users/Repositories/IUsersRepository'
-import IHashProvider from '@Modules/Users/Providers/HashProvider/Models/IHashProvider'
+import AppError from '@Exceptions/AppError'
+import IUsersRepository from '@Domain/Users/Infra/Repositories/IUsersRepository'
+import IHashHelper from '@Utils/Helpers/Hash/Models/IHashHelper'
 
 interface IRequest {
   name: string
@@ -17,8 +17,8 @@ class CreateUserService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    @inject('HashHelper')
+    private hashHelper: IHashHelper,
   ) {}
 
   public async execute({ name, email, password }: IRequest): Promise<User> {
@@ -28,7 +28,7 @@ class CreateUserService {
       throw new AppError('Email address already used.')
     }
 
-    const hashedPassword = await this.hashProvider.generateHash(password)
+    const hashedPassword = await this.hashHelper.generateHash(password)
 
     const user = await this.usersRepository.create({
       name,

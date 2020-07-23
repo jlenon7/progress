@@ -1,6 +1,6 @@
-import IUserTokensRepository from '@Modules/Users/Repositories/IUserTokensRepository'
+import IUserTokensRepository from '@Domain/Users/Infra/Repositories/IUserTokensRepository'
 import { uuid } from 'uuidv4'
-import UserToken from '@Modules/Users/Infra/Typeorm/Entities/UserToken'
+import UserToken from '@Domain/Users/Infra/Entities/UserToken'
 
 class UserTokensRepository implements IUserTokensRepository {
   private userToken: UserToken[] = []
