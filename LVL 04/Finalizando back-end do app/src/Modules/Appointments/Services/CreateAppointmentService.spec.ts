@@ -1,14 +1,20 @@
 import FakeAppointmentRepository from '../Repositories/Fakes/FakeAppointmentsRepository'
+import FakeNotificationsRepository from '@Modules/Notifications/Repositories/Fakes/FakeNotificationsRepository'
 import CreateAppointmentService from './CreateAppointmentService'
 import AppError from '@Shared/Errors/AppError'
 
+let fakeNotificationsRepository: FakeNotificationsRepository
 let fakeAppointmentRepository: FakeAppointmentRepository
 let createAppointment: CreateAppointmentService
 
 describe('> Appointments [CREATE]', () => {
   beforeEach(() => {
     fakeAppointmentRepository = new FakeAppointmentRepository()
-    createAppointment = new CreateAppointmentService(fakeAppointmentRepository)
+    fakeNotificationsRepository = new FakeNotificationsRepository()
+    createAppointment = new CreateAppointmentService(
+      fakeAppointmentRepository,
+      fakeNotificationsRepository,
+    )
   })
 
   it('should be able to create a new appointment', async () => {
