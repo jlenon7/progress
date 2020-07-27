@@ -1,9 +1,11 @@
 import FakeAppointmentRepository from '../Repositories/Fakes/FakeAppointmentsRepository'
+import FakeCacheProvider from '@Shared/Container/Providers/CacheProvider/Fakes/FakeCacheProvider'
 import FakeNotificationsRepository from '@Modules/Notifications/Repositories/Fakes/FakeNotificationsRepository'
 import CreateAppointmentService from './CreateAppointmentService'
 import AppError from '@Shared/Errors/AppError'
 
 let fakeNotificationsRepository: FakeNotificationsRepository
+let fakeCacheProvider: FakeCacheProvider
 let fakeAppointmentRepository: FakeAppointmentRepository
 let createAppointment: CreateAppointmentService
 
@@ -11,9 +13,11 @@ describe('> Appointments [CREATE]', () => {
   beforeEach(() => {
     fakeAppointmentRepository = new FakeAppointmentRepository()
     fakeNotificationsRepository = new FakeNotificationsRepository()
+    fakeCacheProvider = new FakeCacheProvider()
     createAppointment = new CreateAppointmentService(
       fakeAppointmentRepository,
       fakeNotificationsRepository,
+      fakeCacheProvider,
     )
   })
 
