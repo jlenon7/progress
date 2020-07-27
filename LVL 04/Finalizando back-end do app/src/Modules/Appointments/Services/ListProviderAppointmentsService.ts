@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe'
 import IAppointmentsRepository from '../Repositories/IAppointmentsRepository'
 import Appointment from '@Modules/Appointments/Infra/Typeorm/Entities/Appointment'
+import ICacheProvider from '@Shared/Container/Providers/CacheProvider/Models/ICacheProvider'
 
 interface IRequest {
   provider_id: string
@@ -14,6 +15,9 @@ class ListProviderAppointmentsService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
