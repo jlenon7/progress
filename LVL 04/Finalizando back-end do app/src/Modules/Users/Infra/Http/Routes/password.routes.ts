@@ -20,7 +20,7 @@ passwordRouter.post(
   '/reset',
   celebrate({
     [Segments.BODY]: {
-      token: Joi.string().email().required(),
+      token: Joi.string().required(),
       password: Joi.string().required(),
       password_confirmation: Joi.string().required().valid(Joi.ref('password')),
     },
