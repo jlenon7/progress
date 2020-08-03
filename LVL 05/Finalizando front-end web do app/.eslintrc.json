@@ -29,6 +29,7 @@
     "react/jsx-one-expression-per-line": "off",
     "no-unused-expressions": "off",
     "react/prop-types": "off",
+    "import/no-duplicates": "off",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
     "import/prefer-default-export": "off",
