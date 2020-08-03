@@ -15,16 +15,15 @@ export const HeaderContent = styled.div`
   > img {
     height: 80px;
   }
-
   button {
     margin-left: auto;
     background: transparent;
     border: 0;
 
-    svg: {
-      color: #999591;
-      width: 20px;
-      height: 20px;
+    svg {
+      color: #f4ede8;
+      width: 40px;
+      height: 40px;
     }
   }
 `
@@ -49,8 +48,13 @@ export const Profile = styled.div`
       color: #f4ede8;
     }
 
-    strong {
+    a {
+      text-decoration: none;
       color: #ff9000;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 `
