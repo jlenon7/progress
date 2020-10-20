@@ -33,6 +33,13 @@ export class createUsers1602948440526 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'role',
+            type: 'enum',
+            enum: ['admin', 'client'],
+            enumName: 'userRolesEnum',
+            default: `'client'`,
+          },
+          {
             name: 'avatar_url',
             type: 'varchar',
             length: '255',

@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import { v4 } from 'uuid'
 import User from '../models/user.entity'
 import { ModuleRef } from '@nestjs/core'
 import HashService from '../../services/hash.service'
@@ -42,13 +42,11 @@ export default class CreateUserService {
     })
 
     const userToken = await this.userTokenRepository.createUserToken({
-      token: crypto
-        .randomBytes(Math.ceil(48 / 2))
-        .toString('hex')
-        .slice(0, 48),
+      token: `(${userCreated.name}/${userCreated.email})-[${v4()}]`,
       type: TokenTypeEnum.EMAIL_CONFIRMATION,
       expires_in: '604800',
       user_id: userCreated.id,
+      is_revoked: false,
     })
 
     const mail = {

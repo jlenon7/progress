@@ -14,4 +14,7 @@ export default class CreateUserTokenDto {
 
   @Field()
   readonly user_id: string
+
+  @Field()
+  readonly is_revoked: boolean
 }

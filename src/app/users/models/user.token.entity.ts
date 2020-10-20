@@ -12,6 +12,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 import User from './user.entity'
 import TokenTypeEnum from '../../../database/ENUM/token-type.enum'
 import TokenStatusEnum from '../../../database/ENUM/token-status.enum'
+import StatusEnum from '../../../database/ENUM/status.enum'
 
 @ObjectType()
 @Entity({ name: 'user_tokens' })
