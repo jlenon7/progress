@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 import User from '../models/user.entity'
 import { ModuleRef } from '@nestjs/core'
-import HashService from '../../services/hash.service'
+import HashService from './hash.service'
 import { MailerService } from '@nestjs-modules/mailer'
 import CreateUserDto from '../resolvers/dto/create.user.dto'
 import UserRepository from '../repositories/user.repository'
@@ -11,15 +11,13 @@ import UserTokenRepository from '../repositories/user.token.repository'
 
 @Injectable()
 export default class CreateUserService {
-  private hashService: HashService
   constructor(
     private moduleRef: ModuleRef,
+    private hashService: HashService,
     private mailerService: MailerService,
     private userRepository: UserRepository,
     private userTokenRepository: UserTokenRepository,
-  ) {
-    this.hashService = this.moduleRef.get(HashService, { strict: false })
-  }
+  ) {}
 
   public async execute(dto: CreateUserDto): Promise<User> {
     const verifyDuplicatedEmail = await this.userRepository.getUserByEmail(

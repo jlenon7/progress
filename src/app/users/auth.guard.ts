@@ -1,6 +1,3 @@
-import * as jwt from 'jsonwebtoken'
-import { ConfigService } from '@nestjs/config'
-import { GqlExecutionContext } from '@nestjs/graphql'
 import {
   CanActivate,
   ExecutionContext,
@@ -8,6 +5,9 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common'
+import * as jwt from 'jsonwebtoken'
+import { ConfigService } from '@nestjs/config'
+import { GqlExecutionContext } from '@nestjs/graphql'
 
 @Injectable()
 export default class AuthGuard implements CanActivate {

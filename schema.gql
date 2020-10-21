@@ -32,6 +32,9 @@ type Query {
 
 type Mutation {
   authUser(data: AuthUserDto!): AuthResponse!
+  confirmUser(token: String!): User!
+  sendForgotPassword(email: String!): Void!
+  resetPassword(data: ResetPasswordDto!): User!
   createUser(data: CreateUserDto!): User!
   updateUser(data: UpdateUserDto!, id: String!): User!
   deleteUser(id: String!): Void!
@@ -42,18 +45,26 @@ input AuthUserDto {
   password: String!
 }
 
+"""Represents NULL values"""
+scalar Void
+
+input ResetPasswordDto {
+  token: String!
+  password: String!
+  password_confirmation: String!
+}
+
 input CreateUserDto {
   name: String!
   email: String!
   password: String!
+  password_confirmation: String!
 }
 
 input UpdateUserDto {
   name: String!
   email: String!
   password: String
+  password_confirmation: String!
   old_password: String
 }
-
-"""Represents NULL values"""
-scalar Void

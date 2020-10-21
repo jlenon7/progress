@@ -1,6 +1,6 @@
+import { Injectable } from '@nestjs/common'
 import StatusEnum from '../../../database/ENUM/status.enum'
 import UserRepository from '../repositories/user.repository'
-import { Injectable, NotFoundException } from '@nestjs/common'
 
 @Injectable()
 export default class DeleteUserService {
@@ -8,10 +8,6 @@ export default class DeleteUserService {
 
   public async execute(id: string): Promise<void> {
     const user = await this.userRepository.getUser(id)
-
-    if (!user) {
-      throw new NotFoundException('USER_NOT_FOUND', 'User not found!')
-    }
 
     user.status = StatusEnum.DELETED
     user.deleted_at = new Date()
