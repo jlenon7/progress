@@ -29,7 +29,7 @@ const configurations = {
       type: 'sqlite',
       database: `src/database/${Env.get('DB_DATABASE', 'database')}.sqlite`,
       logging: Env.get('DB_DEBUG', false),
-      entities: [path.resolve(__dirname, '..', 'app', 'users', 'models', '*')],
+      entities: [path.resolve(__dirname, '..', 'app', 'models', '*')],
       migrations: [
         path.resolve(__dirname, '..', 'database', 'migrations', '*'),
       ],
@@ -56,7 +56,7 @@ const configurations = {
       password: Env.get('DB_PASSWORD', 'root'),
       synchronize: Env.get('DB_SYNC', true),
       logging: Env.get('DB_DEBUG', false),
-      entities: [path.resolve(__dirname, '..', 'app', 'users', 'models', '*')],
+      entities: [path.resolve(__dirname, '..', 'app', 'models', '*')],
       migrations: [
         path.resolve(__dirname, '..', 'database', 'migrations', '*'),
       ],
@@ -83,7 +83,7 @@ const configurations = {
       password: Env.get('DB_PASSWORD', 'root'),
       synchronize: Env.get('DB_SYNC', true),
       logging: Env.get('DB_DEBUG', false),
-      entities: [path.resolve(__dirname, '..', 'app', 'users', 'models', '*')],
+      entities: [path.resolve(__dirname, '..', 'app', 'models', '*')],
       migrations: [
         path.resolve(__dirname, '..', 'database', 'migrations', '*'),
       ],

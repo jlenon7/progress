@@ -13,9 +13,15 @@ import ResetPasswordUserService from './services/reset.password.user.service'
 import SendForgotUserService from './services/send.forgot.user.service'
 
 @Module({
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  imports: [...kernel],
+  imports: [
+    kernel.jwt,
+    kernel.env,
+    kernel.orm,
+    kernel.mail,
+    kernel.graphql,
+    kernel.passport,
+    kernel.database,
+  ],
   providers: [
     UserResolver,
     AuthResolver,
