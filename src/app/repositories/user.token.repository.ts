@@ -45,6 +45,27 @@ export default class UserTokenRepository extends Repository<UserToken> {
     return userToken
   }
 
+  public async createOrUpdateUserToken(
+    dto: CreateUserTokenDto,
+  ): Promise<UserToken> {
+    let userToken = await this.findOne({
+      user_id: dto.user_id,
+      type: dto.type,
+    })
+
+    if (userToken) {
+      userToken.token = dto.token
+      userToken.expires_in = dto.expires_in
+      userToken.is_revoked = dto.is_revoked
+
+      await this.storage(userToken)
+    }
+
+    userToken = await this.create(dto)
+
+    return this.storage(userToken)
+  }
+
   public async createUserToken(dto: CreateUserTokenDto): Promise<UserToken> {
     const verifyDuplicity = await this.findOne({
       user_id: dto.user_id,
