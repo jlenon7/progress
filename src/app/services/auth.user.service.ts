@@ -48,7 +48,7 @@ export default class AuthUserService {
       expiresIn: accessExp,
     })
 
-    await this.userTokenRepository.createUserToken({
+    await this.userTokenRepository.createOrUpdateUserToken({
       token: accessToken,
       type: TokenTypeEnum.ACCESS_TOKEN,
       expires_in: accessExp,
@@ -61,7 +61,7 @@ export default class AuthUserService {
       expiresIn: refreshExp,
     })
 
-    await this.userTokenRepository.createUserToken({
+    await this.userTokenRepository.createOrUpdateUserToken({
       token: refreshToken,
       type: TokenTypeEnum.REFRESH_TOKEN,
       expires_in: refreshExp,
