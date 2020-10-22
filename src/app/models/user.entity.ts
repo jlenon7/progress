@@ -3,7 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 import BaseEntity from './base.entity'
 import UserToken from './user.token.entity'
-import UserRoleEnum from '../../../database/ENUM/user-role.enum'
+import UserRoleEnum from '../../database/ENUM/user-role.enum'
 
 @ObjectType()
 @Unique(['email'])

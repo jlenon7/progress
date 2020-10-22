@@ -14,7 +14,7 @@ export default {
     from: '"nest-modules" <modules@nestjs.com>',
   },
   template: {
-    dir: process.cwd() + '/src/app/users/views/mail/',
+    dir: process.cwd() + '/src/app/views/mail/',
     adapter: new HandlebarsAdapter(),
     options: {
       strict: true,

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import TokenTypeEnum from '../../../../database/ENUM/token-type.enum'
+import TokenTypeEnum from '../../../database/ENUM/token-type.enum'
 
 @InputType()
 export default class CreateUserTokenDto {

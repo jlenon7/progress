@@ -2,7 +2,7 @@ import { v4 } from 'uuid'
 import { Injectable } from '@nestjs/common'
 import { MailerService } from '@nestjs-modules/mailer'
 import UserRepository from '../repositories/user.repository'
-import TokenTypeEnum from '../../../database/ENUM/token-type.enum'
+import TokenTypeEnum from '../../database/ENUM/token-type.enum'
 import UserTokenRepository from '../repositories/user.token.repository'
 
 @Injectable()

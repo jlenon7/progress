@@ -1,8 +1,8 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common'
 import UserToken from '../models/user.token.entity'
 import { EntityRepository, Repository } from 'typeorm'
-import TokenTypeEnum from '../../../database/ENUM/token-type.enum'
-import TokenStatusEnum from '../../../database/ENUM/token-status.enum'
+import TokenTypeEnum from '../../database/ENUM/token-type.enum'
+import TokenStatusEnum from '../../database/ENUM/token-status.enum'
 import CreateUserTokenDto from '../resolvers/dto/create.user.token.dto'
 
 @EntityRepository(UserToken)

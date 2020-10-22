@@ -5,7 +5,7 @@ import HashService from './hash.service'
 import { MailerService } from '@nestjs-modules/mailer'
 import CreateUserDto from '../resolvers/dto/create.user.dto'
 import UserRepository from '../repositories/user.repository'
-import TokenTypeEnum from '../../../database/ENUM/token-type.enum'
+import TokenTypeEnum from '../../database/ENUM/token-type.enum'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import UserTokenRepository from '../repositories/user.token.repository'
 

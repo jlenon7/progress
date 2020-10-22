@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import StatusEnum from '../../../database/ENUM/status.enum'
+import StatusEnum from '../../database/ENUM/status.enum'
 import UserRepository from '../repositories/user.repository'
 
 @Injectable()

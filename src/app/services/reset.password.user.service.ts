@@ -3,7 +3,7 @@ import { ModuleRef } from '@nestjs/core'
 import HashService from './hash.service'
 import { Injectable } from '@nestjs/common'
 import UserRepository from '../repositories/user.repository'
-import TokenStatusEnum from '../../../database/ENUM/token-status.enum'
+import TokenStatusEnum from '../../database/ENUM/token-status.enum'
 import UserTokenRepository from '../repositories/user.token.repository'
 
 @Injectable()

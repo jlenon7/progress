@@ -7,7 +7,7 @@ import {
 } from 'typeorm'
 import { Field, ObjectType } from '@nestjs/graphql'
 
-import StatusEnum from '../../../database/ENUM/status.enum'
+import StatusEnum from '../../database/ENUM/status.enum'
 
 @ObjectType()
 export default class BaseEntity {

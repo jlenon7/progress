@@ -1,8 +1,8 @@
 import User from '../models/user.entity'
 import { Injectable } from '@nestjs/common'
-import StatusEnum from '../../../database/ENUM/status.enum'
+import StatusEnum from '../../database/ENUM/status.enum'
 import UserRepository from '../repositories/user.repository'
-import TokenStatusEnum from '../../../database/ENUM/token-status.enum'
+import TokenStatusEnum from '../../database/ENUM/token-status.enum'
 import UserTokenRepository from '../repositories/user.token.repository'
 
 @Injectable()

@@ -5,7 +5,7 @@ import AuthUserDto from '../resolvers/dto/auth.user.dto'
 import UserRepository from '../repositories/user.repository'
 import AuthResponse from '../resolvers/responses/auth.response'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import TokenTypeEnum from '../../../database/ENUM/token-type.enum'
+import TokenTypeEnum from '../../database/ENUM/token-type.enum'
 import UserTokenRepository from '../repositories/user.token.repository'
 
 @Injectable()
