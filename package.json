@@ -13,13 +13,13 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{app,config,database,start,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node ./node_modules/typeorm/cli.js --config src/config/database.ts"
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js --config config/database.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.5.1",
@@ -30,7 +30,9 @@
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/swagger": "^4.6.1",
     "@nestjs/typeorm": "^7.1.4",
+    "@secjs/env": "^1.0.0",
     "apollo-server-express": "^2.18.2",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.3.1",
@@ -49,6 +51,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "sqlite3": "^5.0.0",
+    "swagger-ui-express": "^4.1.4",
     "type-graphql": "^1.1.0",
     "typeorm": "^0.2.28",
     "typeorm-seeding": "^1.6.1",
@@ -92,7 +95,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "./src",
+    "rootDir": "./",
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
