@@ -10,7 +10,7 @@ export class JogadoresController {
   @Post()
   async criarAtualizarJogador(
     @Body() criarJogadorDto: CriarJogadorDto
-  ): Promise<void> {
+  ): Promise<IJogador> {
     return this.jogadoresService.criarAtualizarJogador(criarJogadorDto)
   }
 
@@ -25,6 +25,6 @@ export class JogadoresController {
 
   @Delete()
   public async deletarJogador(@Query('email') email: string): Promise<void> {
-    return this.deletarJogador(email)
+    return this.jogadoresService.deletarJogador(email)
   }
 }
