@@ -1,5 +1,5 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from "class-validator";
-import { IEvento } from "../interfaces/categoria.interface";
+import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from 'class-validator'
+import { IEvento } from '../interfaces/categoria.interface'
 
 export class CriarCategoriaDto {
   @IsString()

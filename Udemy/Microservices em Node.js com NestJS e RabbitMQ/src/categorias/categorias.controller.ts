@@ -1,18 +1,28 @@
-import { Body, Controller, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ValidacaoParametrosPipe } from 'src/common/pipes/validacao-parametros.pipe';
-import { JogadoresService } from 'src/jogadores/jogadores.service';
-import { CategoriasService } from './categorias.service';
-import { AtualizarCategoriaDto } from './dtos/atualizar-categoria.dto';
-import { CriarCategoriaDto } from './dtos/criar-categoria.dto';
-import { ICategoria } from './interfaces/categoria.interface';
+import {
+  Get,
+  Put,
+  Body,
+  Post,
+  Param,
+  UsePipes,
+  Controller,
+  ValidationPipe,
+} from '@nestjs/common'
+import { CategoriasService } from './categorias.service'
+import { ICategoria } from './interfaces/categoria.interface'
+import { CriarCategoriaDto } from './dtos/criar-categoria.dto'
+import { AtualizarCategoriaDto } from './dtos/atualizar-categoria.dto'
+import { ValidacaoParametrosPipe } from 'src/common/pipes/validacao-parametros.pipe'
 
 @Controller('api/v1/categorias')
 export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) {}
-  
+
   @Post()
   @UsePipes(ValidationPipe)
-  public async criarCategoria(@Body() criarCategoriaDto: CriarCategoriaDto): Promise<ICategoria> {
+  public async criarCategoria(
+    @Body() criarCategoriaDto: CriarCategoriaDto,
+  ): Promise<ICategoria> {
     return this.categoriasService.criarCategoria(criarCategoriaDto)
   }
 
@@ -22,18 +32,31 @@ export class CategoriasController {
   }
 
   @Get('/:categoria')
-  public async consultarCategoria(@Param('categoria', ValidacaoParametrosPipe) categoria: string): Promise<ICategoria> {
+  public async consultarCategoria(
+    @Param('categoria', ValidacaoParametrosPipe) categoria: string,
+  ): Promise<ICategoria> {
     return this.categoriasService.consultarCategoria(categoria)
   }
 
   @Put('/:categoria')
   @UsePipes(ValidationPipe)
-  public async atualizarCategoria(@Param('categoria', ValidacaoParametrosPipe) categoria: string, @Body() atualizarCategoriaDto: AtualizarCategoriaDto): Promise<ICategoria> {
-    return this.categoriasService.atualizarCategoria(categoria, atualizarCategoriaDto)
+  public async atualizarCategoria(
+    @Param('categoria', ValidacaoParametrosPipe) categoria: string,
+    @Body() atualizarCategoriaDto: AtualizarCategoriaDto,
+  ): Promise<ICategoria> {
+    return this.categoriasService.atualizarCategoria(
+      categoria,
+      atualizarCategoriaDto,
+    )
   }
 
   @Post('/:categoria/jogadores/:idJogador')
-  public async atribuirCategoriaJogador(@Param(ValidacaoParametrosPipe) params: string[]): Promise<ICategoria> {
-    return this.categoriasService.atribuirCategoriaJogador(params['categoria'], params['idJogador'])
+  public async atribuirCategoriaJogador(
+    @Param(ValidacaoParametrosPipe) params: string[],
+  ): Promise<ICategoria> {
+    return this.categoriasService.atribuirCategoriaJogador(
+      params['categoria'],
+      params['idJogador'],
+    )
   }
 }
