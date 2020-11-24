@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { ValidacaoParametrosPipe } from 'src/common/pipes/validacao-parametros.pipe';
 import { JogadoresService } from 'src/jogadores/jogadores.service';
 import { CategoriasService } from './categorias.service';
 import { AtualizarCategoriaDto } from './dtos/atualizar-categoria.dto';
@@ -21,18 +22,18 @@ export class CategoriasController {
   }
 
   @Get('/:categoria')
-  public async consultarCategoria(@Param('categoria') categoria: string): Promise<ICategoria> {
+  public async consultarCategoria(@Param('categoria', ValidacaoParametrosPipe) categoria: string): Promise<ICategoria> {
     return this.categoriasService.consultarCategoria(categoria)
   }
 
   @Put('/:categoria')
   @UsePipes(ValidationPipe)
-  public async atualizarCategoria(@Param('categoria') categoria: string, @Body() atualizarCategoriaDto: AtualizarCategoriaDto): Promise<ICategoria> {
+  public async atualizarCategoria(@Param('categoria', ValidacaoParametrosPipe) categoria: string, @Body() atualizarCategoriaDto: AtualizarCategoriaDto): Promise<ICategoria> {
     return this.categoriasService.atualizarCategoria(categoria, atualizarCategoriaDto)
   }
 
   @Post('/:categoria/jogadores/:idJogador')
-  public async atribuirCategoriaJogador(@Param() params: string[]): Promise<ICategoria> {
+  public async atribuirCategoriaJogador(@Param(ValidacaoParametrosPipe) params: string[]): Promise<ICategoria> {
     return this.categoriasService.atribuirCategoriaJogador(params['categoria'], params['idJogador'])
   }
 }
