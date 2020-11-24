@@ -30,7 +30,7 @@ export class DesafiosController {
     @Body() criarDesafioDto: CriarDesafioDto,
   ): Promise<IDesafio> {
     this.logger.log(`criarDesafioDto: ${JSON.stringify(criarDesafioDto)}`)
-    return await this.desafiosService.criarDesafio(criarDesafioDto)
+    return this.desafiosService.criarDesafio(criarDesafioDto)
   }
 
   @Get()
@@ -38,8 +38,8 @@ export class DesafiosController {
     @Query('idJogador') _id: string,
   ): Promise<IDesafio[]> {
     return _id
-      ? await this.desafiosService.consultarDesafiosDeUmJogador(_id)
-      : await this.desafiosService.consultarTodosDesafios()
+      ? this.desafiosService.consultarDesafiosDeUmJogador(_id)
+      : this.desafiosService.consultarTodosDesafios()
   }
 
   @Put('/:desafio')
@@ -50,12 +50,12 @@ export class DesafiosController {
     await this.desafiosService.atualizarDesafio(_id, atualizarDesafioDto)
   }
 
-  @Post('/:desafio/partida/')
+  @Post('/:desafio/partida')
   async atribuirDesafioPartida(
     @Body(ValidationPipe) atribuirDesafioPartidaDto: AtribuirDesafioPartidaDto,
     @Param('desafio') _id: string,
   ): Promise<void> {
-    return await this.desafiosService.atribuirDesafioPartida(
+    return this.desafiosService.atribuirDesafioPartida(
       _id,
       atribuirDesafioPartidaDto,
     )
