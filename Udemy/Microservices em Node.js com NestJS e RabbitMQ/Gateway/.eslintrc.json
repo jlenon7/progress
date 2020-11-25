@@ -1,0 +1,32 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module",
+    "ecmaVersion": 2018
+  },
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "standard", 
+    "plugin:prettier/recommended", 
+    "prettier", 
+    "prettier/@typescript-eslint"
+  ],
+  "globals": {
+    "use": true,
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "plugins": ["prettier", "@typescript-eslint/eslint-plugin"],
+  "rules": {
+    "dot-notation": "off",
+    "new-cap": "off",
+    "no-unused-vars": "off",
+    "no-useless-constructor": "off",
+    "prettier/prettier": "error",
+    "camelcase": "off"
+  }
+}
