@@ -11,9 +11,12 @@ import {
   UsePipes,
   Query,
   Get,
+  Put,
+  Param,
 } from '@nestjs/common'
 import { CriarCategoriaDto } from './dtos/criar-categoria.dto'
 import { Observable } from 'rxjs'
+import { AtualizarCategoriaDto } from './dtos/atualizar-categoria.dto'
 
 @Controller('api/v1')
 export class AppController {
@@ -38,7 +41,19 @@ export class AppController {
 
   @Post('categorias')
   @UsePipes(ValidationPipe)
-  public setCategoria(@Body() categoriaDto: CriarCategoriaDto) {
-    this.clientAdminBackend.emit('criar-categoria', categoriaDto)
+  public storeCategoria(@Body() categoriaDto: CriarCategoriaDto) {
+    return this.clientAdminBackend.emit('criar-categoria', categoriaDto)
+  }
+
+  @Put('categorias/:id')
+  @UsePipes(ValidationPipe)
+  public updateCategoria(
+    @Body() categoriaDto: AtualizarCategoriaDto,
+    @Param('id') id: string,
+  ) {
+    return this.clientAdminBackend.emit('atualizar-categoria', {
+      id,
+      categoria: categoriaDto,
+    })
   }
 }
