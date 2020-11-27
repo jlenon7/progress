@@ -32,9 +32,24 @@ export class AppService {
     }
   }
 
-  public async setCategoria(categoria: ICategoria): Promise<ICategoria> {
+  public async storeCategoria(categoria: ICategoria): Promise<void> {
     try {
-      return new this.categoriaModel(categoria).save()
+      await new this.categoriaModel(categoria).save()
+    } catch (error) {
+      this.logger.error(`Error: ${JSON.stringify(error.message)}`)
+
+      throw new RpcException(error.message)
+    }
+  }
+
+  public async updateCategoria(
+    id: string,
+    categoria: ICategoria,
+  ): Promise<void> {
+    try {
+      await this.categoriaModel
+        .findOneAndUpdate({ _id: id }, { $set: categoria })
+        .exec()
     } catch (error) {
       this.logger.error(`Error: ${JSON.stringify(error.message)}`)
 
