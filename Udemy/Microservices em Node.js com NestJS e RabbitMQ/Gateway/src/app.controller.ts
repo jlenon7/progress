@@ -6,16 +6,17 @@ import {
 import {
   Controller,
   Post,
-  Logger,
   ValidationPipe,
   Body,
   UsePipes,
+  Query,
+  Get,
 } from '@nestjs/common'
 import { CriarCategoriaDto } from './dtos/criar-categoria.dto'
+import { Observable } from 'rxjs'
 
 @Controller('api/v1')
 export class AppController {
-  private logger = new Logger(AppController.name)
   private clientAdminBackend: ClientProxy
 
   constructor() {
@@ -30,9 +31,14 @@ export class AppController {
     })
   }
 
+  @Get('categorias')
+  public getCategorias(@Query('id') id: string): Observable<any> {
+    return this.clientAdminBackend.send('consultar-categorias', id || '')
+  }
+
   @Post('categorias')
   @UsePipes(ValidationPipe)
-  async criarCategoria(@Body() categoriaDto: CriarCategoriaDto) {
-    return this.clientAdminBackend.emit('criar-categoria', categoriaDto)
+  public setCategoria(@Body() categoriaDto: CriarCategoriaDto) {
+    this.clientAdminBackend.emit('criar-categoria', categoriaDto)
   }
 }
