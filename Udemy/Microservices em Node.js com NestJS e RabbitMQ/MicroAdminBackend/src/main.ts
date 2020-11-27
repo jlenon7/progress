@@ -10,6 +10,7 @@ async function bootstrap() {
       urls: [
         'amqp://rfwsurug:5QzatDz5SCjTSNzP4FnfLTjTzBzVdK8m@jaguar.rmq.cloudamqp.com:5672/rfwsurug',
       ],
+      noAck: false,
       queue: 'admin-backend',
     },
   })
