@@ -1,13 +1,13 @@
 import { AppModule } from './app.module'
 import { NestFactory } from '@nestjs/core'
 import * as momentTimezone from 'moment-timezone'
-import { AllExceptionFilter } from './filters/http-exception.filter'
-import { TimeoutInterceptor } from './interceptors/timeout.interceptor'
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor'
+import { AllExceptionsFilter } from './common/filters/http-exception.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
-  app.useGlobalFilters(new AllExceptionFilter())
+  app.useGlobalFilters(new AllExceptionsFilter())
   app.useGlobalInterceptors(new TimeoutInterceptor())
 
   // eslint-disable-next-line no-extend-native
