@@ -2,11 +2,13 @@ import { AppModule } from './app.module'
 import { NestFactory } from '@nestjs/core'
 import * as momentTimezone from 'moment-timezone'
 import { AllExceptionFilter } from './filters/http-exception.filter'
+import { TimeoutInterceptor } from './interceptors/timeout.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   app.useGlobalFilters(new AllExceptionFilter())
+  app.useGlobalInterceptors(new TimeoutInterceptor())
 
   // eslint-disable-next-line no-extend-native
   Date.prototype.toJSON = () => {
