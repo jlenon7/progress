@@ -1,0 +1,2 @@
+#import Usuario, Perfil from 'Usuario.graphql'
+#import Query from 'Query.graphql'
