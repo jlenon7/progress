@@ -1,11 +1,35 @@
 {
-  "extends": "./node_modules/@adonisjs/mrm-preset/_tsconfig",
+  "extends": "./node_modules/adonis-preset-ts/tsconfig",
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ],
   "compilerOptions": {
-    "rootDir": "./src/",
     "outDir": "build",
-    "strict": true,
-    "esModuleInterop": true,
-  },
-  "include": ["src/**/*", "test/**/*"],
-  "exclude": ["node_modules", "build", "dist", "test"]
+    "rootDir": "./",
+    "sourceMap": true,
+    "paths": {
+      "App/*": [
+        "./app/*"
+      ],
+      "Config/*": [
+        "./config/*"
+      ],
+      "Contracts/*": [
+        "./contracts/*"
+      ],
+      "Database/*": [
+        "./database/*"
+      ]
+    },
+    "types": [
+      "@adonisjs/core",
+      "@adonisjs/repl",
+      "@adonisjs/auth",
+      "@adonisjs/lucid"
+    ]
+  }
 }
