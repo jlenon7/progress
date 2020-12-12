@@ -1,17 +1,17 @@
 import { AuthService } from 'App/Services'
 import { ApiController } from 'App/Controllers/ApiController'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { LoginValidator, RegisterValidator } from 'App/Validators'
+import { LoginValidator, RegisterValidator, ConfirmValidator } from 'App/Validators/Auth'
 
-export default class AuthController {
+export default class AuthController extends ApiController {
   public async me({ auth, response }: HttpContextContract) {
     const user = await new AuthService().setGuard(auth).me()
 
-    return new ApiController({ response }).resWithOne(user)
+    return this.response(response).withOne(user)
   }
 
   public async register({ request, response }: HttpContextContract) {
-    const data = await new ApiController({ request }).validate(RegisterValidator)
+    const data = await this.request(request).validate(RegisterValidator)
 
     const user = await new AuthService().register({
       name: data.name,
@@ -19,20 +19,28 @@ export default class AuthController {
       password: data.password,
     })
 
-    return new ApiController({ response }).resWithCreated(user)
+    return this.response(response).withCreated(user)
   }
 
   public async login({ auth, request, response }: HttpContextContract) {
-    const { email, password } = await new ApiController({ request }).validate(LoginValidator)
+    const { email, password } = await this.request(request).validate(LoginValidator)
 
-    const token = await new AuthService().setGuard(auth).login(email, password)
+    const token = await new AuthService().setGuard(auth).login(email, password, request.ip())
 
-    return new ApiController({ response }).resWithOne(token)
+    return this.response(response).withOne(token)
   }
 
   public async logout({ auth, response }: HttpContextContract) {
     await new AuthService().setGuard(auth).logout()
 
-    return new ApiController({ response }).resWithNone()
+    return this.response(response).withNone()
+  }
+
+  public async confirm({ request, response }: HttpContextContract) {
+    const data = await this.request(request).validate(ConfirmValidator)
+
+    await new AuthService().confirm(data)
+
+    return this.response(response).withNone()
   }
 }
