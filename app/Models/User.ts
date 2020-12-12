@@ -7,6 +7,7 @@ import {
   BaseModel,
   beforeSave,
   beforeCreate,
+  afterCreate,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import Hash from '@ioc:Adonis/Core/Hash'
@@ -70,5 +71,15 @@ export default class User extends BaseModel {
   @beforeCreate()
   public static async generateId(user: User) {
     user.id = new Token().getToken(user.token)
+  }
+
+  @afterCreate()
+  public static async generateConfirmToken(user: User) {
+    await user.related('userTokens').create({
+      name: 'Confirmation Token',
+      type: 'confirmation_token',
+      token: new Token().generate('utk'),
+      expiresAt: DateTime.local(),
+    })
   }
 }
