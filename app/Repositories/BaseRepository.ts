@@ -1,43 +1,121 @@
 import { DateTime } from 'luxon'
-import InternalServerException from 'App/Exceptions/InternalServerException'
+import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import {
+  ApiRequestContract,
+  IncludesConctract,
+  OrderByContract,
+  WhereContract,
+} from 'App/Contracts/ApiRequestContract'
 
 export class BaseRepository {
-  private _model
-
-  constructor({ model }) {
-    this._model = model
-  }
-
-  protected get Model() {
-    if (!this._model) {
-      throw new InternalServerException('MODEL_UNSETED', 500)
-    }
-
-    return this._model
-  }
+  protected Model: typeof BaseModel | any
 
   public query() {
-    return this.Model.query().whereNull('deleted_at').whereIn('status', ['approved'])
+    return this.Model.query().whereNull('deleted_at')
   }
 
-  public async getOne(id: string, includes?) {
-    let query = this.query()
+  public async getOne(id: string, data?: ApiRequestContract) {
+    let query = this.query().where('id', id)
 
-    if (includes) {
-      includes.map((include) => {
-        query = query + `.preload(${include})`
+    if (!data) {
+      return query.first()
+    }
+
+    const { where, includes } = data
+
+    if (where) {
+      where.map((where: WhereContract) => {
+        query.where(where.key, where.value)
       })
     }
 
-    return query.where({ id }).first()
+    if (includes) {
+      includes.map((include: IncludesConctract) => {
+        if (include.where) {
+          query.preload(include.relation, (includeQuery) => {
+            if (include.where) {
+              include.where.map((includeWhere: WhereContract) => {
+                includeQuery.where(includeWhere.key, includeWhere.value)
+              })
+            }
+
+            if (include.orderBy) {
+              include.orderBy.map((includeOrderBy: OrderByContract) => {
+                includeQuery.orderBy(includeOrderBy.key, includeOrderBy.ordenation)
+              })
+            }
+          })
+        }
+
+        if (include.includes) {
+          include.includes.map((include: IncludesConctract) => {
+            if (include.where)
+              query.preload(include.relation, (query) => {
+                if (include.where)
+                  include.where.map((where: WhereContract) => {
+                    query.where(where.key, where.value)
+                  })
+              })
+          })
+        }
+      })
+    }
+
+    return query.first()
   }
 
-  public async getAll(includes?) {
+  public async getAll(data?: ApiRequestContract) {
+    if (!data) {
+      let query = this.query()
+
+      return query
+    }
+
+    const { where, orderBy, includes } = data
+
     let query = this.query()
 
+    if (where) {
+      where.map((where: WhereContract) => {
+        query.where(where.key, where.value)
+      })
+    }
+
+    if (orderBy) {
+      orderBy.map((orderBy: OrderByContract) => {
+        query.orderBy(orderBy.key, orderBy.ordenation)
+      })
+    }
+
     if (includes) {
-      includes.map((include) => {
-        query = query + `.preload(${include})`
+      includes.map((include: IncludesConctract) => {
+        if (include.where) {
+          query.preload(include.relation, (includeQuery) => {
+            if (include.where) {
+              include.where.map((includeWhere: WhereContract) => {
+                includeQuery.where(includeWhere.key, includeWhere.value)
+              })
+            }
+
+            if (include.orderBy) {
+              include.orderBy.map((includeOrderBy: OrderByContract) => {
+                includeQuery.orderBy(includeOrderBy.key, includeOrderBy.ordenation)
+              })
+            }
+          })
+        }
+
+        if (include.includes) {
+          include.includes.map((include: IncludesConctract) => {
+            if (include.where)
+              query.preload(include.relation, (query) => {
+                if (include.where)
+                  include.where.map((where: WhereContract) => {
+                    query.where(where.key, where.value)
+                  })
+              })
+          })
+        }
       })
     }
 
@@ -49,7 +127,7 @@ export class BaseRepository {
   }
 
   public async update(id: string, payload) {
-    return this.query().where({ id }).update(payload)
+    return this.query().where('id', id).update(payload)
   }
 
   public async delete(id: string) {
