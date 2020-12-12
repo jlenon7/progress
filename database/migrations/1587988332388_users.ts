@@ -11,7 +11,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('token', 255).notNullable().unique()
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
-      table.enum('status', ['pendent', 'approved', 'reproved', 'deleted']).defaultTo('pendent')
+      table.enu('status', ['pendent', 'approved', 'reproved', 'deleted']).defaultTo('pendent')
       table.timestamps(true)
       table.dateTime('deleted_at')
     })
