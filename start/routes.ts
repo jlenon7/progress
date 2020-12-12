@@ -32,14 +32,17 @@ Route.group(() => {
   })
 
   Route.group(() => {
-    Route.get('/me', 'AuthController.me')
-    Route.post('/logout', 'AuthController.logout')
+    Route.get('/auth/me', 'AuthController.me')
+    Route.post('/auth/logout', 'AuthController.logout')
 
     Route.get('/users', 'UserController.index')
     Route.get('/users/:id', 'UserController.show')
     Route.delete('/users/:id', 'UserController.delete')
   }).middleware('auth')
 
-  Route.post('/login', 'AuthController.login')
-  Route.post('/register', 'AuthController.register')
+  Route.group(() => {
+    Route.post('/login', 'AuthController.login')
+    Route.post('/confirm', 'AuthController.confirm')
+    Route.post('/register', 'AuthController.register')
+  }).prefix('/auth')
 }).prefix(Config.get('app.prefix'))
