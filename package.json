@@ -1,6 +1,6 @@
 {
   "name": "@secjs/guard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "build": "node ace build --production",
@@ -30,7 +30,9 @@
     "@adonisjs/auth": "^5.1.1",
     "@adonisjs/core": "^5.0.4-preview-rc",
     "@adonisjs/lucid": "^10.0.0",
+    "@adonisjs/mail": "^5.2.3",
     "@adonisjs/repl": "^1.0.0",
+    "@adonisjs/view": "^3.1.0",
     "@secjs/core": "^1.2.0",
     "luxon": "^1.25.0",
     "pg": "^8.5.1",
