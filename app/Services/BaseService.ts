@@ -1,23 +1,31 @@
-import { AuthContract } from '@ioc:Adonis/Addons/Auth'
-import InternalServerException from 'App/Exceptions/InternalServerException'
 import User from 'App/Models/User'
+import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
+import InternalServerException from 'App/Exceptions/InternalServerException'
+
+import { AuthContract } from '@ioc:Adonis/Addons/Auth'
+import { UserMailService } from './Auth/UserMailService'
 
 export class BaseService {
-  protected user: User | undefined
-  protected _guard: AuthContract
+  private _user: User | undefined
+
+  private _guard: AuthContract
 
   public get User(): User {
     if (!this._guard) {
-      throw new InternalServerException('GUARD_UNSETED', 500)
+      throw new InternalServerException('GUARD_UNSETED')
     }
 
-    this.user = this._guard.user
+    this._user = this._guard.user
 
-    if (!this.user) {
-      throw new InternalServerException('USER_UNSETED', 500)
+    if (!this._user) {
+      throw new InternalServerException('USER_UNSETED')
     }
 
-    return this.user
+    if (this._user.status !== 'approved') {
+      this.verifyStatus(this._user)
+    }
+
+    return this._user
   }
 
   public get guard(): AuthContract {
@@ -32,5 +40,27 @@ export class BaseService {
     this._guard = guard
 
     return this
+  }
+
+  public verifyStatus(user: User) {
+    if (user.status === 'pendent') {
+      new UserMailService().confirmToken(user, true)
+
+      throw new UnauthorizedException(
+        'Your profile is still pendent, please check your email inbox'
+      )
+    }
+
+    if (user.status === 'reproved') {
+      throw new UnauthorizedException('Your profile has been reproved from our application, sorry!')
+    }
+
+    if (user.status === 'deleted') {
+      throw new UnauthorizedException(
+        'Your profile has been deleted, contact suport to active it again'
+      )
+    }
+
+    throw new UnauthorizedException()
   }
 }
