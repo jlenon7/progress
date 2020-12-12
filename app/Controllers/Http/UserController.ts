@@ -1,23 +1,27 @@
+import { UserService } from 'App/Services'
 import { ApiController } from 'App/Controllers/ApiController'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { UserService } from 'App/Services'
 
-export default class UserController {
-  public async index({ response, auth }: HttpContextContract) {
-    const users = await new UserService().setGuard(auth).getAll()
+export default class UserController extends ApiController {
+  public async index({ request, response, auth }: HttpContextContract) {
+    const data = request.only(['where', 'orderBy', 'includes'])
 
-    return new ApiController({ response }).resWithCollection(users)
+    const users = await new UserService().setGuard(auth).getAll(data)
+
+    return this.response(response).withCollection(users)
   }
 
-  public async show({ response, params, auth }: HttpContextContract) {
-    const user = await new UserService().setGuard(auth).getOne(params.id)
+  public async show({ request, response, params, auth }: HttpContextContract) {
+    const data = request.only(['where', 'orderBy', 'includes'])
 
-    return new ApiController({ response }).resWithOne(user)
+    const user = await new UserService().setGuard(auth).getOne(params.id, data)
+
+    return this.response(response).withOne(user)
   }
 
   public async delete({ response, params, auth }: HttpContextContract) {
     const user = await new UserService().setGuard(auth).delete(params.id)
 
-    return new ApiController({ response }).resWithOne(user)
+    return this.response(response).withOne(user)
   }
 }
