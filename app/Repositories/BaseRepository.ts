@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import {
   ApiRequestContract,
-  IncludesConctract,
+  IncludesContract,
   OrderByContract,
   WhereContract,
 } from 'App/Contracts/ApiRequestContract'
@@ -30,7 +30,7 @@ export class BaseRepository {
     }
 
     if (includes) {
-      includes.map((include: IncludesConctract) => {
+      includes.map((include: IncludesContract) => {
         if (include.where) {
           query.preload(include.relation, (includeQuery) => {
             if (include.where) {
@@ -48,7 +48,7 @@ export class BaseRepository {
         }
 
         if (include.includes) {
-          include.includes.map((include: IncludesConctract) => {
+          include.includes.map((include: IncludesContract) => {
             if (include.where)
               query.preload(include.relation, (query) => {
                 if (include.where)
@@ -88,7 +88,7 @@ export class BaseRepository {
     }
 
     if (includes) {
-      includes.map((include: IncludesConctract) => {
+      includes.map((include: IncludesContract) => {
         if (include.where) {
           query.preload(include.relation, (includeQuery) => {
             if (include.where) {
@@ -106,7 +106,7 @@ export class BaseRepository {
         }
 
         if (include.includes) {
-          include.includes.map((include: IncludesConctract) => {
+          include.includes.map((include: IncludesContract) => {
             if (include.where)
               query.preload(include.relation, (query) => {
                 if (include.where)

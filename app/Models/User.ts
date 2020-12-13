@@ -75,11 +75,14 @@ export default class User extends BaseModel {
 
   @afterCreate()
   public static async generateConfirmToken(user: User) {
+    const today = new Date()
+    const tommorow = new Date(today.setDate(today.getDate() + 1))
+
     await user.related('userTokens').create({
       name: 'Confirmation Token',
       type: 'confirmation_token',
       token: new Token().generate('utk'),
-      expiresAt: DateTime.local(),
+      expiresAt: DateTime.fromJSDate(tommorow),
     })
   }
 }

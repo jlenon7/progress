@@ -1,14 +1,14 @@
 export interface ApiRequestContract {
   where?: WhereContract[]
   orderBy?: OrderByContract[]
-  includes?: IncludesConctract[]
+  includes?: IncludesContract[]
 }
 
-export interface IncludesConctract {
+export interface IncludesContract {
   relation: any
   where?: WhereContract[]
   orderBy?: OrderByContract[]
-  includes?: IncludesConctract[]
+  includes?: IncludesContract[]
 }
 
 export interface WhereContract {
