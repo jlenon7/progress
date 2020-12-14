@@ -3,8 +3,9 @@ import { ResponseContract } from '@ioc:Adonis/Core/Response'
 export interface SecResponseContract {
   withOne(payload: object): Promise<any>
   withNone(): Promise<any>
+  withMessage(message: string): Promise<any>
   withCreated(payload: object): Promise<any>
-  withCollection(payload: []): Promise<any>
+  withCollection(payload: any): Promise<any>
   withSoftDeleted(payload: string | number): Promise<any>
 }
 
@@ -18,14 +19,25 @@ export class SecResponse {
   public async withOne(payload: object): Promise<void> {
     return this.response.status(200).json({
       code: 'ONE',
+      path: this.response.request.url,
       status: 200,
       data: payload,
+    })
+  }
+
+  public async withMessage(message: string): Promise<void> {
+    return this.response.status(200).json({
+      code: 'MESSAGE',
+      path: this.response.request.url,
+      status: 200,
+      message,
     })
   }
 
   public async withNone(): Promise<void> {
     return this.response.status(204).json({
       code: 'NONE',
+      path: this.response.request.url,
       status: 204,
     })
   }
@@ -33,22 +45,26 @@ export class SecResponse {
   public async withCreated(payload: object): Promise<void> {
     return this.response.status(201).json({
       code: 'CREATED',
+      path: this.response.request.url,
       status: 201,
       data: payload,
     })
   }
 
-  public async withCollection(payload: []): Promise<void> {
+  public async withCollection(payload: any): Promise<void> {
     return this.response.status(200).json({
       code: 'COLLECTION',
+      path: this.response.request.url,
       status: 200,
-      data: payload,
+      data: payload.data,
+      pagination: payload.meta,
     })
   }
 
   public async withSoftDeleted(payload: string | number): Promise<void> {
     return this.response.status(200).json({
       code: 'SOFT_DELETED',
+      path: this.response.request.url,
       status: 200,
       data: {
         message: `[${payload}] Has been deleted`,
