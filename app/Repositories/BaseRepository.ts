@@ -14,8 +14,12 @@ export class BaseRepository {
     return this.Model.query().whereNull('deleted_at')
   }
 
-  public async getOne(id: string, data?: ApiRequestContract) {
-    let query = this.query().where('id', id)
+  public async getOne(id?: string | null, data?: ApiRequestContract | null) {
+    let query = this.query()
+
+    if (id) {
+      query = this.query().where('id', id)
+    }
 
     if (!data) {
       return query.first()
@@ -64,16 +68,14 @@ export class BaseRepository {
     return query.first()
   }
 
-  public async getAll(data?: ApiRequestContract) {
-    if (!data) {
-      let query = this.query()
+  public async getAll(pagination, data?: ApiRequestContract) {
+    let query = this.query()
 
-      return query
+    if (!data) {
+      return query.paginate(pagination.page, pagination.limit)
     }
 
     const { where, orderBy, includes } = data
-
-    let query = this.query()
 
     if (where) {
       where.map((where: WhereContract) => {
@@ -119,7 +121,7 @@ export class BaseRepository {
       })
     }
 
-    return query
+    return query.paginate(pagination.page, pagination.limit)
   }
 
   public async create(payload) {
