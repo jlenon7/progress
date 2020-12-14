@@ -1,7 +1,13 @@
 import { AuthService } from 'App/Services'
 import { ApiController } from 'App/Controllers/ApiController'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { LoginValidator, RegisterValidator, ConfirmValidator } from 'App/Validators/Auth'
+import {
+  LoginValidator,
+  RegisterValidator,
+  ConfirmValidator,
+  ForgotValidator,
+  ResetValidator,
+} from 'App/Validators/Auth'
 
 export default class AuthController extends ApiController {
   public async me({ auth, response }: HttpContextContract) {
@@ -33,7 +39,7 @@ export default class AuthController extends ApiController {
   public async logout({ auth, response }: HttpContextContract) {
     await new AuthService().setGuard(auth).logout()
 
-    return this.response(response).withNone()
+    return this.response(response).withMessage('Successfully logged out')
   }
 
   public async confirm({ request, response }: HttpContextContract) {
@@ -41,6 +47,22 @@ export default class AuthController extends ApiController {
 
     await new AuthService().confirm(data)
 
-    return this.response(response).withNone()
+    return this.response(response).withMessage('Account successfully confirmed')
+  }
+
+  public async forgot({ request, response }: HttpContextContract) {
+    const data = await this.request(request).validate(ForgotValidator)
+
+    await new AuthService().forgot(data)
+
+    return this.response(response).withMessage('Email successfully sent')
+  }
+
+  public async reset({ request, response }: HttpContextContract) {
+    const data = await this.request(request).validate(ResetValidator)
+
+    await new AuthService().reset(data)
+
+    return this.response(response).withMessage('Password reset successfully')
   }
 }
