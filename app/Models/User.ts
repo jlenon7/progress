@@ -8,11 +8,15 @@ import {
   beforeSave,
   beforeCreate,
   afterCreate,
+  manyToMany,
+  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import Hash from '@ioc:Adonis/Core/Hash'
 import { Attachment } from './Attachment'
 import { UserToken } from './UserToken'
+import { Role } from './Role'
+import { Permission } from './Permission'
 
 export { User }
 
@@ -53,6 +57,12 @@ export default class User extends BaseModel {
   @hasMany(() => UserToken)
   public userTokens: HasMany<typeof UserToken>
 
+  @manyToMany(() => Role)
+  public roles: ManyToMany<typeof Role>
+
+  @manyToMany(() => Permission)
+  public permissions: ManyToMany<typeof Permission>
+
   @beforeSave()
   public static async hashPassword(user: User) {
     if (user.$dirty.password) user.password = await Hash.make(user.password)
@@ -71,6 +81,13 @@ export default class User extends BaseModel {
   @beforeCreate()
   public static async generateId(user: User) {
     user.id = new Token().getToken(user.token)
+  }
+
+  @afterCreate()
+  public static async defaultRole(user: User) {
+    const customerRole = await Role.findByOrFail('slug', 'customer')
+
+    await user.related('roles').attach([customerRole.id])
   }
 
   @afterCreate()
