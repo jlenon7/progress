@@ -5,7 +5,7 @@ export class LoginValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    email: schema.string({}, [rules.email()]),
+    email: schema.string({}, [rules.email({ sanitize: true })]),
     password: schema.string(),
   })
 
