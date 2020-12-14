@@ -5,8 +5,8 @@ import { ApiRequestContract } from 'App/Contracts/ApiRequestContract'
 import NotFoundException from 'App/Exceptions/NotFoundException'
 
 export class UserService extends BaseService {
-  public async getAll(data?: ApiRequestContract) {
-    return new UserRepository().getAll(data)
+  public async getAll(pagination, data?: ApiRequestContract) {
+    return new UserRepository().getAll(pagination, data)
   }
 
   public async getOne(id: string, data?: ApiRequestContract) {
