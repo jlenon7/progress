@@ -27,6 +27,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     'E_UNAUTHORIZED_ACCESS',
     'E_INVALID_AUTH_PASSWORD',
     'E_NOT_FOUND',
+    'E_UNAUTHORIZED',
   ]
 
   constructor() {
@@ -36,12 +37,13 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   public async response(error, response: ResponseContract) {
     response.status(error.status).json({
       code: error.code,
+      path: response.request.url,
       status: error.status,
       timestamp: new Date().getTime(),
       error: {
         name: error.name,
         help: error.help,
-        message: error.message,
+        message: error.message.split(': ')[1],
         messages: error.messages,
       },
     })
@@ -49,12 +51,13 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   public async internalError(response: ResponseContract) {
     response.status(500).json({
-      code: 'InternalServerError',
+      code: 'E_INTERNAL_SERVER_ERROR',
+      path: response.request.url,
       status: 500,
       timestamp: new Date().getTime(),
       error: {
         name: 'InternalServerError',
-        message: 'E_INTERNAL_SERVER',
+        message: 'Internal Server Error',
         help: 'This error is not accepted by the application, look the logs for full detail.',
       },
     })

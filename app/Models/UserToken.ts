@@ -15,15 +15,18 @@ export class UserToken extends BaseModel {
   public name: string
 
   @column()
-  public type: 'forgot_token' | 'confirmation_token'
+  public type: 'forgot_token' | 'confirmation_token' | 'api_token'
+
+  @column()
+  public ip?: string
 
   @column()
   public token: string
 
-  @column({ serializeAs: null })
-  public password: string
+  @column()
+  public status: 'created' | 'expired' | 'used' | 'in_use'
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime()
   public expiresAt: DateTime
 
   @column.dateTime({ autoCreate: true })

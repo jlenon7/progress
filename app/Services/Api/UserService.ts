@@ -1,15 +1,16 @@
-import { BaseService } from './BaseService'
+import { BaseService } from 'App/Services'
 import { UserRepository } from 'App/Repositories/UserRepository'
+import { ApiRequestContract } from 'App/Contracts/ApiRequestContract'
 
 import NotFoundException from 'App/Exceptions/NotFoundException'
 
 export class UserService extends BaseService {
-  public async getAll(includes?: string) {
-    return new UserRepository().getAll(includes)
+  public async getAll(pagination, data?: ApiRequestContract) {
+    return new UserRepository().getAll(pagination, data)
   }
 
-  public async getOne(id: string, includes?: string) {
-    const user = await new UserRepository().getOne(id, includes)
+  public async getOne(id: string, data?: ApiRequestContract) {
+    const user = await new UserRepository().getOne(id, data)
 
     if (!user) {
       throw new NotFoundException()

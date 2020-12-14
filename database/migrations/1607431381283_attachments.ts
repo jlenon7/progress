@@ -9,7 +9,7 @@ export default class AttachmentsSchema extends BaseSchema {
 
       table.uuid('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
 
-      table.enum('type', ['avatar', 'rg', 'cnh'])
+      table.enu('type', ['avatar', 'rg', 'cnh'])
       table.string('name').notNullable()
       table.string('icon').notNullable()
       table.string('path', 255).notNullable()
@@ -18,7 +18,7 @@ export default class AttachmentsSchema extends BaseSchema {
       table.string('extension', 10).notNullable()
       table.string('token', 255).notNullable().unique()
       table.string('from_token', 255).nullable()
-      table.enum('status', ['pendent', 'approved', 'reproved', 'deleted']).defaultTo('pendent')
+      table.enu('status', ['pendent', 'approved', 'reproved', 'deleted']).defaultTo('pendent')
       table.timestamps(true)
       table.dateTime('deleted_at')
     })

@@ -10,8 +10,10 @@ export default class UserTokens extends BaseSchema {
       table.uuid('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
 
       table.string('name').notNullable()
-      table.enum('type', ['forgot_token', 'confirmation_token'])
+      table.string('ip').nullable()
+      table.enu('type', ['forgot_token', 'confirmation_token', 'api_token'])
       table.string('token', 255).notNullable()
+      table.enu('status', ['created', 'expired', 'used', 'in_use']).defaultTo('created')
 
       /**
        * "useTz: true" utilizes timezone option in PostgreSQL and MSSQL

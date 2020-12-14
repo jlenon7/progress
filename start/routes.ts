@@ -21,6 +21,15 @@
 import Route from '@ioc:Adonis/Core/Route'
 import Config from '@ioc:Adonis/Core/Config'
 
+Route.get('/', async () => {
+  return {
+    name: Config.get('app.name'),
+    prefix: Config.get('app.prefix'),
+    version: Config.get('app.version'),
+    greeting: Config.get('app.greeting'),
+  }
+})
+
 Route.group(() => {
   Route.get('/', async () => {
     return {
@@ -32,14 +41,19 @@ Route.group(() => {
   })
 
   Route.group(() => {
-    Route.get('/me', 'AuthController.me')
-    Route.post('/logout', 'AuthController.logout')
+    Route.get('/auth/me', 'AuthController.me')
+    Route.post('/auth/logout', 'AuthController.logout')
 
-    Route.get('/users', 'UserController.index')
-    Route.get('/users/:id', 'UserController.show')
+    Route.get('/users', 'UserController.index').middleware('is:admin,manager')
+    Route.get('/users/:id', 'UserController.show').middleware('is:admin,manager')
     Route.delete('/users/:id', 'UserController.delete')
   }).middleware('auth')
 
-  Route.post('/login', 'AuthController.login')
-  Route.post('/register', 'AuthController.register')
+  Route.group(() => {
+    Route.post('/login', 'AuthController.login')
+    Route.post('/reset', 'AuthController.reset')
+    Route.post('/forgot', 'AuthController.forgot')
+    Route.post('/confirm', 'AuthController.confirm')
+    Route.post('/register', 'AuthController.register')
+  }).prefix('/auth')
 }).prefix(Config.get('app.prefix'))

@@ -1,5 +1,5 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { User } from 'App/Models'
+import { Role, User } from 'App/Models'
 
 export default class UserSeeder extends BaseSeeder {
   public async run() {
@@ -41,6 +41,10 @@ export default class UserSeeder extends BaseSeeder {
         from_token: userTwo.token,
         original_name: 'my-photo',
       })
+
+      const role = await Role.findByOrFail('slug', 'admin')
+
+      await userTwo.related('roles').attach([role.id])
     }
   }
 }
