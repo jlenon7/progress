@@ -3,6 +3,7 @@ import Config from '@ioc:Adonis/Core/Config'
 
 import { User } from 'App/Models'
 import { Token } from '@secjs/core'
+import { DateTime } from 'luxon'
 
 export class UserMailService {
   public async newLogin(user: User, token: any, ip: string): Promise<void> {
@@ -37,10 +38,31 @@ export class UserMailService {
       })
     }
 
-    const url = `${Config.get('app.url')}/auth/confirm/${user.id}/${userToken?.token}`
+    const url = `${Config.get('app.url')}/auth/confirm/${userToken?.token}`
 
     Mail.send((message) => {
       message.to(user.email).subject('Welcome Onboard!').htmlView('email/welcome', { user, url })
+    })
+  }
+
+  public async forgotPassword(user: User): Promise<void> {
+    const today = new Date()
+    const tommorow = new Date(today.setDate(today.getDate() + 1))
+
+    const userToken = await user.related('userTokens').create({
+      name: 'Forgot Token',
+      type: 'forgot_token',
+      token: new Token().generate('utk'),
+      expiresAt: DateTime.fromJSDate(tommorow),
+    })
+
+    const url = `${Config.get('app.url')}/auth/forgot/${userToken.token}`
+
+    Mail.send((message) => {
+      message
+        .to(user.email)
+        .subject('Forgot password request')
+        .htmlView('email/forgot', { user, url })
     })
   }
 }
