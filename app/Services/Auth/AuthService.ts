@@ -4,12 +4,15 @@ import { BaseService } from 'App/Services'
 import { UserMailService } from './UserMailService'
 import { UserRepository } from 'App/Repositories/UserRepository'
 import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
+import { UserToken } from 'App/Models/UserToken'
 
 export class AuthService extends BaseService {
   public async me() {
     if (!this.User) {
       throw new NotFoundException()
     }
+
+    await this.User.preload('roles')
 
     return this.User
   }
@@ -23,7 +26,9 @@ export class AuthService extends BaseService {
   }
 
   public async login(email: string, password: string, ip: string) {
-    const token = await this.guard.attempt(email, password)
+    const token = await this.guard.attempt(email, password, {
+      expiresIn: '1 days',
+    })
 
     await this.User.related('userTokens')
       .query()
@@ -50,24 +55,58 @@ export class AuthService extends BaseService {
     return this.guard.logout()
   }
 
-  public async confirm({ user_id, token }) {
-    const user = await new UserRepository().getOne(user_id)
+  public async confirm({ token }) {
+    const userToken = await UserToken.findByOrFail('token', token)
+
+    if (userToken.status !== 'created') {
+      throw new UnauthorizedException('This token has been already used!')
+    }
+
+    await userToken.preload('user')
+
+    const user = userToken.user
 
     if (user.status === 'approved') {
       throw new UnauthorizedException('User is already approved!')
     }
 
-    const userToken = await user.related('userTokens').query().where('token', token)
-
-    if (userToken.created_at > userToken.expiresAt) {
+    if (userToken.createdAt > userToken.expiresAt) {
       await user.related('userTokens').query().where('token', token).update({ status: 'expired' })
 
-      // TODO Criar método no UserMailService para enviar confirmToken pelo ID do Usuário e chamar aqui
+      await new UserMailService().confirmToken(user, true)
 
-      throw new UnauthorizedException('Sorry, your token has expired!')
+      throw new UnauthorizedException(
+        'Sorry, this token has expired, check your email inbox to get a new one'
+      )
     }
 
     await user.related('userTokens').query().where('token', token).update({ status: 'used' })
     await new UserRepository().update(user.id, { status: 'approved' })
+  }
+
+  public async forgot({ email }) {
+    const user = await new UserRepository().getOne(null, {
+      where: [{ key: 'email', value: email }],
+    })
+
+    new UserMailService().forgotPassword(user)
+  }
+
+  public async reset({ password, token }) {
+    const userToken = await UserToken.findByOrFail('token', token)
+
+    if (userToken.status !== 'created') {
+      throw new UnauthorizedException('This token has been already used!')
+    }
+
+    await userToken.preload('user')
+
+    const user = userToken.user
+
+    userToken.status = 'used'
+    await userToken.save()
+
+    user.password = password
+    await user.save()
   }
 }
