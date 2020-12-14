@@ -1,6 +1,6 @@
 {
   "name": "@secjs/guard",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "build": "node ace build --production",
