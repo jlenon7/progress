@@ -44,10 +44,8 @@ export class BaseService {
 
   public verifyStatus(user: User) {
     if (user.status === 'pendent') {
-      new UserMailService().confirmToken(user, true)
-
       throw new UnauthorizedException(
-        'Your profile is still pendent, please check your email inbox'
+        'Your profile is still pendent, please check your email inbox to approve it'
       )
     }
 
