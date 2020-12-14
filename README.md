@@ -1,6 +1,6 @@
 # Guard 📦
 
-> Very simple Auth Guard for NodeJS
+> Guard API with Adonis v5
 
 <p>
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/SecJS/Guard?style=for-the-badge&logo=appveyor">
@@ -16,55 +16,23 @@ The intention behind this repository is to always maintain a viable and simple G
 
 ## Installation
 
-You can install the Response using;
+You can install this project using;
 
 ```bash
-yarn add @SecJS/Guard
+git clone https://github.com/secjs/guard
 ```
 
-## Usage
-
-> You can call the Guard class to create a new guard instance and use in middlewares
-
-```js
-import Guard from '@SecJS/Guard'
-
-export class GuardMiddleware {
-  async handle(request: any, response: any, next: any): Promise<void> {
-    const token = request.header('authorization', null)
-
-    if (!token) {
-      // some unauthorized exception
-      throw new Error
-    }
-
-    const guard = new Guard()
-    await guard.parse(token)
-
-    if (!guard.check()) {
-      // some unauthorized exception
-      throw new Error
-    }
-
-    request.guard = guard
-    await next()
-  }
-}
-
+```bash
+cd guard
+cp .env.example .env
 ```
 
-> You can find all definitions and methods calling the ```IGuard Interface```.
-
-```js
-import { IGuard } from '@SecJS/Guard'
-
-// It will have this format
-interface IGuard {
-  parse(token: string): Promise<void>
-  isUser(): boolean
-  isAdmin(): boolean
-  getRoles(): RoleEnum[]
-  hasRole(role: RoleEnum): boolean
-  check(): boolean
-}
+```bash
+yarn
 ```
+
+## Documentation
+
+For API Documentation you can use [Insomnia]('https://insomnia.rest/download/') and import our [Workspace]('https://github.com/SecJS/Guard/blob/master/.github/insomnia.json') inside of it.
+
+Check our Workspace file [clicking in here]('https://github.com/SecJS/Guard/blob/master/.github/insomnia.json')
