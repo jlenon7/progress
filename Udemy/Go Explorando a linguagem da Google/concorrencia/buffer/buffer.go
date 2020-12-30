@@ -20,4 +20,6 @@ func main() {
 	go rotina(ch)
 
 	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
 }
