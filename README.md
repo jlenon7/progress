@@ -1,3 +1,3 @@
-# Rocketseat GoStack
+🏆 @jlenon7/progress
 
-⏯🚀 My journey at Rocketseat Bootcamp
+Repository with all my progress, courses, video lessons, etc.
