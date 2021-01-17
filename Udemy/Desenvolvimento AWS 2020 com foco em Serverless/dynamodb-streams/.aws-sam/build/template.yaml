@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'dynamodb-streams
+
+  Sample SAM Template for dynamodb-streams
+
+  '
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  ProcessPessoasTableStream:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ProcessPessoasTableStream
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies: AWSLambdaDynamoDBExecutionRole
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream:
+              Fn::GetAtt:
+              - PessoasTable
+              - StreamArn
+            BatchSize: 5
+            StartingPosition: TRIM_HORIZON
+  PessoasTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
