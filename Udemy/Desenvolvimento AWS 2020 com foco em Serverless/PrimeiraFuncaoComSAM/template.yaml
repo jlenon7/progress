@@ -23,6 +23,17 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+  PrimeiraFilaCriadaComCF: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      RedrivePolicy: 
+        deadLetterTargetArn: 
+          Fn::GetAtt: 
+            - "PrimeiraDLQCriadaComCF"
+            - "Arn"
+        maxReceiveCount: 5
+  PrimeiraDLQCriadaComCF: 
+    Type: AWS::SQS::Queue
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -37,3 +48,23 @@ Outputs:
   PrimeiraFuncaoComSAMIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt PrimeiraFuncaoComSAMRole.Arn
+  SourceQueueURL: 
+    Description: "URL of source queue"
+    Value: 
+      Ref: "PrimeiraFilaCriadaComCF"
+  SourceQueueARN: 
+    Description: "ARN of source queue"
+    Value: 
+      Fn::GetAtt: 
+        - "PrimeiraFilaCriadaComCF"
+        - "Arn"
+  DeadLetterQueueURL: 
+    Description: "URL of dead-letter queue"
+    Value: 
+      Ref: "PrimeiraDLQCriadaComCF"
+  DeadLetterQueueARN: 
+    Description: "ARN of dead-letter queue"
+    Value: 
+      Fn::GetAtt: 
+        - "PrimeiraDLQCriadaComCF"
+        - "Arn"
