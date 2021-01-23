@@ -1,0 +1,11 @@
+﻿EXPLAIN ANALYZE SELECT (SELECT (SUM(valor_total)/count(id)) AS media FROM venda WHERE vendedor_id=3) AS media_valor,
+((SELECT SUM(iv.quantidade)
+			FROM venda v
+			INNER JOIN item_venda iv ON iv.venda_id = v.id
+			WHERE v.vendedor_id = 3 AND v.data_venda 
+			BETWEEN '2015-12-02' AND '2020-03-01')
+			/
+(SELECT COUNT(DISTINCT(iv.venda_id))  FROM item_venda iv
+INNER JOIN venda v ON v.id = iv.venda_id
+WHERE v.vendedor_id = 3))  AS media_qtde
+

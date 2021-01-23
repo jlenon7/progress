@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Aula JavaScript - Eventos e Funções</title>
+	<script type="text/javascript" src="Eventos e Funções.js"></script>
+</head>
+<body>
+
+ <h1>Aula JavaScript - Eventos e Funcções</h1>
+
+ <hr color="black">
+ 
+ <p onmouseover="this.style.color='red'"
+    onmouseout="this.style.color='blue'"
+    style="width: 154px;"
+    >Passe o mouse por cima</p>
+ <button onclick="alert('Oi, este e um evento de click')">Clique Me</button>
+
+ <hr color="black">
+
+ <p id="texto">Clique nos botões abaixo para mudar a cor deste paragrafo</p>
+ <button onclick="mudarCor(1)">Azul</button>
+ <button onclick="mudarCor(2)">Verde</button>
+ <button onclick="mudarCor(3)">Normal</button>
+
+ <hr color="black">
+
+ <input id="pegar_texto" type="text" placeholder="Digite um texto" size="25"></input>
+ <button onclick="pegarTexto()">Clique para capturar o texto</button>
+
+
+
+ </body>
+ </html>

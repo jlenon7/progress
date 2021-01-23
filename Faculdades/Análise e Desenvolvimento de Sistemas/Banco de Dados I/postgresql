@@ -1,0 +1,455 @@
+COMANDO PSQL
+
+Ctrl + l - Limpa a tela no postgres
+q - sai dos menu
+\q - sai da base de dados atual
+\c - conecta em uma base de dados
+\d - Lista todos os objetos de uma base de dados
+\dt - Lista as tabelas
+\l - lista os banco de dados
+\i - importa banco de dados
+\x - Ativa e desativa visualização expandida
+\h - help SQL
+\? - help PSQL
+
+
+
+INSTALANDO POSTGRESQL
+
+sudo su -
+apt-get install postgresql
+sudo su -
+passwd postgres (senha)
+su - postgres (para entrar)
+psql
+
+
+CRIANDO DATABASE (DE EXMPLO O PAGILA)
+
+Baixa o pagila.zip
+Cd Downloads
+unzip pagila.zip
+su postgres
+psql
+CREATE DATABASE pagila;
+\c pagila (unico que precisa ao iniciar novamente)
+\d ('No relation found')
+\i pagila.sql
+\d
+
+
+COMANDOS
+
+SELECT *campos* FROM *entidade*;
+SELECT * FROM city; 
+(Para pegar todos os campos da entidade city)
+SELECT city_id, city FROM city 
+(pegar os campos 'city_id' e 'city' da entidade city)
+
+SELECT city_id AS id, city AS cidade FROM city
+(citar na tabela city_id como id e citar city como cidade)
+
+SELECT city_id, city FROM city
+WHERE city = 'Barcelona'; 
+(para buscar a cidade barcelona)
+
+SELECT city_id, city FROM city
+WHERE country_id = 104; 
+(para buscar as cidades cujo pais tem id 104)
+
+SELECT city_id, city FROM city
+WHERE country_id = 104 OR country_id = 103; 
+(pesquisar as cidades cujo pais tem id 103 e as cidades que tem pais com id 104)
+
+SELECT city_id, city FROM city
+WHERE city_id <= 50;
+(Mostrar as cidades cujo id seja menor ou igual a 50)
+
+SELECT city_id, city FROM city
+WHERE city_id >= 50 AND city_id <= 60;
+(Mostrar as cidades cujo id seja maior que 50 e menor que 60)
+
+SELECT city_id, city FROM city
+WHERE city_id >= 50 AND city_id <= 60 AND city_id != 58;
+(Mostrar as cidades cujo id seja maior que 50 e menor que 60 e que seja diferente de 58)
+
+SELECT city_id, city FROM city
+WHERE city_id IN (1, 7, 8, 14, 78, 101);
+(mostra apenas as cidades com os id citados)
+
+SELECT city_id, city FROM city
+WHERE city_id NOT IN (1, 7, 8, 14, 78, 101);
+(mostrar todas as cidades menos as com os id citados)
+
+SELECT * FROM city
+ORDER BY country_id DESC;
+(Ordena as cidades de forma decrescente em relação ao id do pais)
+
+SELECT * FROM city
+ORDER BY city DESC;
+(Ordena as cidades de forma decrescente em relaçãi ao id da cidade)
+
+SELECT * FROM city
+ORDER BY city ASC;
+(ordenando a tabela pelo nome da cidade em ordem alfabetica)
+
+SELECT * FROM city
+ORDER BY country_id ASC, city ASC;
+
+SELECT city_id AS id, city AS cidade FROM city
+WHERE country_id IN (6, 103, 104)
+ORDER BY country_id ASC, city ASC;
+
+SELECT city_id AS id, city AS cidade, country_id pais FROM city
+WHERE country_id IN (6, 103, 104)
+ORDER BY country_id ASC, city DESC;
+
+INSERT INTO city (city, country_id) VALUES('Foz do Iguaçu', 15);
+(comando para inserir uma cidade na entidade city)
+SELECT * FROM city
+WHERE city = 'Foz do Iguaçu'; 
+(pesquisa da cidade acabada de ser inserida)
+
+UPDATE city SET city='Curitiba'
+WHERE city_id=601;
+
+DELETE FROM city WHERE city_id = 601;
+(deleta a cidade cujo id é 601)
+
+---------------------------------------------------------------------------------
+
+CREATE DATABASE ifpr OWNER postgres;
+(criando um database de nome ifpr. *OWNER* diz quem é o dono do database)
+
+ALTER DATABASE federal RENAME TO iffoz;
+(renomear o database federal para iffoz)
+
+DROP DATABASE iffoz;
+(excluir o database iffoz)
+
+DROP DATABASE IF EXISTS iffoz;
+
+CREATE TABLE distribuidor (
+	id SERIAL primary key,
+	nome VARCHAR(80) NOT NULL,
+	modificado TIMESTAMP DEFAULT now()
+);
+(Criando uma tabela de nome distribuidor com as colunas:
+id do tipo 'serial' onde o mesmo é uma chave primária;
+nome do tipo 'varchar' com tamanho 80;
+modificado do tipo 'timestamp' onde chama uma função 'now()')
+
+INSERT INTO distribuidor(nome) VALUES ('FOX');
+INSERT INTO distribuidor(nome) VALUES ('WARNER');
+INSERT INTO distribuidor(nome) VALUES ('MGM');
+INSERT INTO distribuidor(nome) VALUES ('UNIVERSAL');
+INSERT INTO distribuidor(nome) VALUES ('SONY');
+(inserindo nomes na tabela)
+
+CREATE TABLE filmes (
+	id SERIAL,
+	titulo VARCHAR(40) NOT NULL,
+	duracao INTEGER NOT NULL,
+	PRIMARY KEY(id)
+);
+(criando uma tabela de nome films e dizendo no final que id é uma
+chave primária)
+
+DROP TABLE filmes;
+(excluir a tabela filmes)
+
+CREATE TABLE filme (
+	id SERIAL,
+	titulo VARCHAR(40) NOT NULL,
+	did INTEGER NOT NULL,
+	duracao INTEGER NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(did) REFERENCES distribuidor(id)
+);
+(recriando a tabela filme)
+
+CREATE TABLE idioma (
+	id SERIAL,
+	descricao VARCHAR(40) NOT NULL,
+	PRIMARY KEY(id)
+);
+(criando uma tabela de nome idioma e dizendo no final que id é uma
+chave primária)
+
+CREATE TABLE filme_idioma (
+	fid INTEGER NOT NULL,
+	iid INTEGER NOT NULL,
+	CONSTRAINT filme_idioma_pk 
+		PRIMARY KEY(fid, iid)
+
+);
+
+(criando uma tabela de nome filme_idioma e dizendo no final que fid e iid sao chaves primarias - chave primaria composta)
+
+DROP TABLE filme_idioma
+(excluir a tabela filme_idioma)
+
+CREATE TABLE filme(
+	id SERIAL,
+	titulo VARCHAR(40) NOT NULL,
+	did INTEGER NOT NULL,
+	duracao INTEGER NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(did) REFERENCES distribuidor(id)
+);
+(recriando a tabela filme)
+
+CREATE TABLE filme_idioma (
+	fid INTEGER NOT NULL,
+	iid INTEGER NOT NULL,
+        PRIMARY KEY(fid, iid),
+	FOREIGN KEY(fid) REFERENCES filme(id),
+	FOREIGN KEY(iid) REFERENCES idioma(id)
+);
+
+(criando uma tabela de nome filme_idioma e dizendo no final que fid e iid
+são chaves primárias - chave primária composta)
+
+INSERT INTO filme(titulo, did, duracao)
+	VALUES('DeadPool', 1, 132);
+INSERT INTO filme(titulo, did, duracao)
+	VALUES('Venon', 4, 112);
+INSERT INTO filme(titulo, did, duracao)
+	VALUES('Liga da Justiça', 7, 98);
+INSERT INTO filme(titulo, did, duracao)
+	VALUES('Power Rangers', 3, 89);
+
+(Criando o titulo, marca e duracao dos filmes)
+
+DELETE FROM distribuidor WHERE id = 4;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE DATABASE teste;
+\c teste
+
+CREATE TABLE pessoa(
+	pessoa_id serial PRIMARY KEY,
+	nome varchar(80) NOT NULL,
+	rg varchar(10) UNIQUE
+);
+
+INSERT INTO pessoa(nome, rg) VALUES('MARIA', '1010');
+INSERT INTO pessoa(nome, rg) VALUES('PEDRO', '1010');
+
+"Erro, pois já tem um valor 1010 para o campo RG (que é do tipo UNIQUE)*
+
+ALTER TABLE pessoa ADD COLUMN varchar(20);
+
+\q
+
+\c pagila
+
+SELECT * FROM city;
+SELECT * FROM country where country_id = 97;
+SELECT city, country, city.last_update
+FROM city
+INNER JOIN country USING(country_id);
+
+SELECT city_id, city, country
+FROM city
+INNER JOIN country
+USING (country_id)
+ORDER BY city ASC
+LIMIT 15;
+(Ordenando as cidades em ordem alfabética com um limite de 15 cidades)
+
+SELECT city_id, city, country
+FROM city
+INNER JOIN country
+USING (country_id)
+ORDER BY city ASC
+LIMIT 15 OFFSET 15;
+(OFFSET "excluio" os 15 primeiros na pesquesa e só mostra apos os 15 próximos)
+
+SELECT
+	city_id AS id,
+	city AS cidade,
+	country AS pais
+FROM city
+INNER JOIN country
+USING(country_id)
+ORDER BY city ASC
+LIMIT 15;
+(AS da nome aos campos)
+
+SELECT
+	customer_id AS id,
+	amount AS total
+FROM payment
+LIMIT 10;
+
+SELECT customer_id FROM rental;
+SELECT count(customer_id) FROM rental;
+
+SELECT DISTINCT customer_id
+FROM rental;
+
+SELECT first_name FROM actor ORDER BY first_name;
+
+SELECT city_id city FROM city WHERE city like 'S%';
+(para mostrar todas as cidades que comecam com S)
+
+SELECT city_id, city FROM city WHERE city_id BETWEEN 1 AND 10;
+(vai trazer as cidade que ocomecao com o id de 1 a 10)
+
+SELECT city_id, city FROM city WHERE city_id IN(2,4,6);
+(vai mostrar as cidades com id 2, 4 e 6)
+
+SELECT city_id, city FROM city WHERE city IS NULL;
+(mostrar onde os dados realmente sao nuos)
+
+SELECT city_id, city FROM city WHERE city IS NOT NULL;
+(mostra os que nao sao nulos)
+
+SELECT
+	first_name || ' ' || last_name AS fullname,
+	title
+FROM
+	film
+INNER JOIN film_actor USING(film_id)
+INNER JOIN actor USING(actor_id)
+ORDER BY title ASC,last_name ASC;
+
+SELECT (('1' || '6')::INTEGER)+1 AS CARCURU;
+(Para fazer um calculo)
+
+INNER JOIN film_actor USING(film_id)
+INNER JOIN actor USING(actor_id)
+ORDER BY title ASC, last_name ASC;
+
+SELECT
+	customer_id,
+	sum(amount)
+FROM payment	
+INNER JOIN
+GROUP BY customer_id
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT
+	staff_id,
+	SUM(amount)
+FROM
+	payment
+GROUP BY staff_id;
+
+SELECT (date_part('hour', now()));
+
+SELECT 
+	staff_id AS id, 
+	date_part('month', payment_date) || '-' || date_part('year',
+payment_date) AS mes,
+	first_name || ' ' || last_name AS nome,
+	SUM(amount) AS total
+FROM
+ 	payment
+INNER JOIN staff USING(staff_id)
+GROUP BY staff_id, mes
+ORDER BY mes ASC, staff_id ASC;
+
+
+
+********************************************************************
+SELECT * FROM (SELECT
+	staff_id AS id, 
+	date_part('month', payment_date) || '-' || date_part('year',
+payment_date) AS mes,
+	first_name || ' ' || last_name AS nome,
+	SUM(amount) AS total
+FROM
+ 	payment
+INNER JOIN staff USING(staff_id)
+GROUP BY staff_id, mes
+HAVING
+	SUM(amount) > 10000
+ORDER BY mes ASC, staff_id ASC) AS funcionario;
+********************************************************************
+SELECT * FROM (SELECT
+	staff_id AS id, 
+	date_part('month', payment_date) || '-' || date_part('year',
+payment_date) AS mes,
+	first_name || ' ' || last_name AS nome,
+	SUM(amount) AS total
+FROM
+ 	payment
+INNER JOIN staff USING(staff_id)
+GROUP BY staff_id, mes
+ORDER BY mes ASC, staff_id ASC) AS funcionario;
+********************************************************************
+SELECT * FROM (SELECT
+	staff_id AS id, 
+	date_part('month', payment_date) || '-' || date_part('year',
+payment_date) AS mes,
+	first_name || ' ' || last_name AS nome,
+	SUM(amount) AS total
+FROM
+ 	payment
+INNER JOIN staff USING(staff_id)
+GROUP BY staff_id, mes
+ORDER BY mes ASC, staff_id ASC) AS funcionario
+WHERE
+	total > 10000;
+********************************************************************
+SELECT * FROM payment;
+SEÇECT customer_id, sum(amount) FROM payment GROUP by customer_id
+ORDER BY total DESC LIMIT 10;
+
+SELECT * FROM customer;
+
+SELECT * FROM customer
+WHERE customer_id IN (SELECT customer_id FROM top_customer);
+
+SELECT * FROM customer 
+WHERE customer_id IN (SELECT customer_id FROM (SELECT customer_id, sum(amount) total FROM payment GROUP BY customer_id ORDER BY total DESC LIMIT 10) AS l);
+
+CREATE VIEW top_customer AS(SELECT customer_id, sum(amount) total FROM payment GROUP BY customer_id ORDER BY total DESC LIMIT 10);
+
+SELECT * FROM customer 
+WHERE customer_id IN(SELECT customer_id FROM top_customer);
+INNER JOIN top_customer USING(customer_id);
+
+SELECT * FROM customer
+INNER JOIN (SELECT customer_id, sum(amount) total FROM payment GROUP BY
+customer_id ORDER BY total DESC LIMIT 10) AS l USING(customer_id);
+********************************************************************
+
+SELECT
+	customer_id;
+	first_name,	
+	last_name,
+	email,
+	create_date
+FROM
+	customer
+WHERE
+	customer_id IN(SELECT customer_id FROM (SELECT customer_id, sum(amount) total FROM payment GROUP BY customer_id ORDER BY total DESC LIMIT 10) as l);
+
+SELECT
+	customer_id;
+	first_name,
+	last_name,
+	email,
+	create_date
+FROM
+	customer
+INNER JOIN (SELECT customer_id, sum(amount) total FROM payment GROUP BY 
+customer_id);
+
+
+
+
+
+
+
+
+
+
+
+

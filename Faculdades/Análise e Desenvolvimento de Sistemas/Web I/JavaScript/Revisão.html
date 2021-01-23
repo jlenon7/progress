@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8">
+	<title>Aula JavaScript 3</title>
+</head>
+<body>
+
+<button onclick="imprimirNome()">Exibir Nome</button>
+<button onclick="imprimirIdade()">Exibir Idade</button>
+<p id="nome"></p>
+<p id="idade"></p>
+
+<input type="type" placeholder="Digite algo" onkeypress="exibirAlerta()">
+<hr color="black">
+<input type="type" placeholder="Exercicio" onkeypress="copiarTexto(this)">
+<p id="texto"></p>
+
+<button id="btnAlerta">Clique Me</button>
+
+<!-- Exercicio -->
+<h2>Calcular usando addEventListener</h2>
+<!-- acabei usando getElementById pq sou burro -->
+Valor 1: <input type="text" id="valor1"><br>
+Valor 2: <input type="text" id="valor2"><br>
+<hr color="black">
+<button id="somar" onclick="btnCalcular()">Calcular</button>
+<p id="resultado"></p>
+
+
+<script type="text/javascript">
+	
+var pessoa = {
+
+	  nome: "João",
+    sobrenome: "Lenon",
+    idade: "17",
+    nomecompleto: function()
+    {
+    var nomefcompleto = pessoa.nome + " " + pessoa.sobrenome;
+    return nomefcompleto;
+    }
+
+};
+
+var btnAlerta = document.getElementById("btnAlerta");
+btnAlerta.addEventListener("click", exibirAlerta);
+
+function exibirAlerta() {
+	alert("Vocẽ digitou algo no teclado ou clicou em mim!");
+}
+
+function imprimirNome() {
+   document.getElementById("nome").innerHTML =
+   "Nome: " + pessoa.nome + 
+   "<br>Nome Completo: " + pessoa.nomecompleto();
+};
+
+function imprimirIdade() {
+	document.getElementById("idade").innerHTML = 
+  "Idade: " + pessoa.idade + " " + "Anos";
+
+}
+
+function copiarTexto(texto) {
+    var valor = texto.value;
+    document.getElementById("texto").innerHTML = valor;
+}
+
+function btnCalcular(){
+        var valor1 = document.getElementById("valor1").value;
+        var valor2 = document.getElementById("valor2").value;
+        var resultado = parseInt(valor1) + parseInt(valor2);
+        alert(resultado);
+    }
+
+</script>
+
+</body>
+</html>

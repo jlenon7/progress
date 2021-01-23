@@ -1,0 +1,18 @@
+﻿CREATE OR REPLACE VIEW total_itens_view (venda, produto, total)
+AS SELECT iv.venda_id, p.referencia, (iv.valor_item * iv.quantidade)
+FROM item_venda iv
+JOIN produto p ON iv.produto_id = p.id;
+
+SELECT * FROM total_itens_view;
+
+CREATE OR REPLACE VIEW total_itens2_view (venda, produto, total)
+AS SELECT p.referencia, iv.venda_id, (iv.valor_item * iv.quantidade)
+FROM item_venda iv
+JOIN produto p ON iv.produto_id = p.id;
+
+SELECT * FROM total_itens2_view;
+SELECT * FROM item_venda;
+
+
+--drop view total_itens_view;
+--drop view total_itens2_view;

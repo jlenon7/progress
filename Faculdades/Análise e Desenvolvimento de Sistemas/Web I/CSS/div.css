@@ -1,0 +1,102 @@
+div {
+	background-color: #990000;
+	padding: 20px;
+	border-radius: 5px;
+	width: 30%;
+	float: left;
+	
+}
+
+input {
+	box-sizing: border-box;
+}
+
+input[type=text] {
+	width: 100%;
+	padding: 12px;
+	margin: 8px 0px;
+	border: 1px;
+	border-radius: 5px;
+	background-image: url('boneco.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: 5px;
+	padding-left: 28px;
+}
+
+
+input[type=search] {
+	width: 100%;
+	padding: 12px;
+	margin: 8px 0px;
+	border: 1px;
+	border-radius: 5px;
+	background-image: url('search.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: 5px;
+	padding-left: 27px;
+}
+
+
+input[type=submit] {
+	width: 100%;
+	padding: 12px;
+	margin: 8px 0px;
+	border: none;
+	border-radius: 5px;
+	color: black;
+	font-weight: bold;
+	background-color: #00ff00; 
+	cursor: pointer;
+}
+
+input[type=email] {
+	width: 100%;
+	padding: 12px;
+	margin: 8px 0px;
+	border: 1px;
+	border-radius: 5px;
+	background-image: url('email.png');
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: 3px;
+	padding-left: 27px;
+}
+
+body {
+	background-color: #808080;
+}
+
+h2 {
+	background-color: #CFCFCF;
+	padding: 20px; 
+	text-align: center;
+	border-radius: 5px;
+	background-image: url('ifpr_logo.png');
+	background-size: 250px;
+	background-repeat: no-repeat;
+	background-position: 3px;
+	padding-left: 27px;
+}
+
+#conteudo-esquerda {
+	float: right; 
+	background-color: #CFCFCF;
+	padding: 20px;
+	width: 60%;
+	height: 510px;
+	border-radius: 5px;
+}
+
+#rodape {
+	float: bottom;
+	clear: both;
+	text-align: center;
+	padding: 10px;
+	background-color: #990000;
+	border-radius: 5px;
+	
+	
+
+}

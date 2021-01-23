@@ -1,0 +1,106 @@
+*********************************************************************************************************************************************************
+/* 0 - Criando uma Data Base*/
+
+createdb vendas
+psql vendas
+
+*********************************************************************************************************************************************************
+
+/* 1 - Adicione um conjunto de registros em média 5 registros por entidade; */
+
+CREATE TABLE cliente (
+	id_cliente SERIAL,
+	
+);
+
+CREATE TABLE vendedor (
+	id_vendedor SERIAL,
+	nome VARCHAR(40) NOT NULL,
+	comissao INTEGER NOT NULL,
+	s_total INTEGER NOT NULL,
+	departamento VARCHAR(150) NOT NULL,
+        PRIMARY KEY(id_vendedor)
+);
+
+CREATE TABLE produto (
+	id_produto SERIAL,
+	descricao VARCHAR(150) NOT NULL,
+	qtde INTEGER NOT NULL,
+	preco NUMERIC(7,2) NOT NULL,
+	PRIMARY KEY(id_produto)
+);
+
+CREATE TABLE venda (
+	id_venda SERIAL,
+	id_vendedor SERIAL,
+	total INTEGER NOT NULL,
+	desconto INTEGER NOT NULL,	
+	PRIMARY KEY(id_venda)
+);
+
+CREATE TABLE item_venda (
+	id_venda INTEGER NOT NULL,
+	id_produto INTEGER NOT NULL,
+	qtde INTEGER NOT NULL,
+	preco INTEGER NOT NULL,
+	PRIMARY KEY(id_venda, id_produto),
+	FOREIGN KEY(id_produto) REFERENCES produto (id_produto),
+	FOREIGN KEY(id_venda) REFERENCES venda(id_venda)
+);
+
+INSERT INTO produto(descricao, qtde, preco) VALUES('Paracetamol', 100, 2.50);
+INSERT INTO produto(descricao, qtde, preco) VALUES('Ibuprofeno', 100, 3.50);
+INSERT INTO produto(descricao, qtde, preco) VALUES('Amoxilina', 100, 8.50);
+INSERT INTO produto(descricao, qtde, preco) VALUES('Xylocaina', 100, 8.70);
+INSERT INTO produto(descricao, qtde, preco) VALUES('ERVA MIDICINAL', 100, 1.50);
+
+*********************************************************************************************************************************************************
+
+/* 2 - Atualize o preço de 3 produtos; */
+
+UPDATE produto SET preco='3.00'
+WHERE id_produto=6;
+
+UPDATE produto SET preco='10.90'
+WHERE id_produto=10;
+
+UPDATE produto SET preco='4.30'
+WHERE id_produto=8;
+
+
+*********************************************************************************************************************************************************
+
+/* 3 - Exclua um produto que não foi utilizando durante as vendas; */
+
+INSERT INTO produto(descricao, qtde, preco) VALUES('xesqdale', 100, 100.00);
+SELECT * FROM produto;
+DELETE FROM produto WHERE id_produto = 11;
+SELECT * FROM produto;
+
+*********************************************************************************************************************************************************
+
+/* 4 - Faça uma consulta apresentando todas as vendas com valor total superior  R$ 300,00; */
+
+INSERT INTO venda(total, desconto) VALUES(300, 0);
+INSERT INTO item_venda(id_produto, qtde, preco) VALUES(6, 100, 300.00);
+INSERT INTO vendedor(nome, comissao, s_total, departamento) VALUES('Fernando Souza', 250.50, 1450.50, 'Fármacias Nissei MORUMBI');
+
+*********************************************************************************************************************************************************
+
+/* 5 - Faça uma consulta que apresente o nome dos vendedores em ordem alfabética; */
+
+INSERT INTO vendedor(nome, comissao, s_total, departamento) VALUES('João Lenon', 250.90, 1250.90, 'Fármacias Nissei VILA A');
+INSERT INTO vendedor(nome, comissao, s_total, departamento) VALUES('Jéssica Carolini', 250.60, 1850.60, 'Fármacias Nissei CENTRO');
+INSERT INTO vendedor(nome, comissao, s_total, departamento) VALUES('Fernando Souza', 250.50, 1450.50, 'Fármacias Nissei MORUMBI');
+
+SELECT * FROM vendedor ORDER BY nome ASC;
+
+*********************************************************************************************************************************************************
+/* 6 - Faça uma consulta que mostre os vendedores que realizaram mais vendas. */
+
+INSERT INTO venda(total, desconto) VALUES(450, 0);
+INSERT INTO venda(total, desconto) VALUES(200, 0);
+
+SELECT * FROM venda ORDER BY total DESC;
+
+*********************************************************************************************************************************************************

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Entre com o usuário: "
+read usuario
+
+
+cont=`grep -i $usuario /etc/passwd | wc -l`
+login=`grep -i $usuario /etc/passwd | cut -f1 -d:`
+
+achou=0
+if [ $cont -gt 0 ] ; then
+	for u in $login
+	do
+	  if [ $u = $usuario ] ; then
+	     achou=1
+	  fi
+	done
+fi
+if [ $achou -ge 1 ] ; then
+	echo "Usuário $usuario cadastrado"
+else
+	echo "Usuário $usuario não cadastrado"
+fi

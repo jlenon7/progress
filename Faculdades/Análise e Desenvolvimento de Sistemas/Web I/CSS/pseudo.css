@@ -1,0 +1,15 @@
+
+#paragrafo_escondido {
+	display: none;
+	border-radius: 5px;
+}
+
+div:hover #paragrafo_escondido {
+	display: block;
+	border-radius: 5px;
+}
+
+#impares article:nth-child(even){
+	background-color: lightblue;
+	border-radius: 5px;
+}

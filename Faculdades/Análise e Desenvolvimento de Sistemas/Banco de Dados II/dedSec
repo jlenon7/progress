@@ -1,0 +1,26 @@
+﻿CREATE TABLE venda(
+	id SERIAL PRIMARY KEY,
+	valor DECIMAL NOT NULL
+);
+
+CREATE TABLE produto(
+	id SERIAL PRIMARY KEY,
+	valor_unitario DECIMAL NOT NULL
+);
+
+CREATE TABLE item_venda(
+	id_venda INTEGER,
+	id_produto INTEGER,
+	valor_total DECIMAL NOT NULL,
+	CONSTRAINT id_venda_fk FOREIGN KEY (id_venda)
+	REFERENCES venda (id),
+	CONSTRAINT id_produto_fk FOREIGN KEY (id_produto)
+	REFERENCES produto (id), 
+	CONSTRAINT item_venda_pk PRIMARY KEY (id_venda, id_produto)
+);
+
+SELECT * FROM venda;
+SELECT * FROM produto;
+SELECT * FROM item_venda;
+
+

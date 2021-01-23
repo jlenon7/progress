@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Listando a pasta corrente"
+ls
+num=`ls | wc -l`
+echo "A pasta tem $num arquivos"

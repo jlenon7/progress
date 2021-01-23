@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Aula HTML - Tabelas - data: 14/03/2018</title>
+</head>
+<body>
+
+	<!-- Exemplo de Tabela -->
+	<table border="1">
+		<caption> <!-- Título para Tabela -->
+			<font color="blue" face="Arial">Exemplo Básico de Tabela</font>
+		</caption> 
+
+		<tr> <!-- <tr> Linha -->
+			<th>Cabeçalho 1</th> <!-- <th> Cabeçalho -->
+			<th>Cabeçalho 2</th> 
+			<th>Cabeçalho 3</th> 
+		</tr>
+		<tr>
+			<td>Linha 1 </td> <!-- <td> Célula -->
+			<td>Linha 1 </td>
+			<td>Linha 1 </td>
+		</tr>
+		<tr>
+			<td>Linha 2 </td>
+			<td>Linha 2 </td>
+			<td>Linha 2 </td>
+		</tr>
+	</table>
+
+	<hr>
+
+	<table border="1" align="center" bgcolor="#CFE4FF" 
+		width="50%" height="150" cellspacing="5" cellpadding="10">
+
+		<caption> <!-- Título para Tabela -->
+			Tabela com thead, tbody, tfoot
+		</caption>
+
+		<tfoot align="center" bgcolor="#FFB69C">
+			<!-- colspan: mescla quantidade de colunas informadas -->
+			<td colspan="3">Rodapé da tabela</td>
+		</tfoot>
+
+		<!-- Seção para corpo da tabela. Sempre renderiza no meio -->
+		<tbody background="http://bit.ly/2pfhYB8"> 
+			<tr>
+				<!-- rowspan: mescla quantidade de linhas informadas -->
+				<!-- valign: alinhamento vertical do conteúdo da célula -->
+				<td rowspan="3" valign="middle">Célula 1 mesclada</td>
+				<td>Célula 2</td>
+				<td>Célula 3</td>
+			</tr>
+			<tr>
+				<td>Célula 4</td>
+				<td>Célula 5</td>
+			</tr>
+			<tr>
+				<td>Célula 6</td>
+				<td>
+					<!-- Tabela dentro de uma célula -->
+					<table border="1" bgcolor="#FFFB9C">
+						<caption>Sub-Tabela</caption>
+						<tr>
+							<td>Esta é uma tabela..</td>
+							<td>Dentro de outra tabela</td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+		</tbody>
+
+		<thead bgcolor="#B1FFA7"> <!-- Seção para Cabeçalhos. Renderiza no inicio -->
+			<th>Cabeçalho 1</th>
+			<th>Cabeçalho 2</th>
+			<th>Cabeçalho 3</th> 	
+		</thead>
+	</table>
+	
+</body>
+</html>

@@ -1,0 +1,50 @@
+* {
+	margin: 0px; /*espaço entre a borda e os elementos*/
+}
+
+h1 {
+	background-color: #CFCFCF;
+	padding: 12px; /*espaço entre a borda e o conteudo*/
+	text-align: center;
+	border-radius: 5px;
+}
+
+#menu {
+	background-color: #F6DC00;
+	padding: 10px;
+	margin-top: -10px; /*aloca o elemento para cima/baixo*/
+	text-align: center;
+	border-radius: 5px;
+}
+
+#conteudo {
+	width: 100%;
+	border-radius: 5px;
+}
+
+#conteudo-esquerda {
+	float: left; /*define que o elemento flutue a esquerda*/
+	background-color: #CFCFCF;
+	padding: 1px;
+	width: 75%;
+	height: 680px;
+	border-radius: 5px;
+}
+
+#conteudo-direita {
+	float: right; /*define que o elemento flutue a direita*/
+	background-color: #CFCFCF;
+	padding: 10px;
+	width: 20%;
+	height: 360px;
+	border-radius: 5px;
+}
+
+#rodape {
+	float: bottom;
+	clear: both; /*não permite elementos flutuantes ao lado dele*/
+	text-align: center;
+	padding: 10px;
+	background-color: #00CFF6;
+	border-radius: 5px;
+}

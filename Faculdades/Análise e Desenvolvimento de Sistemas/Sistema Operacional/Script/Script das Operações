@@ -1,0 +1,22 @@
+#!/bin/bash
+echo "Entre com o primeiro número"
+read num1
+echo "Entre com o segundo número"
+read num2
+echo "Entre com a operação desejada +, -, x, /"
+read operador
+
+if [ "$operador" = "+" ]
+then
+	result=`expr $num1 + $num2`
+elif [ "$operador" = "-" ]
+then
+	result=`expr $num1 - $num2`
+elif [ "$operador" = "x" ]
+then
+	result=`expr $num1 \* $num2`
+elif [ "$operador" = "/" ]
+then
+	result=`expr $num1 / $num2`
+fi 
+echo "A operação de $num1 $operador $num2 é = $result"

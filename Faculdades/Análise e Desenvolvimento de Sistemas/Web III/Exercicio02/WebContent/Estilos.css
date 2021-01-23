@@ -1,0 +1,13 @@
+.divImpar{
+	height: 150px;
+	width: 150px;
+	background-color: white;
+	float: left;
+}
+
+.divPar{
+	height: 150px;
+	width: 150px;
+	background-color: black;
+	float: left;
+}

@@ -1,0 +1,5 @@
+div {
+	background-color: #990000;
+	padding: 20px;
+	border-radius: 5px;
+}

@@ -1,0 +1,76 @@
+﻿CREATE TABLE viagem (
+	id SERIAL NOT NULL,
+	dat DATE NOT NULL,
+	com_escala BOOLEAN NOT NULL,
+	numero_voo VARCHAR(10) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE passageiros (
+	id SERIAL NOT NULL,
+	nome_completo VARCHAR(255) NOT NULL,
+	dat_nascimento DATE NOT NULL,
+	cpf VARCHAR(15) NOT NULL UNIQUE,
+	PRIMARY KEY (id)
+);
+
+
+CREATE TABLE ticket_passagem ( 
+	passageiro_id INTEGER NOT NULL,
+	viagem_id INTEGER NOT NULL,
+	valor_ticket DECIMAL(6,2) NOT NULL,
+	FOREIGN KEY (passageiro_id) REFERENCES passageiros (id),
+	FOREIGN KEY (viagem_id) REFERENCES viagem(id),
+	PRIMARY KEY(passageiro_id, viagem_id)
+);
+
+INSERT INTO passageiros(nome_completo, dat_nascimento, cpf) VALUES ('Joaozinho 35', '09/12/2000', '092.862.989.94');
+INSERT INTO passageiros(nome_completo, dat_nascimento, cpf) VALUES ('Joaozinho 36', '09/12/2001', '092.862.989.95');
+INSERT INTO passageiros(nome_completo, dat_nascimento, cpf) VALUES ('Joaozinho 37', '09/12/2002', '092.862.989.96');
+INSERT INTO passageiros(nome_completo, dat_nascimento, cpf) VALUES ('Joaozinho 38', '09/12/2003', '092.862.989.97');
+INSERT INTO passageiros(nome_completo, dat_nascimento, cpf) VALUES ('Joaozinho 39', '09/12/2004', '092.862.989.98');
+
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('10/09/2017', false, '1');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('11/09/2017', true, '2');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('12/09/2017', false, '3');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('13/07/2018', true, '4');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('14/07/2018', false, '5');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('15/09/2019', true, '6');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('16/07/2018', false, '7');
+INSERT INTO viagem(dat, com_escala, numero_voo) VALUES ('17/06/2019', true, '8');
+
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('1','1','6000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('1','5','7000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('1','7','8000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('2','4','6000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('2','1','7000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('2','8','8000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('3','7','6000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('3','2','7000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('3','6','8000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('4','5','6000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('4','3','7000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('4','7','8000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('5','2','6000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('5','4','7000.00');
+INSERT INTO ticket_passagem(passageiro_id, viagem_id, valor_ticket) VALUES('5','5','8000.00');
+
+UPDATE passageiros SET cpf = '123.456.789.10' WHERE id = 1;
+
+INSERT INTO passageiros(nome_completo, dat_nascimento, cpf) VALUES ('Joaozinho 40', '09/12/2005', '092.862.989.99');
+DELETE FROM passageiros WHERE id='6';
+
+SELECT dat, valor_ticket 
+FROM viagem 
+INNER JOIN ticket_passagem ON viagem.id = ticket_passagem.viagem_id 
+WHERE dat BETWEEN '01/07/2018' AND '31/12/2019' 
+ORDER BY dat ASC;
+
+SELECT AVG(valor_ticket) 
+FROM viagem AS v
+INNER JOIN ticket_passagem AS t ON v.id = t.viagem_id 
+WHERE dat BETWEEN '01/07/2018' AND '31/12/2019' ;
+
+
+
+

@@ -1,0 +1,1 @@
+para saber quem fez a venda, fiz uma entidade cliente com relacoes na venda e com o vendedor alem de pegar o dados dos clientes, e para determinar o departamento do vendedor fiz um atributo departament, fazendo tambem seu salario total e sua comissao de acordo com seu total de vendas e seus descontos oferecidos para a entidade cliente

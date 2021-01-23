@@ -1,0 +1,89 @@
+Trabalho de Banco de Dados
+
+1 - Insira 2 atores
+R: 
+   SELECT * FROM actor;
+   INSERT INTO actor(first_name, last_name) VALUES('JAO','LENO');
+   INSERT INTO actor(first_name, last_name) VALUES('A','DRYELL');
+
+2 - Insira 2 filmes
+R:
+  SELECT * FROM filme;
+  INSERT INTO film(
+  title, 
+  description, 
+  release_year, 
+  language_id,     
+  rental_duration, 
+  rental_rate, 
+  length, 
+  replacement_cost) 
+  
+  VALUES(
+  'Procurando Jaun',
+  'Um filme onde só pessoas com mais de 400 QI para entender.',
+  2018,
+  1,
+  6,
+  0.99,
+  86,
+  20.99
+);
+
+INSERT INTO film(
+  title, 
+  description, 
+  release_year, 
+  language_id,     
+  rental_duration, 
+  rental_rate, 
+  length, 
+  replacement_cost) 
+  
+  VALUES(
+  'Procurando A dryell',
+  'O lindo encontro entre jaun i a dryell',
+  2018,
+  1,
+  6,
+  0.99,
+  86,
+  20.98
+);
+
+3 - Relacione os filmes aos atores que você inseriu.
+R:
+  INSERT INTO film_actor(actor_id, film_id) VALUES(201, 1002);
+  INSERT INTO film_actor(actor_id, film_id) VALUES(202, 1003);
+
+4 - Troque o nome de um dos atores.
+R:
+  UPDATE actor SET first_name='JUAUN'
+  WHERE actor_id=201;
+
+5 - Delete um dos atores. (Lembre-se, a integridade referêncial irá 
+impedir a exclusão)
+R:
+  DELETE FROM film_actor WHERE actor_id = 200;
+  DELETE FROM actor WHERE actor_id = 200;
+
+6 - Apresente a lista dos 10 clientes que mais gastaram em locações.
+R: 
+  SELECT
+	customer_id,
+	sum(amount) AS total
+  FROM payment	
+  GROUP BY customer_id
+  ORDER BY total DESC
+  LIMIT 10;
+
+7 - Descubra qual cidade possui:
+     a. Mais clientes na locadora
+     b. Maior número de locações
+     c. Maior valor de locações
+R:
+  SELECT
+
+
+
+

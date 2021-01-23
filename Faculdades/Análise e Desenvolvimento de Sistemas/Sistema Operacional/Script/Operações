@@ -1,0 +1,29 @@
+#!/bin/bash
+echo "Entre com o primeiro númerio"
+read num1
+echo "Entre com o segundo número"
+read num2
+soma=`expr $num1 + $num2`
+echo "A soma de $num1 e $num2 = $soma"
+
+echo "Entre com o primeiro número"
+read num1
+echo "Entre com o segundo número"
+read num2
+sub=`expr $num1 - $num2`
+echo "A subtração de $num1 e $num2 = $sub"
+
+echo "Entre com o primeiro número"
+read num1
+echo "Entre com o segundo número"
+read num2
+mul=`expr $num1 \* $num2`
+echo "A multiplicação de $num1 e $num2 = $mul"
+
+echo "Entre com o primeiro número"
+read num1
+echo "Entre com o segundo número"
+read num2
+div=`expr $num1 / $num2`
+echo "A divisão de $num1 e $num2 = $div"
+
