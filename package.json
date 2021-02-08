@@ -30,7 +30,7 @@
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
     "@secjs/core": "^1.3.9",
-    "@secjs/env": "^1.0.0",
+    "@secjs/env": "^1.0.1",
     "amqp-connection-manager": "^3.2.1",
     "amqplib": "^0.6.0",
     "axios": "^0.21.0",
