@@ -1,294 +1,132 @@
-/**
- * Config source: https://git.io/JfefZ
- *
- * Feel free to let us know via PR, if you find something broken in this config
- * file.
- */
+import Env from '@secjs/env'
+import * as packageJson from '../package.json'
 
-import proxyAddr from 'proxy-addr'
-import Env from '@ioc:Adonis/Core/Env'
-import { ServerConfig } from '@ioc:Adonis/Core/Server'
-import { LoggerConfig } from '@ioc:Adonis/Core/Logger'
-import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler'
-import { ValidatorConfig } from '@ioc:Adonis/Core/Validator'
-
-/*
-|--------------------------------------------------------------------------
-| Application secret key
-|--------------------------------------------------------------------------
-|
-| The secret to encrypt and sign different values in your application.
-| Make sure to keep the `APP_KEY` as an environment variable and secure.
-|
-| Note: Changing the application key for an existing app will make all
-| the cookies invalid and also the existing encrypted data will not
-| be decrypted.
-|
-*/
-export const appKey: string = Env.get('APP_KEY')
-
-/*
-|--------------------------------------------------------------------------
-| Application name
-|--------------------------------------------------------------------------
-|
-| The current application name.
-|
-*/
-export const name: string = require('../package.json').name
-
-/*
-|--------------------------------------------------------------------------
-| Application enviroment
-|--------------------------------------------------------------------------
-|
-| The current application enviroment.
-|
-*/
-export const enviroment: string = Env.get('NODE_ENV', 'development')
-
-/*
-|--------------------------------------------------------------------------
-| Application url
-|--------------------------------------------------------------------------
-|
-| The current application url.
-|
-*/
-export const url: string = Env.get('APP_URL', 'development')
-
-/*
-|--------------------------------------------------------------------------
-| Application greeting
-|--------------------------------------------------------------------------
-|
-| The current application greeting.
-|
-*/
-export const greeting: string = `Welcome to ${Env.get('APP_NAME')} API!`
-
-/*
-|--------------------------------------------------------------------------
-| Application version
-|--------------------------------------------------------------------------
-|
-| The current application version based on package.json.
-|
-*/
-export const version: string = require('../package.json').version
-
-/*
-|--------------------------------------------------------------------------
-| Application prefix
-|--------------------------------------------------------------------------
-|
-| The application prefix that will be used in routes.
-|
-*/
-export const prefix: string = `${Env.get('APP_PREFIX')}/v${version}`
-
-/*
-|--------------------------------------------------------------------------
-| Http server configuration
-|--------------------------------------------------------------------------
-|
-| The configuration for the HTTP(s) server. Make sure to go through all
-| the config properties to make keep server secure.
-|
-*/
-export const http: ServerConfig = {
+export default {
   /*
   |--------------------------------------------------------------------------
-  | Allow method spoofing
+  | Application Name
   |--------------------------------------------------------------------------
   |
-  | Method spoofing enables defining custom HTTP methods using a query string
-  | `_method`. This is usually required when you are making traditional
-  | form requests and wants to use HTTP verbs like `PUT`, `DELETE` and
-  | so on.
+  | This value is the name of your application and can used when you
+  | need to place the application's name in a email, view or
+  | other location.
   |
   */
-  allowMethodSpoofing: false,
+
+  name: Env('APP_NAME', 'NestJS'),
 
   /*
   |--------------------------------------------------------------------------
-  | Subdomain offset
+  | Application Description
   |--------------------------------------------------------------------------
+  |
+  | This value is the description of your application and can used when you
+  | need to place the application's description in swagger, view or
+  | other location.
+  |
   */
-  subdomainOffset: 2,
+
+  description: Env('APP_DESCRIPTION', 'NestJS Framework'),
 
   /*
   |--------------------------------------------------------------------------
-  | Request Ids
+  | Application host
   |--------------------------------------------------------------------------
   |
-  | Setting this value to `true` will generate a unique request id for each
-  | HTTP request and set it as `x-request-id` header.
+  | This value is the HOST of your application and its used to access your
+  | application.
   |
   */
-  generateRequestId: false,
+
+  host: Env('HOST', '127.0.0.1'),
 
   /*
   |--------------------------------------------------------------------------
-  | Trusting proxy servers
+  | Application port
   |--------------------------------------------------------------------------
   |
-  | Define the proxy servers that AdonisJs must trust for reading `X-Forwarded`
-  | headers.
+  | This value is the PORT of your application and its used to access your
+  | application.
   |
   */
-  trustProxy: proxyAddr.compile('loopback'),
+
+  port: Env('PORT', 3000),
 
   /*
   |--------------------------------------------------------------------------
-  | Generating Etag
+  | Application prefix
   |--------------------------------------------------------------------------
   |
-  | Whether or not to generate an etag for every response.
+  | This value is the prefix of your application and can used when you
+  | need to place the application's prefix in a route, view or
+  | other location.
   |
   */
-  etag: false,
+
+  prefix: Env('APP_PREFIX', '/srv'),
 
   /*
   |--------------------------------------------------------------------------
-  | JSONP Callback
+  | Application Version
   |--------------------------------------------------------------------------
+  |
+  | This value is the version of your application and can used when you
+  | need to place the application's version in a route, view or
+  | other location.
+  |
   */
-  jsonpCallbackName: 'callback',
+  version: packageJson.version,
 
   /*
   |--------------------------------------------------------------------------
-  | Cookie settings
+  | Default Locale
   |--------------------------------------------------------------------------
+  |
+  | Default locale to be used by Antl provider. You can always switch drivers
+  | in runtime or use the official Antl middleware to detect the driver
+  | based on HTTP headers/query string.
+  |
   */
-  cookie: {
-    domain: '',
-    path: '/',
-    maxAge: '2h',
-    httpOnly: true,
-    secure: false,
-    sameSite: false,
+  locale: Env('APP_LOCALE', 'pt'),
+
+  /*
+  |--------------------------------------------------------------------------
+  | Default enviroment
+  |--------------------------------------------------------------------------
+  |
+  | Default enviroment of the application.
+  |
+  */
+  enviroment: Env('NODE_ENV', 'development'),
+
+  /*
+  |--------------------------------------------------------------------------
+  | Default services
+  |--------------------------------------------------------------------------
+  |
+  | Default services token for communication.
+  |
+  */
+  services: {
+    guard: {
+      url: Env('GUARD_URL', ''),
+      token: Env('GUARD_TOKEN', ''),
+    },
   },
 
   /*
   |--------------------------------------------------------------------------
-  | Force content negotiation to JSON
+  | Default authorization strategy
   |--------------------------------------------------------------------------
   |
-  | The internals of the framework relies on the content negotiation to
-  | detect the best possible response type for a given HTTP request.
-  |
-  | However, it is a very common these days that API servers always wants to
-  | make response in JSON regardless of the existence of the `Accept` header.
-  |
-  | By setting `forceContentNegotiationToJSON = true`, you negotiate with the
-  | server in advance to always return JSON without relying on the client
-  | to set the header explicitly.
+  | Default authorization strategy for the entire application.
   |
   */
-  forceContentNegotiationToJSON: true,
+  authorization: {
+    strategy: 'jwt',
+    jwt: {
+      secret: Env('APP_KEY', ''),
+      signOptions: { expiresIn: 18000 },
+    },
+  },
 }
-
-/*
-|--------------------------------------------------------------------------
-| Logger
-|--------------------------------------------------------------------------
-*/
-export const logger: LoggerConfig = {
-  /*
-  |--------------------------------------------------------------------------
-  | Application name
-  |--------------------------------------------------------------------------
-  |
-  | The name of the application you want to add to the log. It is recommended
-  | to always have app name in every log line.
-  |
-  | The `APP_NAME` environment variable is automatically set by AdonisJS by
-  | reading the `name` property from the `package.json` file.
-  |
-  */
-  name: Env.get('APP_NAME'),
-
-  /*
-  |--------------------------------------------------------------------------
-  | Toggle logger
-  |--------------------------------------------------------------------------
-  |
-  | Enable or disable logger application wide
-  |
-  */
-  enabled: true,
-
-  /*
-  |--------------------------------------------------------------------------
-  | Logging level
-  |--------------------------------------------------------------------------
-  |
-  | The level from which you want the logger to flush logs. It is recommended
-  | to make use of the environment variable, so that you can define log levels
-  | at deployment level and not code level.
-  |
-  */
-  level: Env.get('LOG_LEVEL', 'info'),
-
-  /*
-  |--------------------------------------------------------------------------
-  | Pretty print
-  |--------------------------------------------------------------------------
-  |
-  | It is highly advised NOT to use `prettyPrint` in production, since it
-  | can have huge impact on performance.
-  |
-  */
-  prettyPrint: Env.get('NODE_ENV') === 'development',
-}
-
-/*
-|--------------------------------------------------------------------------
-| Profiler
-|--------------------------------------------------------------------------
-*/
-export const profiler: ProfilerConfig = {
-  /*
-  |--------------------------------------------------------------------------
-  | Toggle profiler
-  |--------------------------------------------------------------------------
-  |
-  | Enable or disable profiler
-  |
-  */
-  enabled: true,
-
-  /*
-  |--------------------------------------------------------------------------
-  | Blacklist actions/row labels
-  |--------------------------------------------------------------------------
-  |
-  | Define an array of actions or row labels that you want to disable from
-  | getting profiled.
-  |
-  */
-  blacklist: [],
-
-  /*
-  |--------------------------------------------------------------------------
-  | Whitelist actions/row labels
-  |--------------------------------------------------------------------------
-  |
-  | Define an array of actions or row labels that you want to whitelist for
-  | the profiler. When whitelist is defined, then `blacklist` is ignored.
-  |
-  */
-  whitelist: [],
-}
-
-/*
-|--------------------------------------------------------------------------
-| Validator
-|--------------------------------------------------------------------------
-|
-| Configure the global configuration for the validator. Here's the reference
-| to the default config https://git.io/JT0WE
-|
-*/
-export const validator: ValidatorConfig = {}

@@ -1,35 +1,42 @@
-import { BaseService } from 'App/Services'
-import { ApplicationRepository } from 'App/Repositories/ApplicationRepository'
-import { ApiRequestContract } from 'App/Contracts/ApiRequestContract'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { ApplicationContract } from 'app/Contracts/ApplicationContract'
+import { ApiRequestContract, GuardBaseService, Token } from '@secjs/core'
+import { CreateApplicationDto } from 'app/Contracts/Dtos/CreateApplicationDto'
+import { UpdateApplicationDto } from 'app/Contracts/Dtos/UpdateApplicationDto'
+import { ApplicationRepository } from 'app/Repositories/ApplicationRepository'
 
-import NotFoundException from 'App/Exceptions/NotFoundException'
+@Injectable()
+export class ApplicationService extends GuardBaseService<ApplicationContract> {
+  @Inject(ApplicationRepository)
+  private applicationRepository: ApplicationRepository
 
-export class ApplicationService extends BaseService {
-  public async getAll(pagination, data?: ApiRequestContract) {
-    return new ApplicationRepository().getAll(pagination, data)
+  async create(dto: CreateApplicationDto) {
+    dto.token = new Token().generate(dto.prefix)
+
+    return this.applicationRepository.storeOne(dto)
   }
 
-  public async getOne(id: string, data?: ApiRequestContract) {
-    const application = await new ApplicationRepository().getOne(id, data)
+  async show(id: string, data?: ApiRequestContract) {
+    await this.initRequest(data)
+
+    const application = await this.applicationRepository.getOne(id, data)
 
     if (!application) {
-      throw new NotFoundException()
+      throw new NotFoundException('NOT_FOUND_APPLICATION')
     }
 
     return application
   }
 
-  public async update(id: string, data) {
-    return new ApplicationRepository().update(id, data)
+  async update(id: string, dto: UpdateApplicationDto) {
+    const application = await this.show(id, {})
+
+    return this.applicationRepository.updateOne(dto, application)
   }
 
-  public async delete(id: string) {
-    const application = await new ApplicationRepository().delete(id)
+  async delete(id: string) {
+    const application = await this.show(id, {})
 
-    if (!application) {
-      throw new NotFoundException()
-    }
-
-    return application
+    return this.applicationRepository.deleteOne(application)
   }
 }

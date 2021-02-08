@@ -1,148 +1,124 @@
-import { DateTime } from 'luxon'
-import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import {
-  ApiRequestContract,
-  IncludesContract,
-  OrderByContract,
   WhereContract,
-} from 'App/Contracts/ApiRequestContract'
+  OrderByContract,
+  IncludesContract,
+  ApiRequestContract,
+  PaginationContract,
+} from '@secjs/core'
+import { Model, Document, isValidObjectId } from 'mongoose'
 
-export class BaseRepository {
-  protected Model: typeof BaseModel | any
+export abstract class BaseRepository<TModel extends Document> {
+  protected abstract Model: Model<TModel>
 
-  public query() {
-    return this.Model.query().whereNull('deleted_at')
-  }
-
-  public async getOne(id?: string | null, data?: ApiRequestContract | null) {
-    let query = this.query()
-
-    if (id) {
-      query = this.query().where('id', id)
-    }
-
+  private factoryRequest(query: any, data?: ApiRequestContract) {
     if (!data) {
-      return query.first()
-    }
-
-    const { where, includes } = data
-
-    if (where) {
-      where.map((where: WhereContract) => {
-        query.where(where.key, where.value)
-      })
-    }
-
-    if (includes) {
-      includes.map((include: IncludesContract) => {
-        if (include.where) {
-          query.preload(include.relation, (includeQuery) => {
-            if (include.where) {
-              include.where.map((includeWhere: WhereContract) => {
-                includeQuery.where(includeWhere.key, includeWhere.value)
-              })
-            }
-
-            if (include.orderBy) {
-              include.orderBy.map((includeOrderBy: OrderByContract) => {
-                includeQuery.orderBy(includeOrderBy.key, includeOrderBy.ordenation)
-              })
-            }
-          })
-        }
-
-        if (include.includes) {
-          include.includes.map((include: IncludesContract) => {
-            if (include.where)
-              query.preload(include.relation, (query) => {
-                if (include.where)
-                  include.where.map((where: WhereContract) => {
-                    query.where(where.key, where.value)
-                  })
-              })
-          })
-        }
-      })
-    }
-
-    return query.first()
-  }
-
-  public async getAll(pagination, data?: ApiRequestContract) {
-    let query = this.query()
-
-    if (!data) {
-      return query.paginate(pagination.page, pagination.limit)
+      return
     }
 
     const { where, orderBy, includes } = data
 
     if (where) {
-      where.map((where: WhereContract) => {
-        query.where(where.key, where.value)
-      })
+      this.factoryWhere(query, where)
     }
 
     if (orderBy) {
-      orderBy.map((orderBy: OrderByContract) => {
-        query.orderBy(orderBy.key, orderBy.ordenation)
-      })
+      this.factoryOrderBy(query, orderBy)
     }
 
     if (includes) {
-      includes.map((include: IncludesContract) => {
-        if (include.where) {
-          query.preload(include.relation, (includeQuery) => {
-            if (include.where) {
-              include.where.map((includeWhere: WhereContract) => {
-                includeQuery.where(includeWhere.key, includeWhere.value)
-              })
-            }
+      this.factoryIncludes(query, includes)
+    }
+  }
 
-            if (include.orderBy) {
-              include.orderBy.map((includeOrderBy: OrderByContract) => {
-                includeQuery.orderBy(includeOrderBy.key, includeOrderBy.ordenation)
-              })
-            }
-          })
-        }
+  private factoryWhere(query: any, where: WhereContract[]) {
+    where.map((w: WhereContract) => {
+      query.where(w.key, w.value)
+    })
+  }
 
-        if (include.includes) {
-          include.includes.map((include: IncludesContract) => {
-            if (include.where)
-              query.preload(include.relation, (query) => {
-                if (include.where)
-                  include.where.map((where: WhereContract) => {
-                    query.where(where.key, where.value)
-                  })
-              })
-          })
-        }
-      })
+  private factoryOrderBy(query: any, orderBy: OrderByContract[]) {
+    orderBy.map((o: OrderByContract) => {
+      query.sort({ [o.key]: o.ordenation })
+    })
+  }
+
+  private factoryIncludes(query: any, includes: IncludesContract[]) {
+    includes.map((i: IncludesContract) => {
+      query.populate(i.relation)
+    })
+  }
+
+  async getOne(id?: string, data?: ApiRequestContract): Promise<TModel | null> {
+    const query = this.Model.findOne()
+
+    if (id) {
+      if (!isValidObjectId(id)) {
+        throw new Error('NOT_VALID_OBJECT_ID')
+      }
+
+      query.where('_id', id)
     }
 
-    return query.paginate(pagination.page, pagination.limit)
+    this.factoryRequest(query, data)
+
+    return query.exec()
   }
 
-  public async create(payload) {
-    return this.Model.create(payload)
+  async getAll(
+    pagination: PaginationContract,
+    data?: ApiRequestContract,
+  ): Promise<any> {
+    const query = this.Model.find()
+
+    if (pagination.page && pagination.limit) {
+      query.skip(pagination.page).limit(pagination.limit)
+    }
+
+    this.factoryRequest(query, data)
+
+    pagination.total = await this.Model.countDocuments()
+
+    return {
+      data: await query.exec(),
+      pagination,
+    }
   }
 
-  public async update(id: string, payload) {
-    const model = await this.getOne(id)
+  async storeOne(body: any): Promise<TModel> {
+    return new this.Model(body).save()
+  }
 
-    Object.keys(payload).map((key) => {
-      model[key] = payload[key]
+  async updateOne(body: any, id?: any): Promise<TModel> {
+    let model = id
+
+    if (typeof id === 'string') {
+      model = await this.getOne(id)
+
+      if (!model) {
+        throw new Error('MODEL_NOT_FOUND_UPDATE')
+      }
+    }
+
+    Object.keys(body).map(key => {
+      model[key] = body[key]
     })
 
     return model.save()
   }
 
-  public async delete(id: string) {
-    const model = await this.getOne(id)
+  async deleteOne(id: any): Promise<TModel> {
+    let model = id
+
+    if (typeof id === 'string') {
+      model = await this.getOne(id)
+
+      if (!model) {
+        throw new Error('MODEL_NOT_FOUND_DELETE')
+      }
+    }
 
     model.status = 'deleted'
-    model.deletedAt = DateTime.fromJSDate(new Date())
+    model.deleted_at = new Date()
 
     return model.save()
   }

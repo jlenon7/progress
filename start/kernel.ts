@@ -1,46 +1,30 @@
-/*
-|--------------------------------------------------------------------------
-| Application middleware
-|--------------------------------------------------------------------------
-|
-| This file is used to define middleware for HTTP requests. You can register
-| middleware as a `closure` or an IoC container binding. The bindings are
-| preferred, since they keep this file clean.
-|
-*/
+import app from '../config/app'
+import cors from '../config/cors'
+import database from '../config/database'
 
-import Server from '@ioc:Adonis/Core/Server'
+import { JwtModule } from '@nestjs/jwt'
+import { ConfigModule } from '@nestjs/config'
+import { PassportModule } from '@nestjs/passport'
+import { MongooseModule } from '@nestjs/mongoose'
 
-/*
-|--------------------------------------------------------------------------
-| Global middleware
-|--------------------------------------------------------------------------
-|
-| An array of global middleware, that will be executed in the order they
-| are defined for every HTTP requests.
-|
-*/
-Server.middleware.register(['Adonis/Core/BodyParserMiddleware', 'App/Middleware/Pagination'])
-
-/*
-|--------------------------------------------------------------------------
-| Named middleware
-|--------------------------------------------------------------------------
-|
-| Named middleware are defined as key-value pair. The value is the namespace
-| or middleware function and key is the alias. Later you can use these
-| alias on individual routes. For example:
-|
-| { auth: 'App/Auth/Middleware' }
-|
-| and then use it as follows
-|
-| Route.get('dashboard', 'UserController.dashboard').middleware('auth')
-|
-*/
-Server.middleware.registerNamed({
-  is: 'App/Middleware/Is',
-  auth: 'App/Middleware/Auth',
-  owner: 'App/Middleware/Owner',
-  resourceOwner: 'App/Middleware/ResourceOwner',
+const configuration = () => ({
+  app,
+  cors,
+  database,
 })
+
+const envFilePath = `.env.${process.env.NODE_ENV}`
+
+const kernel = [
+  ConfigModule.forRoot({
+    envFilePath,
+    isGlobal: true,
+    load: [configuration],
+  }),
+  MongooseModule.forFeature(database.schemas),
+  MongooseModule.forRoot(database.connection.url),
+  JwtModule.register(app.authorization[app.authorization.strategy]),
+  PassportModule.register({ defaultStrategy: app.authorization.strategy }),
+]
+
+export default kernel

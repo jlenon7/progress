@@ -1,50 +1,86 @@
-import { ApplicationService } from 'App/Services'
-import { ApiController } from 'App/Controllers/ApiController'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { UpdateValidator } from 'App/Validators/Auth'
-import { ApplicationRepository } from 'App/Repositories/ApplicationRepository'
+import TokenGuard from './Guards/TokenGuard'
 
-export default class ApplicationController extends ApiController {
-  public async token({ response, params }: HttpContextContract) {
-    const token = params.token
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Ip,
+  Param,
+  Patch,
+  Post,
+  Put,
+  UseGuards,
+  UseInterceptors,
+  ValidationPipe,
+} from '@nestjs/common'
+import { ApiRequestContract } from '@secjs/core'
+import { GetData } from 'app/Decorators/GetData'
+import { Application } from 'app/Decorators/Application'
+import { TokenService } from 'app/Services/Api/TokenService'
+import { ApplicationService } from 'app/Services/Api/ApplicationService'
+import { ResponseInterceptor } from './Interceptors/ResponseInterceptor'
+import { CreateApplicationValidator } from '../Validators/CreateApplicationValidator'
+import { UpdateApplicationValidator } from '../Validators/UpdateApplicationValidator'
 
-    const application = await new ApplicationRepository().getOne(null, {
-      where: [
-        { key: 'token', value: token },
-        { key: 'status', value: 'approved' },
-      ],
-    })
+@Controller('/applications')
+@UseInterceptors(ResponseInterceptor)
+export default class ApplicationController {
+  @Inject(TokenService)
+  private tokenService: TokenService
 
-    return this.response(response).withOne(application)
+  @Inject(ApplicationService)
+  private applicationService: ApplicationService
+
+  @Get('/me')
+  @UseGuards(TokenGuard)
+  async me(@Application() application) {
+    return application
   }
 
-  public async index({ request, response, auth, pagination }: HttpContextContract) {
-    const data = request.only(['where', 'orderBy', 'includes'])
+  @Post('/:id/api')
+  async generateApi(@Param('id') id, @Ip() ip) {
+    const application = await this.applicationService.show(id, {})
 
-    const applications = await new ApplicationService().setGuard(auth).getAll(pagination, data)
-
-    return this.response(response).withCollection(applications.toJSON())
+    return {
+      apiKey: await this.tokenService.create({
+        ip,
+        application: application._id,
+        title: 'API_KEY',
+        type: 'api_key',
+        token: application.token,
+      }),
+      secret: await this.tokenService.create({
+        ip,
+        application: application._id,
+        title: 'SECRET',
+        type: 'api_secret',
+        token: application.token,
+      }),
+    }
   }
 
-  public async show({ request, response, params, auth }: HttpContextContract) {
-    const data = request.only(['where', 'orderBy', 'includes'])
-
-    const application = await new ApplicationService().setGuard(auth).getOne(params.id, data)
-
-    return this.response(response).withOne(application)
+  @Patch('/:id')
+  async show(@Param('id') id, @GetData() data: ApiRequestContract) {
+    return this.applicationService.show(id, data)
   }
 
-  public async update({ request, response, params, auth }: HttpContextContract) {
-    const data = await this.request(request).validate(UpdateValidator)
-
-    const application = await new ApplicationService().setGuard(auth).update(params.id, data)
-
-    return this.response(response).withOne(application)
+  @Post()
+  async create(@Body(ValidationPipe) body: CreateApplicationValidator) {
+    return this.applicationService.create(body)
   }
 
-  public async delete({ response, params, auth }: HttpContextContract) {
-    const application = await new ApplicationService().setGuard(auth).delete(params.id)
+  @Put('/:id')
+  async update(
+    @Param('id') id,
+    @Body(ValidationPipe) body: UpdateApplicationValidator,
+  ) {
+    return this.applicationService.update(id, body)
+  }
 
-    return this.response(response).withSoftDeleted(application.name)
+  @Delete('/:id')
+  async delete(@Param('id') id) {
+    return this.applicationService.delete(id)
   }
 }
