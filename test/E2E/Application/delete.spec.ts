@@ -66,7 +66,7 @@ describe('\n[E2E] Delete Application 🏘', () => {
       message: {
         error: 'Not Found',
         message: 'NOT_FOUND_APPLICATION',
-        statusCode: 404,
+        statusCode: status,
       },
     })
   })

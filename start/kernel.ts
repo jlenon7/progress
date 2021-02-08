@@ -13,16 +13,10 @@ const configuration = () => ({
   database,
 })
 
-const envFilePath = `.env.${process.env.NODE_ENV}`
-
 const kernel = [
-  ConfigModule.forRoot({
-    envFilePath,
-    isGlobal: true,
-    load: [configuration],
-  }),
   MongooseModule.forFeature(database.schemas),
   MongooseModule.forRoot(database.connection.url),
+  ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
   JwtModule.register(app.authorization[app.authorization.strategy]),
   PassportModule.register({ defaultStrategy: app.authorization.strategy }),
 ]
