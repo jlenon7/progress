@@ -663,10 +663,10 @@
   resolved "https://registry.yarnpkg.com/@secjs/core/-/core-1.3.9.tgz#ab9668b83df9dd35ae8bcb1c53fe502ce6fd0c8a"
   integrity sha512-lL7UaxV65zp9BdzFyEC4jBiBtDV8S2nD/KHGi2LSgD5tbbA2wffGjLwxY6tpaBsXSdW86xQ1j0hSg5SzFCIdbw==
 
-"@secjs/env@^1.0.0":
-  version "1.0.0"
-  resolved "https://npm.pkg.github.com/download/@secjs/env/1.0.0/bc1bb8b6623b8abfe5cd6fa5e967b8e221322fb507ed29a25f41111cbdac5e2d#04f448f2f08b8562fd777333f192deb83555bc06"
-  integrity sha512-T8gwnFISSMSMX1asNO0imInV/iax0ei+d+2y9xmYyNiEUcLgj7o1WvFYCpDs3po2K5lwO2wfj6D/pACUoH5y3Q==
+"@secjs/env@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@secjs/env/-/env-1.0.1.tgz#fa2e731dce3e63afeabd84444894afcedd9bc4a6"
+  integrity sha512-jSHfty+iGONGsikDZE9Dh3Btc+kP1I/tdA4yvVfmCHfa/S/aTMA+ZqZ+f4R8LSLLYU8h2R8c1Mo2LGLfqHX2sw==
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
