@@ -23,7 +23,7 @@ export class TokenService extends GuardBaseService<ApplicationContract> {
 
   async create(dto: CreateTokenDto) {
     dto.value = await random(64)
-    dto.token = new Token().changePrefix('tkn', dto.token)
+    dto.token = new Token().changeOrGenerate('tkn', dto.token)
 
     return this.tokenRepository.storeOne(dto)
   }

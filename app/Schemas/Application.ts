@@ -22,7 +22,7 @@ export class Application {
   token: string
 
   @Prop({ type: Date, default: null })
-  deleted_at?: Date
+  deletedAt?: Date
 
   @Prop({ type: String, default: 'pendent' })
   status: 'pendent' | 'approved' | 'reproved' | 'deleted' | 'pendent_issue'

@@ -9,7 +9,7 @@ import { ApplicationRepository } from 'app/Repositories/ApplicationRepository'
 
 describe('\n[E2E] Generate Application API 🏘', () => {
   it('should store one application api with secret and apiKey', async () => {
-    const application = await appRepository.storeOne({ ...payload })
+    const application = await appRepository.storeOne(payload)
 
     const status = 201
     const method = 'POST'
@@ -38,8 +38,8 @@ describe('\n[E2E] Generate Application API 🏘', () => {
     expect(body.path).toBe(path)
     expect(body.method).toBe(method)
     expect(body.status).toBe(status)
-    expect(body.data.apiKey.value).toBe(apiKey.value)
-    expect(body.data.secret.value).toBe(secret.value)
+    expect(body.data.apiKey).toBe(apiKey.value)
+    expect(body.data.secret).toBe(secret.value)
   })
 })
 

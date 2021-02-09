@@ -33,31 +33,32 @@ export default class ApplicationController {
   @Inject(ApplicationService)
   private applicationService: ApplicationService
 
-  @Get('/me')
+  @Get('/api')
   @UseGuards(TokenGuard)
-  async me(@Application() application) {
+  async api(@Application() application) {
     return application
   }
 
   @Post('/:id/api')
   async generateApi(@Param('id') id, @Ip() ip) {
     const application = await this.applicationService.show(id, {})
+    const tokenKey = await this.tokenService.create({
+      ip,
+      application: application._id,
+      title: 'API_KEY',
+      type: 'api_key',
+    })
+    const tokenSecret = await this.tokenService.create({
+      ip,
+      application: application._id,
+      title: 'SECRET',
+      type: 'api_secret',
+      token: tokenKey.token,
+    })
 
     return {
-      apiKey: await this.tokenService.create({
-        ip,
-        application: application._id,
-        title: 'API_KEY',
-        type: 'api_key',
-        token: application.token,
-      }),
-      secret: await this.tokenService.create({
-        ip,
-        application: application._id,
-        title: 'SECRET',
-        type: 'api_secret',
-        token: application.token,
-      }),
+      apiKey: tokenKey.value,
+      secret: tokenSecret.value,
     }
   }
 

@@ -9,16 +9,16 @@ import { random } from '@secjs/core/build/Utils/Functions/random'
 import { TokenRepository } from 'app/Repositories/TokenRepository'
 import { ApplicationRepository } from 'app/Repositories/ApplicationRepository'
 
-describe('\n[E2E] Me Application 🏘', () => {
+describe('\n[E2E] API Application 🏘', () => {
   it('should return an application by apiKey and secret', async () => {
-    const application = await appRepository.storeOne({ ...payload })
+    const application = await appRepository.storeOne(payload)
 
     const apiKey = await tokenRepository.storeOne({
       ip: '192.168.0.1',
       application,
       title: 'API_KEY',
       type: 'api_token',
-      token: new Token().changePrefix('tkn', application.token),
+      token: new Token().generate('tkn'),
       value: await random(36),
     })
     const secret = await tokenRepository.storeOne({
@@ -26,14 +26,14 @@ describe('\n[E2E] Me Application 🏘', () => {
       application,
       title: 'API_SECRET',
       type: 'api_secret',
-      token: new Token().changePrefix('tkn', application.token),
+      token: new Token().changePrefix('tkn', apiKey.token),
       value: await random(36),
     })
 
     const status = 200
     const method = 'GET'
     const code = 'RESPONSE'
-    const path = `/applications/me?secret=${secret.value}`
+    const path = `/applications/api?secret=${secret.value}`
 
     const { body } = await request(app.server.getHttpServer())
       .get(path)
@@ -51,7 +51,7 @@ describe('\n[E2E] Me Application 🏘', () => {
     const status = 401
     const method = 'GET'
     const code = 'Error'
-    const path = '/applications/me?secret=aaaa'
+    const path = '/applications/api?secret=aaaa'
 
     const { body } = await request(app.server.getHttpServer())
       .get(path)
@@ -73,21 +73,21 @@ describe('\n[E2E] Me Application 🏘', () => {
   })
 
   it('should throw a token invalid exception when secret does not exist', async () => {
-    const application = await appRepository.storeOne({ ...payload })
+    const application = await appRepository.storeOne(payload)
 
     const apiKey = await tokenRepository.storeOne({
       ip: '192.168.0.1',
       application,
       title: 'API_KEY',
       type: 'api_token',
-      token: new Token().changePrefix('tkn', application.token),
+      token: new Token().generate('tkn'),
       value: await random(36),
     })
 
     const status = 401
     const method = 'GET'
     const code = 'Error'
-    const path = `/applications/me?secret=aaaa`
+    const path = `/applications/api?secret=aaaa`
 
     const { body } = await request(app.server.getHttpServer())
       .get(path)
@@ -109,14 +109,14 @@ describe('\n[E2E] Me Application 🏘', () => {
   })
 
   it('should throw a token invalid exception when apiKey and secret has different tokens', async () => {
-    const application = await appRepository.storeOne({ ...payload })
+    const application = await appRepository.storeOne(payload)
 
     const apiKey = await tokenRepository.storeOne({
       ip: '192.168.0.1',
       application,
       title: 'API_KEY',
       type: 'api_token',
-      token: new Token().changePrefix('tkn', application.token),
+      token: new Token().generate('tkn'),
       value: await random(36),
     })
     const secret = await tokenRepository.storeOne({
@@ -124,14 +124,14 @@ describe('\n[E2E] Me Application 🏘', () => {
       application,
       title: 'API_SECRET',
       type: 'api_secret',
-      token: new Token().changePrefix('tkn', new Token().generate('aaa')),
+      token: new Token().generate('tkn'),
       value: await random(36),
     })
 
     const status = 401
     const method = 'GET'
     const code = 'Error'
-    const path = `/applications/me?secret=${secret.value}`
+    const path = `/applications/api?secret=${secret.value}`
 
     const { body } = await request(app.server.getHttpServer())
       .get(path)

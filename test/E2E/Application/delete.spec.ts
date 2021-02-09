@@ -8,7 +8,7 @@ import { ApplicationRepository } from 'app/Repositories/ApplicationRepository'
 
 describe('\n[E2E] Delete Application 🏘', () => {
   it('should delete one application', async () => {
-    const application = await appRepository.storeOne({ ...payload })
+    const application = await appRepository.storeOne(payload)
 
     const status = 200
     const method = 'DELETE'

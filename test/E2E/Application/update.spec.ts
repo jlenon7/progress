@@ -8,7 +8,7 @@ import { ApplicationRepository } from 'app/Repositories/ApplicationRepository'
 
 describe('\n[E2E] Update Application 🏘', () => {
   it('should update one application', async () => {
-    const application = await appRepository.storeOne({ ...payload })
+    const application = await appRepository.storeOne(payload)
 
     const status = 200
     const method = 'PUT'

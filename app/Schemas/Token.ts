@@ -27,7 +27,7 @@ export class Token {
   value: string
 
   @Prop({ type: Date, default: null })
-  deleted_at?: Date
+  deletedAt?: Date
 
   @Prop({ type: String, default: 'created' })
   status: 'created' | 'expired' | 'used' | 'in_use' | 'deleted'
