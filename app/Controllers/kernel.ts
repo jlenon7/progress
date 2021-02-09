@@ -1,3 +1,5 @@
+import { RequestMethod } from '@nestjs/common'
+
 /*
 |--------------------------------------------------------------------------
 | Http Controllers
@@ -21,6 +23,23 @@ export const httpControllers = [
 */
 
 export const collections = []
+
+/*
+|--------------------------------------------------------------------------
+| Middlewares
+|--------------------------------------------------------------------------
+|
+| All Middlewares of the application.
+|
+*/
+
+export const middlewares = [
+  {
+    middleware: require('./Middlewares/PaginationMiddleware')
+      .PaginationMiddleware,
+    routes: [{ path: 'applications', method: RequestMethod.PATCH }],
+  },
+]
 
 /*
 |--------------------------------------------------------------------------
