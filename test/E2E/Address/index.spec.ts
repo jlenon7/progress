@@ -32,7 +32,7 @@ describe('\n[E2E] Index Address 🏘', () => {
     expect(body.data.pagination.total).toBeTruthy()
   })
 
-  it('should return all deleted addresses paginated', async () => {
+  it('should return all deleted addresses paginated an ordered DESC by deletedAt', async () => {
     const status = 200
     const method = 'PATCH'
     const code = 'RESPONSE'
@@ -43,12 +43,16 @@ describe('\n[E2E] Index Address 🏘', () => {
     await addressRepository.storeOne(payload)
 
     await addressRepository.deleteOne(`${address1._id}`)
-    await addressRepository.deleteOne(`${address2._id}`)
+    const secondDeleted = await addressRepository.deleteOne(`${address2._id}`)
 
     const { body } = await request(app.server.getHttpServer())
       .patch(path)
       .set('api_key', apiKey)
-      .send({ ...apiRequest, where: [{ key: 'status', value: 'deleted' }] })
+      .send({
+        ...apiRequest,
+        where: [{ key: 'status', value: 'deleted' }],
+        orderBy: [{ key: 'deletedAt', ordenation: 'DESC' }],
+      })
       .expect(status)
 
     expect(body.code).toBe(code)
@@ -59,6 +63,7 @@ describe('\n[E2E] Index Address 🏘', () => {
     expect(body.data.pagination.page).toBe(0)
     expect(body.data.pagination.limit).toBe(10)
     expect(body.data.pagination.total).toBeTruthy()
+    expect(body.data.data[0].deletedAt).toBe(secondDeleted.deletedAt.toJSON())
   })
 })
 
