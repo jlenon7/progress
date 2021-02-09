@@ -108,9 +108,9 @@ export default {
   |
   */
   services: {
-    guard: {
-      url: Env('GUARD_URL', ''),
-      token: Env('GUARD_TOKEN', ''),
+    application: {
+      url: Env('APPLICATION_URL', ''),
+      token: Env('APPLICATION_TOKEN', ''),
     },
   },
 

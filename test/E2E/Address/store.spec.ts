@@ -20,7 +20,7 @@ describe('\n[E2E] Store Address 🏘', () => {
       .expect(status)
 
     const address = await addressRepository.getOne(null, {
-      where: [{ key: 'owner_id', value: createPayload.owner_id }],
+      where: [{ key: 'ownerId', value: createPayload.ownerId }],
     })
 
     expect(body.code).toBe(code)
@@ -28,10 +28,10 @@ describe('\n[E2E] Store Address 🏘', () => {
     expect(body.method).toBe(method)
     expect(body.status).toBe(status)
     expect(address.street).toBe(createPayload.street)
-    expect(body.data.owner_id).toBe(createPayload.owner_id)
+    expect(body.data.ownerId).toBe(createPayload.ownerId)
   })
 
-  it('should throw a validation error when does not send owner_id and each service', async () => {
+  it('should throw a validation error when does not send ownerId and each service', async () => {
     const status = 400
     const method = 'POST'
     const code = 'Error'
@@ -40,7 +40,7 @@ describe('\n[E2E] Store Address 🏘', () => {
     const { body } = await request(app.server.getHttpServer())
       .post(path)
       .set('api_key', apiKey)
-      .send({ ...createPayload, owner_id: null })
+      .send({ ...createPayload, ownerId: null })
       .expect(status)
 
     expect(body.code).toBe(code)
@@ -51,7 +51,7 @@ describe('\n[E2E] Store Address 🏘', () => {
       name: 'Error',
       message: {
         statusCode: status,
-        message: ['owner_id should not be empty', 'owner_id must be a string'],
+        message: ['ownerId should not be empty', 'ownerId must be a string'],
         error: 'Bad Request',
       },
     })

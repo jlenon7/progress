@@ -4,5 +4,5 @@ import { CreateAddressDto } from 'app/Contracts/Dtos/CreateAddressDto'
 export class CreateAddressValidator extends CreateAddressDto {
   @IsString()
   @IsNotEmpty()
-  owner_id: string
+  ownerId: string
 }

@@ -16,6 +16,7 @@ import {
 } from '@nestjs/common'
 import { ApiRequestContract } from '@secjs/core'
 import { GetData } from 'app/Decorators/GetData'
+import { Pagination } from 'app/Decorators/Pagination'
 import { Application } from 'app/Decorators/Application'
 import { AddressService } from 'app/Services/Api/AddressService'
 import { ResponseInterceptor } from './Interceptors/ResponseInterceptor'
@@ -32,14 +33,10 @@ export default class AddressController {
   @Patch()
   async list(
     @Query() queries,
+    @Pagination() pagination,
     @Application() application,
     @GetData() data: ApiRequestContract,
   ) {
-    const pagination = {
-      page: queries.page || 0,
-      limit: queries.limit || 10,
-    }
-
     return this.addressService.setGuard(application).list(pagination, data)
   }
 

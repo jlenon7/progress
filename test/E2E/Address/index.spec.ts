@@ -11,7 +11,7 @@ describe('\n[E2E] Index Address 🏘', () => {
     const status = 200
     const method = 'PATCH'
     const code = 'RESPONSE'
-    const path = `/addresses?secret=${secret}`
+    const path = `/addresses?secret=${secret}&page=0&limit=10`
 
     await addressRepository.storeOne(payload)
     await addressRepository.storeOne(payload)
@@ -36,7 +36,7 @@ describe('\n[E2E] Index Address 🏘', () => {
     const status = 200
     const method = 'PATCH'
     const code = 'RESPONSE'
-    const path = `/addresses?secret=${secret}`
+    const path = `/addresses?secret=${secret}&page=0&limit=10`
 
     const address1 = await addressRepository.storeOne(payload)
     const address2 = await addressRepository.storeOne(payload)

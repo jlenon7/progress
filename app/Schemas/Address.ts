@@ -6,10 +6,10 @@ export type AddressDocument = Address & Document
 @Schema({ timestamps: true })
 export class Address {
   @Prop({ type: String, required: true })
-  owner_id: string
+  ownerId: string
 
   @Prop({ type: String, required: true })
-  service_token: string
+  serviceToken: string
 
   @Prop({ type: String, required: true })
   token: string
@@ -39,10 +39,10 @@ export class Address {
   country?: string
 
   @Prop()
-  zip_code?: string
+  zipCode?: string
 
   @Prop({ type: Date, default: null })
-  deleted_at?: Date
+  deletedAt?: Date
 
   @Prop({ type: String, default: 'pendent' })
   status: 'pendent' | 'canceled' | 'actived' | 'deleted'

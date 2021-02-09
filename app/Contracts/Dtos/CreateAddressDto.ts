@@ -1,7 +1,7 @@
 export class CreateAddressDto {
-  owner_id: string
+  ownerId: string
   token: string
-  service_token: string
+  serviceToken: string
   title?: string
   street?: string
   number?: string
@@ -10,6 +10,6 @@ export class CreateAddressDto {
   city?: string
   state?: string
   country?: string
-  zip_code?: string
+  zipCode?: string
   status?: 'pendent' | 'canceled' | 'actived' | 'deleted'
 }

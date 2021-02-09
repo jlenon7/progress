@@ -7,6 +7,6 @@ export class UpdateAddressDto {
   city?: string
   state?: string
   country?: string
-  zip_code?: string
+  zipCode?: string
   status?: 'pendent' | 'canceled' | 'actived' | 'deleted'
 }

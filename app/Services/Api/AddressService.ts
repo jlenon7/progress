@@ -18,14 +18,14 @@ export class AddressService extends GuardBaseService<ApplicationContract> {
   async list(pagination?: PaginationContract, data?: ApiRequestContract) {
     await this.initRequest(data)
 
-    data.where.push({ key: 'service_token', value: this.guard.token })
+    data.where.push({ key: 'serviceToken', value: this.guard.token })
 
     return this.addressRepository.getAll(pagination, data)
   }
 
   async create(dto: CreateAddressDto) {
-    dto.service_token = this.guard.token
-    dto.token = new Token().changePrefix('adr', this.guard.token)
+    dto.serviceToken = this.guard.token
+    dto.token = new Token().generate('adr')
 
     return this.addressRepository.storeOne(dto)
   }
@@ -33,7 +33,7 @@ export class AddressService extends GuardBaseService<ApplicationContract> {
   async show(id: string, data?: ApiRequestContract) {
     await this.initRequest(data)
 
-    data.where.push({ key: 'service_token', value: this.guard.token })
+    data.where.push({ key: 'serviceToken', value: this.guard.token })
 
     const address = await this.addressRepository.getOne(id, data)
 
