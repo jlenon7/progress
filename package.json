@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest --max_old_space_size=2048 build",
     "format": "prettier --write \"**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "nest --max_old_space_size=2048 start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
