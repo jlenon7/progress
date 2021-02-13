@@ -1,0 +1,13 @@
+image: diegofsilva/cf-node:latest
+stages:
+  - deploy-dev
+
+deploy-dev:
+  stage: deploy-dev
+  script:
+    - npm install && npm run build
+    - cp package.json dist/package.json
+    - cf login -a $CF_DEV_API_URL -u $CF_DEV_USERNAME -p $CF_DEV_PASSWORD -o $CF_DEV_ORG -s $CF_DEV_SPACE
+    - cf push
+  only:
+    - development

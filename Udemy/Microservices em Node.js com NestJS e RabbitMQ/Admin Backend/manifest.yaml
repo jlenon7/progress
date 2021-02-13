@@ -1,0 +1,9 @@
+---
+applications:
+      - name: micro-admin-backend
+        path: dist
+        instances: 1
+        memory: 128MB
+        disk_quota: 1GB
+        command: node main
+        health-check-type: none
