@@ -1,0 +1,291 @@
+Lista de exercícios de Shell Script
+
+1) Faça um script em shell, que receba dois parâmetros numéricos, e informe na saída, qual o maior número e a soma dos dois números. (parametros, if, let)
+
+Exemplo:
+./maior_soma 15 17
+O maior valor informado é 17
+A soma dos valores informados é 32
+R:
+#!/bin/bash
+# Exercício 1
+# $1 = operando 1
+# $2 = operacao 2
+# $res = resultado
+
+if [ $1 -gt $2 ]
+then
+       echo "$1 é maior que $2"
+
+elif [ $1 -lt $2 ]
+then
+       echo "$2 é maior que $1"
+
+else 
+       echo "$1 e $2 são iguais"
+fi
+
+let res=$1+$2
+echo "A soma é:$res"
+
+
+
+
+2) Faça um script que solicite um nome de usuário e verifique se esse nome corresponde a um usuário cadastrado no sistema (login ou nome de usuário), ignorando as diferenças entre maiúsculas e minúsculas. (echo, read, cut, grep -i )
+
+Exemplo1: 
+./usuario 
+Informe o usuário: Julio
+Julio é um usuário cadastrado
+
+Exemplo2: 
+./usuario
+Informe o usuário: Antonio
+Antonio não é um usuário cadastrado
+
+R:
+#!/bin/bash
+# Exercicio 2
+# Solicita o nome de um usuario e verifica se ele esta cadastrado no sistema
+echo -n "Informe o usuario: "
+read usuario
+# Busca o string digitado pelo usuário no arquivo passwd
+cut -f1,5 -d: /etc/passwd | grep -i $usuario > /dev/null
+if [ $? -eq 0 ]
+then
+  echo "$usuario é um usuário cadastrado"
+else
+  echo "$usuario não é um usuário cadastrado"
+fi
+
+3) Crie um script que receba como parâmetro um caminho de diretório e liste os arquivos e diretórios nele contidos, um por linha. Se for diretório, deve escrever “(dir)” ao lado do nome. (for, crase, ls, teste -d)
+
+Exemplo:
+./lista /home/tads
+aposentadoria
+parametros
+pasta1 (dir)
+script1
+SO (dir)
+
+R:
+#!/bin/bash
+# Exercício 3
+# Lista a pasta informada, indicando os diretórios
+for arq in `ls $1`
+do
+  if [ -d $1/$arq ]
+  then
+    echo $arq \(dir\)
+  else
+    echo $arq 
+  fi
+done
+
+
+
+4) Escreva um script que receba um número como parâmetro e imprima todos os números pares de 0 até o número informado. (while, let ou expr, echo -n ou printf)
+
+Exemplo:
+./pares 0 10
+0 2 4 6 8 10
+R:
+#!/bin/bash
+# Exercício 4
+# mostrar os numeros pares de 0 ate o informado
+i=0
+while [ $i -le $1 ]
+do
+resto=`expr $i % 2`
+if [ $resto -eq 0 ]
+then
+echo -n "$i "
+fi
+i=`expr $i + 1`
+done
+
+
+
+5) Faça um script que receba um nome de arquivo como parâmetro, e verifique se o arquivo existe. Em caso afirmativo, imprima o nome do seu dono. (teste -f, ls -l e cut)
+
+Exemplo 1:
+./existe /etc/passwd
+O arquivo /etc/passwd existe e tem 2306 bytes
+
+Exemplo 2: 
+./existe /etc/teste
+O arquivo /etc/teste não existe
+
+R:
+#!/bin/bash 
+# Exercício 5
+# Verifica se um arquivo informado por parâmetro existe, e se existir, informa o tamanho dele
+# $1 - Nome de arquivo informado 
+if [ -f $1 ]
+then
+  tam=`ls -l $1 | cut -f5 -d " "`
+  echo "O arquivo $1 existe e tem $tam bytes"
+else
+  echo "O arquivo $1 nao existe"
+fi
+
+6) Elaborar um script que apresente ao usuário um menu com as seguintes opções:
+1 – Exibir o status da utilização das partições do sistema (df -h)
+2 – Exibir  a relação de usuários logados (who)
+3 – Exibir a data e hora do sistema (date)
+4 – Sair 
+Informe a opção: 
+
+Caso o usuário digite um outro valor, o script deve mostrar a mensagem “Opção não disponível”, e mostrar novamente o menu.
+O script deve permanecer informando as opções até que o usuário escolha a opção 4 (sair). Caso o usuário escolha as opções 1 a 3, deve ser executado o comando correspondente, e mostrado o resultado na tela. (while, read, echo -n, df, who, date)
+
+Exemplo:
+./menu
+1 – Exibir o status da utilização das partições do sistema (df -h)
+2 – Exibir  a relação de usuários logados (who)
+3 – Exibir a data e hora do sistema (date)
+4 – Sair 
+Informe a opção: 1
+Sist. Arq.      Tam. Usado Disp. Uso% Montado em
+udev            3,9G 0 3,9G   0% /dev
+tmpfs           785M 28M 757M   4% /run
+/dev/sda7        92G 59G 29G 68% /
+tmpfs           3,9G 502M 3,4G  13% /dev/shm
+tmpfs           5,0M 4,0K 5,0M   1% /run/lock
+tmpfs           3,9G 0 3,9G   0% /sys/fs/cgroup
+/dev/sda6       123G 82G 35G  71% /home
+tmpfs           785M 88K 785M   1% /run/user/1000
+
+R:
+#!/bin/bash 
+# Exercício 6
+
+op=0
+while [ $op -ne 4 ]
+do
+       echo "*****MENU*****"
+       echo "1 - Exibir o status da utilização das partições do sistema"
+       echo "2 - Exibir  a relação de usuários logados"
+       echo "3 - Exibir a data e hora do sistema"
+       echo "4 - Sair"
+       read op
+
+       case $op in
+               1) df -h;;
+               2) who;;
+               3) date;;
+               4) ;;
+               *) echo "Opção inválida!"
+       esac
+done
+
+
+
+7) Faça um script que receba uma lista de palavras como parametros, e mostre na saída essas palavras ordenadas. (parametros, while, arquivo temporário)
+
+Exemplo:
+./ordena abacaxi casa bola
+Foram informados 3 parametros
+abacaxi
+bola
+casa
+
+R:
+#!/bin/bash
+# Exercício 7
+# Script para ordenar os parametros informados
+# $1 - Primeiro parametro
+# $2 - Segundo parametro
+# $n - n-ésimo parampetro
+# $# - informa o número de parametros informados
+echo "Foram informados $# parametros"
+i=1
+while [ $# -gt 0 ]
+do
+  echo $1 >> em_ordem
+  shift
+done
+sort em_ordem 2> /dev/null
+rm em_ordem 2> /dev/null
+
+
+
+8) Desenvolva um script que realize as quatro operações aritméticas básicas (soma (+), subtração (-), multiplicação (x) e divisão(/)), recebendo por parâmetros os valores e a operação. Lembre-se que não se pode fazer divisão por zero. Nesse caso, o script deve mostrar uma mensagem de erro (parâmetros, case, if).
+
+Exemplos:
+./calcula 8 x 4
+32
+
+./calcula 7 + 5
+12
+
+./calcula 7 – 5
+2
+
+./calcula 7 / 0
+Erro: divisão por zero
+
+./calcula 20 / 5
+4
+
+R:
+#!/bin/bash
+# Exercício 8
+# Calculadora de 4 operacoes: +, -, x, /
+# $1 = operando 1
+# $2 = operacao
+# $3 = operando 2
+if [ $# -ne 3 ]
+then
+  echo "Informe operando 1, operacao (+, -, x ou /) e operando 2"
+else
+  case "$2" in
+       "+") result=`expr $1 + $3` ;;
+       "-") result=`expr $1 - $3` ;;
+       "x") result=`expr $1 \* $3` ;;
+       "/") if [ $3 -ne 0 ]
+          then
+             result=`expr $1 / $3`
+          else
+             result="Erro: Divisao por 0"
+          fi ;;
+       *) result="Operacao invalida" ;;
+  esac
+  echo $result
+
+
+
+9) Aprimore o script da questão anterior, permitindo um modo interativo. Se o usuário não informar os parâmetros, solicite, um a um, o primeiro operador, a operação e o segundo operando. (parâmetros, read, case, if)
+
+Exemplos:
+./calcula
+Entre com o primeiro operando: 5
+Entre com o operador: +
+Entre com o segundo operando: 8
+Operação 5 + 8 = 13
+
+./calcula 5 + 8
+Operação 5 + 8 = 13
+
+R:
+#!/bin/bash 
+# Exercício 9
+
+if [ $# -eq 3 ]
+then
+case $2 in
++)result=`expr $1 + $3`;;
+-)result=`expr $1 - $3`;;
+x)result=`expr $1 \* $3`;;
+/) if [ $3 -eq 0 ]
+  then
+echo "Impossível realizar divisão por zero"
+  else
+result=`expr $1 / $3`
+  fi;;
+esac
+echo "Resultado = $result"
+
+else
+echo "Operação invalida"
+fi
